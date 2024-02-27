@@ -85,6 +85,13 @@ class PhysicsInformedNN:
         self.device = device
         self.dnn = DNN(layers, connections).to(device)
         # Data
+        self.T_mean, self.T_std = torch.mean(T), torch.std(T)
+        self.xEvent_mean, self.xEvent_std = torch.mean(xEvent), torch.std(xEvent)
+        self.yEvent_mean, self.yEvent_std = torch.mean(yEvent), torch.std(yEvent)
+        # Standardize the data
+        T = (T - T.mean()) / T.std()
+        xEvent = (xEvent - xEvent.mean()) / xEvent.std()
+        yEvent = (yEvent - yEvent.mean()) / yEvent.std()
         self.T = T.clone().detach().requires_grad_(True).to(device).float()
         self.xEvent = xEvent.clone().detach().requires_grad_(True).to(device).float()
         self.yEvent = yEvent.clone().detach().requires_grad_(True).to(device).float()
@@ -116,7 +123,7 @@ class PhysicsInformedNN:
              self.y0,
              self.gamma
              ],
-            lr=0.005, betas=(0.9, 0.999)
+            lr=0.01, betas=(0.9, 0.999)
         )
 
     def rotate(self, xEvent, T, yEvent, gamma):
@@ -153,9 +160,9 @@ class PhysicsInformedNN:
         定义基于物理方程的残差函数
         """
         xEvent, T, yEvent = self.rotate(xEvent, T, yEvent, self.gamma)
-        y_loss = yEvent - torch.sin(self.a * xEvent + self.b) *\
-                torch.sin(self.omega * T * torch.sqrt(1 - self.zeta**2)) *\
-                torch.exp(-self.zeta * self.omega * T) - self.y0
+        y_loss = self.yEvent_std * yEvent + self.yEvent_mean - torch.sin(self.a * (self.xEvent_std * xEvent + self.xEvent_mean) + self.b) *\
+                torch.sin(self.omega * (self.T_std * T + self.T_mean) * torch.sqrt(1 - self.zeta**2)) *\
+                torch.exp(-self.zeta * self.omega * (self.T_std * T + self.T_mean)) - (self.y0 * self.yEvent_std + self.yEvent_mean)
         PIloss = torch.nn.functional.mse_loss(y_loss, torch.zeros_like(y_loss))
         return PIloss
 
@@ -269,10 +276,6 @@ connections = [0, 1, 2, 3, 4, 5, 5, 5, 5, 2]
 T = mat['brushedData'][:, 0]/1e6
 xEvent = mat['brushedData'][:, 1]
 yEvent = mat['brushedData'][:, 2]
-# Standardize the data
-T = (T - np.mean(T))/np.std(T)
-xEvent = (xEvent - np.mean(xEvent))/np.std(xEvent)
-yEvent = (yEvent - np.mean(yEvent))/np.std(yEvent)
 # Brush the data
 (xEvent, T, yEvent) = brush(xEvent, T, yEvent)
 # Convert to torch tensors
@@ -287,7 +290,7 @@ pinn = PhysicsInformedNN(layers, connections, device, xEvent, T, yEvent)
 print('=======Model Training=======')
 # 训练模型
 start_time = time.time()
-pinn.train(1000)
+pinn.train(10000)
 print('=======Model Training Done!=======')
 print("===Training time: {:.2f} seconds==".format(time.time() - start_time))
 print('==================================')
