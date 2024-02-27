@@ -287,7 +287,7 @@ pinn = PhysicsInformedNN(layers, connections, device, xEvent, T, yEvent)
 print('=======Model Training=======')
 # 训练模型
 start_time = time.time()
-pinn.train(10000)
+pinn.train(1000)
 print('=======Model Training Done!=======')
 print("===Training time: {:.2f} seconds==".format(time.time() - start_time))
 print('==================================')
