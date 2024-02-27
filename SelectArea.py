@@ -22,8 +22,8 @@ def HotPixel_brush(xEvent, T, yEvent):
     act_std = event['activity'].std()
     cont_mean = event['continuity'].mean()
     cont_std = event['continuity'].std()
-    event_filtered = event[(event['activity'] > act_mean - 2 * act_std) & (event['activity'] < act_mean + 2 * act_std) &
-                           (event['continuity'] > cont_mean - 2 *cont_std) & (event['continuity'] < cont_mean + 2 * cont_std)]
+    event_filtered = event[(event['activity'] > act_mean - 2 * act_std) & (event['activity'] < act_mean + 1.5 * act_std) &
+                           (event['continuity'] > cont_mean - 2 * cont_std) & (event['continuity'] < cont_mean + 1.5 * cont_std)]
     filtered_events = df[df['coords'].isin(event_filtered.index)]
     return filtered_events['xEvent'].to_numpy(), filtered_events['T'].to_numpy(), filtered_events['yEvent'].to_numpy()
 
@@ -51,7 +51,7 @@ def init():
 
 def pause_and_resume(event):
     global isRunning
-    if event.key == 'p':
+    if event.key == 'm':
         if isRunning:
             ani.pause()
             isRunning = False
@@ -59,7 +59,7 @@ def pause_and_resume(event):
             ani.resume()
             isRunning = True
 
-filename = r'test_10mm_2Hz.aedat4'
+filename = r'earthquake_ELCENTRO_2.aedat4'
 with AedatFile(f'data/{filename}') as f:
     height, width = f['events'].size
     events = np.hstack([packet for packet in f['events'].numpy()])
