@@ -15,7 +15,8 @@ plt.rc('font',family='Times New Roman')
 
 # 检查CUDA可用性（用于GPU加速）
 device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
-print("===Using device===\n", device)
+print("===Using device===")
+print(f"=====  {device}  =====")
 
 def brush(xEvent, T, yEvent):
     """
@@ -131,7 +132,12 @@ class PhysicsInformedNN:
 
     def rotate(self, xEvent, T, yEvent, gamma):
         """
-        rotation operator function
+        Rotation operator function for torch tensor
+        :param xEvent: x coordinates of the events
+        :param T: time coordinates of the events
+        :param yEvent: y coordinates of the events
+        :param gamma: rotation angle in radians
+        :return: rotated x, y, t coordinates
         """
         # Rotation Matrix
         gamma_mat = torch.cat([
@@ -180,21 +186,21 @@ class PhysicsInformedNN:
     def plot_results(self, x_val, T_val, y_val, epoch):
         self.dnn.eval()
         with torch.no_grad():
-            y_pred_val = self.predict(x_val, T_val).flatten()
+            y_pred_val = self.predict(x_val, T_val)
 
             y_pred_PI = torch.sin(self.a * (x_val * self.xEvent_std + self.xEvent_mean) + self.b) * \
                         torch.sin(self.omega * (T_val * self.T_std + self.T_mean) * torch.sqrt(1 - self.zeta ** 2)) * \
                         torch.exp(-self.zeta * self.omega * (T_val * self.T_std + self.T_mean)) + self.y0 * self.yEvent_std + self.yEvent_mean
             x_val_R, T_val_R, y_pred_PI = self.rotate(self.x_val, self.T_val, y_pred_PI, -self.gamma)
-            x_val = x_val.cpu().detach().numpy()
-            y_val = y_val.cpu().detach().numpy()
-            T_val = T_val.cpu().detach().numpy()
-            xEvent_std = self.xEvent_std.cpu().detach().numpy()
-            yEvent_std = self.yEvent_std.cpu().detach().numpy()
-            T_std = self.T_std.cpu().detach().numpy()
-            xEvent_mean = self.xEvent_mean.cpu().detach().numpy()
-            yEvent_mean = self.yEvent_mean.cpu().detach().numpy()
-            T_mean = self.T_mean.cpu().detach().numpy()
+            x_val = x_val.clone().cpu().detach().numpy()
+            y_val = y_val.clone().cpu().detach().numpy()
+            T_val = T_val.clone().cpu().detach().numpy()
+            xEvent_std = self.xEvent_std.clone().cpu().detach().numpy()
+            yEvent_std = self.yEvent_std.clone().cpu().detach().numpy()
+            T_std = self.T_std.clone().cpu().detach().numpy()
+            xEvent_mean = self.xEvent_mean.clone().cpu().detach().numpy()
+            yEvent_mean = self.yEvent_mean.clone().cpu().detach().numpy()
+            T_mean = self.T_mean.clone().cpu().detach().numpy()
 
 
             fig = plt.figure(figsize=(10, 7))
@@ -206,7 +212,7 @@ class PhysicsInformedNN:
                        )
             ax.scatter(x_val * xEvent_std + xEvent_mean,
                        T_val * T_std + T_mean,
-                       y_pred_PI.cpu().detach().numpy(),
+                       y_pred_PI.clone().cpu().detach().numpy(),
                        color='g', label='Predicted (PI)', alpha=0.5
                        )
             ax.scatter(x_val * xEvent_std + xEvent_mean,
@@ -220,6 +226,7 @@ class PhysicsInformedNN:
             ax.legend()
             plt.title(f'Comparison at Epoch {epoch}', fontsize=20)
             plt.show()
+
 
     def train(self, epochs):
         """
@@ -240,7 +247,7 @@ class PhysicsInformedNN:
             self.dnn.train()
             self.optimizer_Adam.zero_grad()
             y_pred = self.net_u(self.x_train, self.T_train)
-            loss_rotate =  self.rotateLoss(self.x_train, self.T_train, self.y_train)
+            loss_rotate = self.rotateLoss(self.x_train, self.T_train, self.y_train)
             loss_y = torch.nn.functional.mse_loss(y_pred, self.y_train)
             loss_PI = self.PIloss(self.x_train, self.T_train, self.y_train)
 
@@ -255,25 +262,26 @@ class PhysicsInformedNN:
             self.history['y0'].append(self.y0.item())
             self.history['gamma'].append(self.gamma.item())
 
-            if epoch % 10 == 0:
-                self.dnn.eval()
-                with torch.no_grad():
+
+            self.dnn.eval()
+            with torch.no_grad():
+                if epoch % 10 == 0:
                     y_pred_val = self.net_u(self.x_val, self.T_val)
                     loss_y_val = torch.nn.functional.mse_loss(y_pred_val, self.y_val)
                     loss_PI_val = self.PIloss(self.x_val, self.T_val, self.y_val)
                     loss_val = loss_y_val + loss_PI_val
-                print(f'=======Epoch {epoch}=======\n'
-                        f'Training Loss: {loss.item():.3f},Validation Loss: {loss_val.item():.3f}\n'
-                        f'a:{self.a.item():.3f},a_grad:{self.a.grad.item()}\n'
-                        f'b:{self.b.item():.3f},b_grad:{self.b.grad.item()}\n'
-                        f'omega:{self.omega.item():.3f},omega_grad:{self.omega.grad.item()}\n'
-                        f'zeta:{self.zeta.item():.3f},zeta_grad:{self.zeta.grad.item()}\n'
-                        f'y0:{self.y0.item():.3f},y0_grad:{self.y0.grad.item():.5f}\n'
-                        f'gamma:{self.gamma.item():.3f},gamma_grad:{self.gamma.grad.item():.5f}\n'
-                        )
-            if epoch % 1000 == 0:
-                if epoch <= 50000:
-                    self.plot_results(self.x_val, self.T_val, self.y_val, epoch)
+                    print(f'=======Epoch {epoch}=======\n'
+                            f'Training Loss: {loss.item():.3f},Validation Loss: {loss_val.item():.3f}\n'
+                            f'a:{self.a.item():.3f},a_grad:{self.a.grad.item()}\n'
+                            f'b:{self.b.item():.3f},b_grad:{self.b.grad.item()}\n'
+                            f'omega:{self.omega.item():.3f},omega_grad:{self.omega.grad.item()}\n'
+                            f'zeta:{self.zeta.item():.3f},zeta_grad:{self.zeta.grad.item()}\n'
+                            f'y0:{self.y0.item():.3f},y0_grad:{self.y0.grad.item():.5f}\n'
+                            f'gamma:{self.gamma.item():.3f},gamma_grad:{self.gamma.grad.item():.5f}\n'
+                            )
+                if epoch % 1000 == 1:
+                    if epoch <= 50000:
+                        self.plot_results(self.x_val, self.T_val, self.y_val, epoch)
 
     def predict(self, xEvent, T):
         """
