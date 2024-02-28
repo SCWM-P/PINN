@@ -119,7 +119,7 @@ class PhysicsInformedNN:
              self.y0,
              self.gamma
              ],
-            lr=0.001, betas=(0.9, 0.999)
+            lr=0.003, betas=(0.9, 0.999)
         )
 
     def net_u(self, xEvent, T):
@@ -283,9 +283,20 @@ class PhysicsInformedNN:
                         f'y0:{self.y0.item():.3f},y0_grad:{self.y0.grad.item():.5f}\n'
                         f'gamma:{self.gamma.item():.3f},gamma_grad:{self.gamma.grad.item():.5f}\n'
                       )
-            if epoch % 1000 == 0:
-                if epoch <= 50000:
+            if epochs <= 10000:
+                if epoch % 1000 == 0:
                     self.plot_results(epoch)
+            else:
+                if epoch <= 10000:
+                    if epoch % 1000 == 0:
+                        self.plot_results(epoch)
+                elif epoch % (epochs // 10) == 0:
+                    if epoch <= 30000:
+                        self.plot_results(epoch)
+
+            # 为了避免物理方程被拟合成平面，对a参数对逐渐减弱的扰动🤔
+            self.a = torch.nn.Parameter(self.a + ((torch.rand((1,)) - 0.5) * epoch/epochs).to(self.device))
+
 
     def predict(self, xEvent, T):
         """
@@ -298,7 +309,7 @@ class PhysicsInformedNN:
 
 #%% Configurations
 # Configuration
-epochs = 8000
+epochs = 20000
 layers = [2, 100, 100, 100, 100, 100, 100, 100, 100, 1]
 connections = [0, 1, 2, 3, 4, 5, 5, 5, 5, 2]
 # Load the Data
@@ -314,9 +325,9 @@ xEvent = torch.tensor(xEvent, dtype=torch.float32, device=device)
 yEvent = torch.tensor(yEvent, dtype=torch.float32, device=device)
 
 print('=======Data Loading Done!=======')
-print('======Model Initialization=====')
+print('===== Model Initialization =====')
 pinn = PhysicsInformedNN(layers, connections, device, xEvent, T, yEvent)
-print('=======Model Training=======')
+print('========= Model Training =======')
 # 训练模型
 start_time = time.time()
 pinn.train(epochs)
