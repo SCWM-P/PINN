@@ -99,6 +99,7 @@ class PhysicsInformedNN:
         self.omega = torch.nn.Parameter(torch.tensor([1.0], device=device))
         self.zeta = torch.nn.Parameter(torch.tensor([0.05], device=device))
         self.gamma = torch.nn.Parameter(torch.tensor([torch.pi / 4], device=device))
+        self.Y = torch.nn.Parameter(torch.abs(yEvent.max() - yEvent.min())/2 * torch.exp(T.min()))
         self.y0 = torch.nn.Parameter(torch.mean(yEvent))
         self.T = T
         self.xEvent = xEvent
@@ -152,20 +153,6 @@ class PhysicsInformedNN:
         sin_gamma = torch.sin(gamma)
         xEvent = cos_gamma * xEvent + sin_gamma * yEvent
         yEvent = -sin_gamma * xEvent + cos_gamma * yEvent
-        # # Rotation Matrix
-        # zeros = torch.zeroes_like(gamma)
-        # ones = torch.ones_like(gamma)
-        # gamma_mat = torch.cat([
-        #     torch.stack([cos_gamma,  zeros, sin_gamma], dim=1),
-        #     torch.stack([zeros,      ones,      zeros], dim=1),
-        #     torch.stack([-sin_gamma, zeros, cos_gamma], dim=1)
-        # ], dim=0)
-        #
-        # xTy = torch.cat([xEvent, T, yEvent], dim=1)
-        # xTy = torch.matmul(gamma_mat, xTy.t()).t()
-        # xEvent = xTy[:,0]
-        # T = xTy[:,1]
-        # yEvent = xTy[:,2]
         return xEvent, T, yEvent
 
     def PIloss(self, xEvent, T, yEvent):
@@ -174,7 +161,7 @@ class PhysicsInformedNN:
         接受标准化的数据\n
         """
         xEvent, T, yEvent = self.rotate(xEvent, T, yEvent, self.gamma)
-        y_loss = yEvent - torch.sin(self.a * xEvent + self.b) *\
+        y_loss = yEvent - self.Y * torch.sin(self.a * xEvent + self.b) *\
                 torch.sin(self.omega * T * torch.sqrt(1 - self.zeta**2)) *\
                 torch.exp(-self.zeta * self.omega * T) - self.y0
         PIloss = torch.nn.functional.mse_loss(y_loss, torch.zeros_like(y_loss))
@@ -202,7 +189,7 @@ class PhysicsInformedNN:
 
             # Physical Equation
             x_val_R, T_val_R, y_val_R = self.rotate(self.x_val, self.T_val, self.y_val, self.gamma)
-            y_pred_PI = torch.sin(self.a * x_val_R + self.b) * \
+            y_pred_PI = self.Y * torch.sin(self.a * x_val_R + self.b) * \
                         torch.sin(self.omega * T_val_R * torch.sqrt(1 - self.zeta ** 2)) * \
                         torch.exp(-self.zeta * self.omega * T_val_R) + self.y0
             x_val_R, T_val_R, y_pred_PI = self.rotate(x_val_R, T_val_R, y_pred_PI, -self.gamma)
@@ -239,6 +226,7 @@ class PhysicsInformedNN:
             'b': [],
             'omega': [],
             'zeta': [],
+            'Y': [],
             'y0': [],
             'gamma':[]
         }
@@ -262,6 +250,7 @@ class PhysicsInformedNN:
             self.history['b'].append(self.b.item())
             self.history['omega'].append(self.omega.item())
             self.history['zeta'].append(self.zeta.item())
+            self.history['Y'].append(self.Y.item())
             self.history['y0'].append(self.y0.item())
             self.history['gamma'].append(self.gamma.item())
 
@@ -280,6 +269,7 @@ class PhysicsInformedNN:
                         f'b:{self.b.item():.3f},b_grad:{self.b.grad.item()}\n'
                         f'omega:{self.omega.item():.3f},omega_grad:{self.omega.grad.item()}\n'
                         f'zeta:{self.zeta.item():.3f},zeta_grad:{self.zeta.grad.item()}\n'
+                        f'Y:{self.Y.item():.3f},Y_grad:{self.Y.grad.item()}\n'
                         f'y0:{self.y0.item():.3f},y0_grad:{self.y0.grad.item():.5f}\n'
                         f'gamma:{self.gamma.item():.3f},gamma_grad:{self.gamma.grad.item():.5f}\n'
                       )
@@ -294,8 +284,8 @@ class PhysicsInformedNN:
                     if epoch <= 30000:
                         self.plot_results(epoch)
 
-            # 为了避免物理方程被拟合成平面，对a参数对逐渐减弱的扰动🤔
-            self.a = torch.nn.Parameter(self.a + ((torch.rand((1,)) - 0.5) * epoch/epochs).to(self.device))
+            # 为了避免物理方程被拟合成平面，对a参数对逐渐减弱的扰动（实验功能）🤔
+            self.a = torch.nn.Parameter(self.a + ((torch.rand((1,)) - 0.5) * (1-epoch/epochs)).to(self.device))
 
 
     def predict(self, xEvent, T):
@@ -309,7 +299,7 @@ class PhysicsInformedNN:
 
 #%% Configurations
 # Configuration
-epochs = 20000
+epochs = 15000
 layers = [2, 100, 100, 100, 100, 100, 100, 100, 100, 1]
 connections = [0, 1, 2, 3, 4, 5, 5, 5, 5, 2]
 # Load the Data
@@ -334,7 +324,7 @@ pinn.train(epochs)
 end_time = time.time()
 print('============Model Training Done!===========')
 print("========Training time: {:.2f} seconds======".format(end_time - start_time))
-print('====Average time per epoch: {:.3f} seconds==='.format((end_time - start_time)/epochs))
+print('===Average time per epoch: {:.3f} seconds==='.format((end_time - start_time)/epochs))
 print('===========================================')
 #%% Draw the Final Result
 # 绘制参数变化曲线
@@ -347,8 +337,9 @@ ax1.plot(pinn.history['zeta'], label='ζ')
 ax1.plot(pinn.history['gamma'], label='γ')
 ax1.set_xlabel('Epoch', fontsize=18)
 ax1.set_ylabel('Parameter Value', fontsize=18)
+ax2.plot(pinn.history['Y'], label='Y', color='black')
 ax2.plot(pinn.history['y0'], label='y0', color='grey')
-ax2.set_ylabel('y0 Value', fontsize=18)
+ax2.set_ylabel('y0 & Y Value', fontsize=18)
 fig.legend()
 plt.title('Parameter Evolution', fontsize=20)
 
