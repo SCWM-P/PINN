@@ -11,7 +11,7 @@ np.random.seed(1234)
 torch.manual_seed(1234)
 plt.rc('font', family='Times New Roman')
 
-# 检查CUDA可用性（用于GPU加速）
+# Check CUDA availability (for GPU acceleration)
 device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
 print("===Using device===")
 print(f"=====  {device}  =====")
