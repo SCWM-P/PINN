@@ -125,7 +125,8 @@ class PhysicsInformedNN:
             z = z.unsqueeze(1)
         if axis == 'None':
             raise Exception(
-                'No axis specified! Please specify an axis.\n For example axis=\'x\' if you want to rotate around the x-axis.')
+                'No axis specified! Please specify an axis.\n For example axis=\'x\' if you want to rotate around the x-axis.'
+            )
         elif axis == 'x':
             x = x
             y = y * torch.cos(gamma) - z * torch.sin(gamma)
@@ -140,8 +141,8 @@ class PhysicsInformedNN:
             z = z
         return x, y, z
 
-    def rotateLoss(self, xEvent: torch.Tensor, Timestamp: torch.Tensor, yEvent: torch.Tensor):
-        xEvent, Timestamp, yEvent = self.rotate(xEvent, Timestamp, yEvent, self.gamma, axis='y')
+    def rotateLoss(self, xEvent: torch.Tensor, Timestamp: torch.Tensor, yEvent: torch.Tensor, axis='None'):
+        xEvent, Timestamp, yEvent = self.rotate(xEvent, Timestamp, yEvent, self.gamma, axis=axis)
         loss_rotate = torch.std(yEvent)
         return loss_rotate
 
@@ -178,7 +179,7 @@ class PhysicsInformedNN:
                                       create_graph=True)[0]
         return d4y_dx4, d2y_dx2, d2y_dt2, dy_dt
 
-    def physicalLoss(self, xEvent:torch.Tensor, Timestamp:torch.Tensor, yEvent:torch.Tensor):
+    def physicalLoss(self, xEvent:torch.Tensor, Timestamp:torch.Tensor, yEvent: torch.Tensor):
         xEvent, Timestamp, yEvent = self.rotate(xEvent, Timestamp, yEvent, self.gamma, axis='y')
         d4y_dx4, d2y_dx2, d2y_dt2, dy_dt = self.derive(xEvent, Timestamp)
         y_PI_pred = \
@@ -196,6 +197,22 @@ class PhysicsInformedNN:
             'c': torch.zeros((epochs,)),
             'gamma': torch.zeros((epochs,))
         }
+        x_train, t_train, y_train = self.normalize(self.x_train, self.t_train, self.y_train)
         for epoch in np.range(epochs):
             self.dnn.train()
             self.optimizer.zero_grad()
+            # Loss of Natural Network
+            y_nn_pred = self.predict(x_train, t_train)
+            loss_nn = torch.nn.functional.mse_loss(y_nn_pred, y_train)
+            # Loss of Rotation
+            loss_rotation = self.rotateLoss(x_train, t_train, y_train, axis='y')
+            # Loss of Physical Informed Equation
+            loss_physical = self.physicalLoss(x_train, t_train, y_train)
+
+            Loss = loss_nn + 100*loss_rotation + 10000*loss_physical
+            Loss.backward(retain_graph=True)
+            self.optimizer.step()
+
+            # Record loss and EI
+            self.history['train_loss'][epoch] = loss_nn.item()
+            self
