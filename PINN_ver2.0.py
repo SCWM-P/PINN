@@ -80,7 +80,16 @@ class DNN(torch.nn.Module):
 
 # Define Physical Information Neural Network Classes
 class PhysicsInformedNN:
-    def __init__(self, layers, connections, device, xEvent, Timestamp, yEvent, validation_ratio=0.2):
+    def __init__(
+            self,
+            layers: list,
+            connections: list,
+            device: torch.device,
+            xEvent: torch.Tensor,
+            Timestamp: torch.Tensor,
+            yEvent: torch.Tensor,
+            validation_ratio=0.2
+    ):
         # Configuration
         self.device = device
         self.dnn = DNN(layers, connections).to(device)
@@ -129,13 +138,7 @@ class PhysicsInformedNN:
         y = y * self.yEvent.std() + self.yEvent.mean()
         return x, t, y
 
-    def rotate(self, x: torch.Tensor, y: torch.Tensor, z: torch.Tensor, gamma, axis='None'):
-        if x.dim() == 1:
-            x = x.unsqueeze(1)
-        if y.dim() == 1:
-            y = y.unsqueeze(1)
-        if z.dim() == 1:
-            z = z.unsqueeze(1)
+    def rotate(self, x: torch.Tensor, y: torch.Tensor, z: torch.Tensor, gamma: torch.Tensor, axis='None'):
         if axis == 'None':
             raise Exception(
                 'No axis specified! Please specify an axis.\n For example axis=\'x\' if you want to rotate around the x-axis.'
@@ -289,40 +292,41 @@ class PhysicsInformedNN:
                 truth_val = torch.sum(y_nn_val_pred[torch.abs(y_nn_val_pred - y_val) <= 1e-5])
                 loss_nn_val = torch.nn.functional.mse_loss(y_nn_val_pred, y_val)
                 loss_physical_val = self.physicalLoss(self.x_val, self.t_val, self.y_val)
-                print(f'========= Epoch {epoch} | Times Consumption {epoch_time:.3f}s per 50 epochs =========')
+                print(f'\n===== Epoch {epoch} | Times Consumption {epoch_time:.1f}s per 50 epochs =====')
                 print('= = = = = = == === ====  Train  Set  ==== === == = = = = =')
-                print(f'Natural Loss:\n{loss_nn.item():.3f}')
-                print(f'Physical Equation Loss:\n{loss_physical.item():.3f}')
-                print(f'Accuracy:\n{self.history["train_accuracy"][epoch]*100:.2f}%')
+                print(f'Natural Loss:{loss_nn.item():.3f}')
+                print(f'Physical Equation Loss:{loss_physical.item():.3f}')
+                print(f'Accuracy:{self.history["train_accuracy"][epoch]*100:.2f}%')
                 print('= = = = = == === ====  Validation  Set  ==== === == = = = =')
-                print(f'Natural Loss:\n{loss_nn_val.item():.3f}',
-                      f'Physical Equation Loss:\n{loss_physical_val.item():.3f}',
-                      f'Accuracy:\n{(truth_val.item() / len(y_val))*100:.2f}%')
+                print(f'Natural Loss:{loss_nn_val.item():.3f}')
+                print(f'Physical Equation Loss:{loss_physical_val.item():.3f}')
+                print(f'Accuracy:{(truth_val.item() / len(y_val))*100:.2f}%')
+                print('-----------------------------------------------------------')
                 print(f'EI: {self.EI.item():<9.4f}, EI_grad: {self.EI.grad.item():.8f}')
                 print(f'T: {self.T.item():<10.4f}, T_grad: {self.T.grad.item():.8f}')
                 print(f'M: {self.M.item():<10.4f}, M_grad: {self.M.grad.item():.8f}')
                 print(f'c: {self.c.item():<10.4f}, c_grad: {self.c.grad.item():.8f}')
-                print(f'gamma: {self.gamma.item():<6.4f}, gamma_grad: {self.gamma.grad.item():.8f}')
+                print(f'gamma: {self.gamma.item():<6.4f}, gamma_grad: {self.gamma.grad.item():.8f}\n')
                 epoch_startTime = time.time()
 
             # Process Visualization
-            if epochs <= 10000:
-                if epoch % 1000 == 0:
+            if epochs <= 1000:
+                if epoch % 100 == 0:
                     self.plot_results(epoch)
             else:
-                if epoch <= 10000:
-                    if epoch % 1000 == 0:
+                if epoch <= 1000:
+                    if epoch % 100 == 0:
                         self.plot_results(epoch)
                 elif epoch % (epochs // 20) == 0:
-                    if epoch <= 30000:
+                    if epoch <= 3000:
                         self.plot_results(epoch)
 
 
 if __name__ == '__main__':
     # Configuration and Load Data
-    epochs = 15000
-    layers = [2, 150, 150, 150, 150, 150, 150, 150, 1]
-    connections = [0, 1, 2, 3, 4, 5, 5, 5, 2]
+    epochs = 1000
+    layers = [2, 100, 100, 100, 100, 100, 100, 1]
+    connections = [0, 1, 2, 3, 4, 5, 5, 2]
     data = scipy.io.loadmat('test16-1.mat')
     Timestamp = data['brushedData'][:, 0]/1e6
     xEvent = data['brushedData'][:, 1]
