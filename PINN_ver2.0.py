@@ -88,6 +88,7 @@ class PhysicsInformedNN:
             xEvent: torch.Tensor,
             Timestamp: torch.Tensor,
             yEvent: torch.Tensor,
+            epochs: int = 1000,
             validation_ratio=0.2
     ):
         # Configuration
@@ -109,6 +110,16 @@ class PhysicsInformedNN:
             test_size=validation_ratio,
             random_state=42
         )
+        # Define the Training Parameters History
+        self.history = {
+            'train_loss': torch.zeros((epochs,)),
+            'train_accuracy': torch.zeros((epochs,)),
+            'EI': torch.zeros((epochs,)),
+            'T': torch.zeros((epochs,)),
+            'M': torch.zeros((epochs,)),
+            'c': torch.zeros((epochs,)),
+            'gamma': torch.zeros((epochs,))
+        }
         # Define Optimizer
         self.optimizer = torch.optim.Adam(
             list(self.dnn.parameters()) + [self.EI, self.T, self.M, self.c, self.gamma],
@@ -154,7 +165,8 @@ class PhysicsInformedNN:
         """
         if axis == 'None':
             raise Exception(
-                'No axis specified! Please specify an axis.\n For example axis=\'x\' if you want to rotate around the x-axis.'
+                'No axis specified! Please specify an axis.\n'
+                'For example axis=\'x\' if you want to rotate around the x-axis.'
             )
         elif axis == 'x':
             x = x
@@ -245,11 +257,12 @@ class PhysicsInformedNN:
             # plot the results in validation set
             x_val, t_val, y_val = self.normalize(self.x_val, self.t_val, self.y_val)
             y_nn_pred_val = self.predict(x_val, t_val).flatten()
+            x_val, t_val, y_nn_pred_val = self.denormalize(x_val, t_val, y_nn_pred_val)
+
 
             # Convert torch.Tensor to numpy.ndarray
             x_train = x_train.cpu().detach().numpy()
             t_train = t_train.cpu().detach().numpy()
-            y_train = y_train.cpu().detach().numpy()
             y_nn_pred_train = y_nn_pred_train.cpu().detach().numpy()
 
             x_val = x_val.cpu().detach().numpy()
@@ -261,15 +274,31 @@ class PhysicsInformedNN:
             fig = plt.figure()
             ax_train = fig.add_subplot(121, projection='3d')
             ax_val = fig.add_subplot(122, projection='3d')
-            ax_train.scatter(x_train, t_train, y_train, c='b', marker='.', label='Actual Dataset', alpha=0.5)
-            ax_train.scatter(x_train, t_train, y_nn_pred_train, c='r', marker='.', label='Prediction of Natural Network', alpha=0.5)
+            ax_train.scatter(
+                x_train, t_train, self.y_train.cpu().detach().numpy(),
+                c='b', marker='.', alpha=0.5,
+                label='Actual Dataset'
+            )
+            ax_train.scatter(
+                x_train, t_train, y_nn_pred_train,
+                c='r', marker='.', alpha=0.5,
+                label='Prediction of Natural Network'
+            )
             ax_train.set_xlabel('$X$', fontsize=18)
             ax_train.set_ylabel('$T (s)$', fontsize=18)
             ax_train.set_zlabel('$Y$', fontsize=18)
             ax_train.legend()
             ax_train.set_title(f'Comparison at Epoch {epoch} in Train Set', fontsize=20)
-            ax_val.scatter(x_val, t_val, y_val, c='b', marker='.', label='Actual Dataset', alpha=0.5)
-            ax_val.scatter(x_val, t_val, y_nn_pred_val, c='r', marker='.', label='Prediction of Natural Network', alpha=0.5)
+            ax_val.scatter(
+                x_val, t_val, self.y_val.cpu().detach().numpy(),
+                c='b', marker='.', alpha=0.5,
+                label='Actual Dataset'
+            )
+            ax_val.scatter(
+                x_val, t_val, y_nn_pred_val,
+                c='r', marker='.', alpha=0.5,
+                label='Prediction of Natural Network'
+            )
             ax_val.set_xlabel('$X$', fontsize=18)
             ax_val.set_ylabel('$T (s)$', fontsize=18)
             ax_val.set_zlabel('$Y$', fontsize=18)
@@ -277,16 +306,7 @@ class PhysicsInformedNN:
             ax_val.set_title(f'Comparison at Epoch {epoch} in Validation Set', fontsize=20)
             plt.show()
 
-    def train(self, epochs: int):
-        self.history = {
-            'train_loss': torch.zeros((epochs,)),
-            'train_accuracy': torch.zeros((epochs,)),
-            'EI': torch.zeros((epochs,)),
-            'T': torch.zeros((epochs,)),
-            'M': torch.zeros((epochs,)),
-            'c': torch.zeros((epochs,)),
-            'gamma': torch.zeros((epochs,))
-        }
+    def train(self):
         x_train, t_train, y_train = self.normalize(self.x_train, self.t_train, self.y_train)
         for epoch in range(epochs):
             self.dnn.train()  # Train the  model in training set
@@ -323,16 +343,16 @@ class PhysicsInformedNN:
                 truth_val = torch.sum(y_nn_val_pred[torch.abs(y_nn_val_pred - y_val) <= 1e-5])
                 loss_nn_val = torch.nn.functional.mse_loss(y_nn_val_pred, y_val)
                 loss_physical_val = self.physicalLoss(self.x_val, self.t_val, self.y_val)
-                print(f'\n===== Epoch {epoch} | Times Consumption {epoch_time:.1f}s per 50 epochs =====')
-                print('= = = = = = == === ====  Train  Set  ==== === == = = = = =')
+                print(f'\n===== Epoch {epoch} || Cost {epoch_time:.1f}s per 50 epochs =====')
+                print('= = = = = = == ===  Train  Set  === == = = = = =')
                 print(f'Natural Loss:{loss_nn.item():.3f}')
                 print(f'Physical Equation Loss:{loss_physical.item():.3f}')
                 print(f'Accuracy:{self.history["train_accuracy"][epoch]*100:.2f}%')
-                print('= = = = = == === ====  Validation  Set  ==== === == = = = =')
+                print('= = = = = == ===  Validation  Set  === == = = = =')
                 print(f'Natural Loss:{loss_nn_val.item():.3f}')
                 print(f'Physical Equation Loss:{loss_physical_val.item():.3f}')
                 print(f'Accuracy:{(truth_val.item() / len(y_val))*100:.2f}%')
-                print('-----------------------------------------------------------')
+                print('-------------------------------------------------')
                 print(f'EI: {self.EI.item():<9.4f}, EI_grad: {self.EI.grad.item():.8f}')
                 print(f'T: {self.T.item():<10.4f}, T_grad: {self.T.grad.item():.8f}')
                 print(f'M: {self.M.item():<10.4f}, M_grad: {self.M.grad.item():.8f}')
@@ -371,12 +391,12 @@ if __name__ == '__main__':
 
     print('====== Data Loading Done! ======')
     print('===== Model Initialization =====')
-    pinn = PhysicsInformedNN(layers, connections, device, xEvent, Timestamp, yEvent)
+    pinn = PhysicsInformedNN(layers, connections, device, xEvent, Timestamp, yEvent, epochs)
     print('========= Model Training =======')
 
     # Training the Model
     start_time = time.time()
-    pinn.train(epochs)
+    pinn.train()
     end_time = time.time()
     print('============Model Training Done!===========')
     print("========Training time: {:.2f} seconds======".format(end_time - start_time))
