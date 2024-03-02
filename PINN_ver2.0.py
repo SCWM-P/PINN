@@ -325,7 +325,7 @@ class PhysicsInformedNN:
 
             # Record loss
             self.dnn.eval()  # Evaluate the  model in validation set
-            truth_train = torch.sum(y_nn_pred[torch.abs(y_nn_pred - y_train) <= 1e-5])
+            truth_train = torch.sum(y_nn_pred[torch.abs(y_nn_pred - y_train) <= 3*y_train.std()])
             self.history['train_loss'][epoch] = loss_nn.item()
             self.history['train_accuracy'][epoch] = truth_train.item() / len(y_train) * 100
             self.history['EI'][epoch] = self.EI.item()
@@ -340,23 +340,23 @@ class PhysicsInformedNN:
                 epoch_time = (epoch_endTime - epoch_startTime) if locals().get('epoch_startTime') else 0
                 x_val, t_val, y_val = self.normalize(self.x_val, self.t_val, self.y_val)
                 y_nn_val_pred = self.predict(x_val, t_val)
-                truth_val = torch.sum(y_nn_val_pred[torch.abs(y_nn_val_pred - y_val) <= 1e-5])
+                truth_val = torch.sum(y_nn_val_pred[torch.abs(y_nn_val_pred - y_val) <= 3*y_val.std()])
                 loss_nn_val = torch.nn.functional.mse_loss(y_nn_val_pred, y_val)
                 loss_physical_val = self.physicalLoss(self.x_val, self.t_val, self.y_val)
-                print(f'\n===== Epoch {epoch} || Cost {epoch_time:.1f}s per 50 epochs =====')
-                print('= = = = = = == ===  Train  Set  === == = = = = =')
-                print(f'Natural Loss:{loss_nn.item():.3f}')
-                print(f'Physical Equation Loss:{loss_physical.item():.3f}')
+                print(f'\n=== Epoch {epoch} || Cost {epoch_time:.1f}s per 50 epochs ===')
+                print('= = == === ====  Train  Set  ==== === == =')
+                print(f'Natural Loss:{loss_nn.item():.3e}')
+                print(f'Physical Equation Loss:{loss_physical.item():.3e}')
                 print(f'Accuracy:{self.history["train_accuracy"][epoch]*100:.2f}%')
-                print('= = = = = == ===  Validation  Set  === == = = = =')
-                print(f'Natural Loss:{loss_nn_val.item():.3f}')
-                print(f'Physical Equation Loss:{loss_physical_val.item():.3f}')
+                print('= == === ==== Validation Set ==== === == =')
+                print(f'Natural Loss:{loss_nn_val.item():.3e}')
+                print(f'Physical Equation Loss:{loss_physical_val.item():.3e}')
                 print(f'Accuracy:{(truth_val.item() / len(y_val))*100:.2f}%')
-                print('-------------------------------------------------')
-                print(f'EI: {self.EI.item():<9.4f}, EI_grad: {self.EI.grad.item():.8f}')
-                print(f'T: {self.T.item():<10.4f}, T_grad: {self.T.grad.item():.8f}')
-                print(f'M: {self.M.item():<10.4f}, M_grad: {self.M.grad.item():.8f}')
-                print(f'c: {self.c.item():<10.4f}, c_grad: {self.c.grad.item():.8f}')
+                print('------------------------------------------')
+                print(f'EI: {self.EI.item():<9.4e}, EI_grad: {self.EI.grad.item():.8f}')
+                print(f'T: {self.T.item():<10.4e}, T_grad: {self.T.grad.item():.8f}')
+                print(f'M: {self.M.item():<10.4e}, M_grad: {self.M.grad.item():.8f}')
+                print(f'c: {self.c.item():<10.4e}, c_grad: {self.c.grad.item():.8f}')
                 print(f'gamma: {self.gamma.item():<6.4f}, gamma_grad: {self.gamma.grad.item():.8f}\n')
                 epoch_startTime = time.time()
 
@@ -375,7 +375,7 @@ class PhysicsInformedNN:
 
 if __name__ == '__main__':
     # Configuration and Load Data
-    epochs = 1000
+    epochs = 1500
     layers = [2, 100, 100, 100, 100, 100, 100, 1]
     connections = [0, 1, 2, 3, 4, 5, 5, 2]
     data = scipy.io.loadmat('test16-1.mat')
@@ -427,3 +427,5 @@ if __name__ == '__main__':
     ax2_2.set_ylabel('Accuracy (%)', fontsize=18)
     plt.title('Loss and Accuracy Change', fontsize=20)
     plt.legend()
+
+    pinn.plot_results(epochs)
