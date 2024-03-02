@@ -1,4 +1,3 @@
-import cv2
 import pandas as pd
 import numpy as np
 from dv import AedatFile
@@ -60,20 +59,20 @@ def pause_and_resume(event):
             isRunning = True
 
 filename = r'earthquake_ELCENTRO_2.aedat4'
-with AedatFile(f'data/{filename}') as f:
+with AedatFile(f'data/aedat4/{filename}') as f:
     height, width = f['events'].size
     events = np.hstack([packet for packet in f['events'].numpy()])
     T, xEvent, yEvent, polarities = events['timestamp'], events['x'], events['y'], events['polarity']
     T = (T - T[0]) / 1e6
 
-    xEvent = xEvent[0::20]
-    T = T[0::20]
-    yEvent = yEvent[0::20]
-    polarities = polarities[0::20]
+    xEvent = xEvent[0::10]
+    T = T[0::10]
+    yEvent = yEvent[0::10]
+    polarities = polarities[0::10]
 
 
 isRunning = True
-event_num = 30000
+event_num = 50000
 xEvent_selected = xEvent[0:event_num]
 T_selected = T[0:event_num]
 yEvent_selected = yEvent[0:event_num]
@@ -87,7 +86,7 @@ ax.set_zlabel('Y', fontsize=18)
 plt.title(f'Event from EventCamera of {filename}')
 ani = FuncAnimation(fig,
                     update,
-                    frames=np.arange(0, len(xEvent), 500),
+                    frames=np.arange(0, len(xEvent), 2000),
                     interval=5,
                     init_func=init,
                     blit=False

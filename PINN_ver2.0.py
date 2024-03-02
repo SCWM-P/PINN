@@ -259,7 +259,6 @@ class PhysicsInformedNN:
             y_nn_pred_val = self.predict(x_val, t_val).flatten()
             x_val, t_val, y_nn_pred_val = self.denormalize(x_val, t_val, y_nn_pred_val)
 
-
             # Convert torch.Tensor to numpy.ndarray
             x_train = x_train.cpu().detach().numpy()
             t_train = t_train.cpu().detach().numpy()
@@ -343,11 +342,11 @@ class PhysicsInformedNN:
                 truth_val = torch.sum(torch.abs(y_nn_val_pred - y_val) <= 0.05 * torch.abs(y_val))
                 loss_nn_val = torch.nn.functional.mse_loss(y_nn_val_pred, y_val)
                 loss_physical_val = self.physicalLoss(self.x_val, self.t_val, self.y_val)
-                print(f'\n=== Epoch {epoch} || Cost {epoch_time:.1f}s per 50 epochs ===')
+                print(f'\n== Epoch {epoch} | Cost {epoch_time:.1f}s per 50 epochs ==')
                 print('= = == === ====  Train  Set  ==== === == =')
                 print(f'Natural Loss:{loss_nn.item():.3e}')
                 print(f'Physical Equation Loss:{loss_physical.item():.3e}')
-                print(f'Accuracy:{self.history["train_accuracy"][epoch]*100:.2f}%')
+                print(f'Accuracy:{self.history["train_accuracy"][epoch]:.2f}%')
                 print('= == === ==== Validation Set ==== === == =')
                 print(f'Natural Loss:{loss_nn_val.item():.3e}')
                 print(f'Physical Equation Loss:{loss_physical_val.item():.3e}')
@@ -378,10 +377,19 @@ if __name__ == '__main__':
     epochs = 1500
     layers = [2, 100, 100, 100, 100, 100, 100, 1]
     connections = [0, 1, 2, 3, 4, 5, 5, 2]
-    data = scipy.io.loadmat('test16-1.mat')
-    Timestamp = data['brushedData'][:, 0]/1e6
-    xEvent = data['brushedData'][:, 1]
-    yEvent = data['brushedData'][:, 2]
+
+
+    # data = scipy.io.loadmat('test16-1.mat')
+    # Timestamp = data['brushedData'][:, 0]/1e6
+    # xEvent = data['brushedData'][:, 1]
+    # yEvent = data['brushedData'][:, 2]
+
+    filedir = r'data\npy\data1.npy'
+    data = np.load(filedir, allow_pickle=True).item()
+    xEvent = data['x_event']
+    Timestamp = data['T']
+    yEvent = data['y_event']
+
     # Data Cleansing
     (xEvent, Timestamp, yEvent) = HotPixel_cleansing(xEvent, Timestamp, yEvent)
     # Convert to torch.Tensor
@@ -398,10 +406,11 @@ if __name__ == '__main__':
     start_time = time.time()
     pinn.train()
     end_time = time.time()
-    print('============Model Training Done!===========')
-    print("========Training time: {:.2f} seconds======".format(end_time - start_time))
-    print('===Average time per epoch: {:.4f} seconds==='.format((end_time - start_time) / epochs))
-    print('===========================================')
+    print('==============================================')
+    print('============= Model Training Done! ===========')
+    print("======== Training time: {:.2f} seconds ======".format(end_time - start_time))
+    print('=== Average time per epoch: {:.4f} seconds ==='.format((end_time - start_time) / epochs))
+    print('==============================================')
 
     #%% Draw the final results for visualization
 
@@ -429,4 +438,3 @@ if __name__ == '__main__':
     plt.legend()
 
     pinn.plot_results(epochs)
-

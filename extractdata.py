@@ -1,9 +1,3 @@
-# -*- coding: utf-8 -*-
-"""
-Spyder Editor
-
-This is a temporary script file.
-"""
 from dv import AedatFile
 import cv2
 # dvframe-2021_10_07_13_58_32.aedat4
