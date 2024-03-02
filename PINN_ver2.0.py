@@ -123,7 +123,7 @@ class PhysicsInformedNN:
         # Define Optimizer
         self.optimizer = torch.optim.Adam(
             list(self.dnn.parameters()) + [self.EI, self.T, self.M, self.c, self.gamma],
-            lr=0.001,
+            lr=0.003,
             betas=(0.9, 0.999),
             eps=1e-15,
             weight_decay=0.0001
@@ -325,9 +325,9 @@ class PhysicsInformedNN:
 
             # Record loss
             self.dnn.eval()  # Evaluate the  model in validation set
-            truth_train = torch.sum(y_nn_pred[torch.abs(y_nn_pred - y_train) <= 3*y_train.std()])
+            truth_train = torch.sum(torch.abs(y_nn_pred - y_train) <= 0.05 * torch.abs(y_train))
             self.history['train_loss'][epoch] = loss_nn.item()
-            self.history['train_accuracy'][epoch] = truth_train.item() / len(y_train) * 100
+            self.history['train_accuracy'][epoch] = truth_train.item() / y_train.numel() * 100
             self.history['EI'][epoch] = self.EI.item()
             self.history['T'][epoch] = self.T.item()
             self.history['M'][epoch] = self.M.item()
@@ -340,7 +340,7 @@ class PhysicsInformedNN:
                 epoch_time = (epoch_endTime - epoch_startTime) if locals().get('epoch_startTime') else 0
                 x_val, t_val, y_val = self.normalize(self.x_val, self.t_val, self.y_val)
                 y_nn_val_pred = self.predict(x_val, t_val)
-                truth_val = torch.sum(y_nn_val_pred[torch.abs(y_nn_val_pred - y_val) <= 3*y_val.std()])
+                truth_val = torch.sum(torch.abs(y_nn_val_pred - y_val) <= 0.05 * torch.abs(y_val))
                 loss_nn_val = torch.nn.functional.mse_loss(y_nn_val_pred, y_val)
                 loss_physical_val = self.physicalLoss(self.x_val, self.t_val, self.y_val)
                 print(f'\n=== Epoch {epoch} || Cost {epoch_time:.1f}s per 50 epochs ===')
@@ -351,7 +351,7 @@ class PhysicsInformedNN:
                 print('= == === ==== Validation Set ==== === == =')
                 print(f'Natural Loss:{loss_nn_val.item():.3e}')
                 print(f'Physical Equation Loss:{loss_physical_val.item():.3e}')
-                print(f'Accuracy:{(truth_val.item() / len(y_val))*100:.2f}%')
+                print(f'Accuracy:{(truth_val.item() / y_val.numel())*100:.2f}%')
                 print('------------------------------------------')
                 print(f'EI: {self.EI.item():<9.4e}, EI_grad: {self.EI.grad.item():.8f}')
                 print(f'T: {self.T.item():<10.4e}, T_grad: {self.T.grad.item():.8f}')
