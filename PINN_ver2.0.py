@@ -124,7 +124,7 @@ class PhysicsInformedNN:
 
     def normalize(self, x: torch.Tensor, t: torch.Tensor, y: torch.Tensor):
         """
-        Normalize data with mean and std
+        Normalize data with mean and std.
         """
         with torch.no_grad():
             x = (x - self.xEvent.mean()) / self.xEvent.std()
@@ -133,12 +133,25 @@ class PhysicsInformedNN:
         return x, t, y
 
     def denormalize(self, x: torch.Tensor, t: torch.Tensor, y: torch.Tensor):
+        """
+        Denormalize data with mean and std.
+        """
         x = x * self.xEvent.std() + self.xEvent.mean()
         t = t * self.Timestamp.std() + self.Timestamp.mean()
         y = y * self.yEvent.std() + self.yEvent.mean()
         return x, t, y
 
     def rotate(self, x: torch.Tensor, y: torch.Tensor, z: torch.Tensor, gamma: torch.Tensor, axis='None'):
+        """
+        Rotate data around the specified axis,For example, if axis='x', the data will be rotated around the x-axis.\n
+        The data manipulated by the function are all **torch.Tensor** type.
+        :param x: original x-axis data
+        :param y: original y-axis data
+        :param z: original z-axis data
+        :param gamma: the angle of rotation in radians
+        :param axis: axis of rotation you specify
+        :return: rotated data tuple with (x, y, z)
+        """
         if axis == 'None':
             raise Exception(
                 'No axis specified! Please specify an axis.\n For example axis=\'x\' if you want to rotate around the x-axis.'
@@ -158,11 +171,19 @@ class PhysicsInformedNN:
         return x, y, z
 
     def rotateLoss(self, xEvent: torch.Tensor, Timestamp: torch.Tensor, yEvent: torch.Tensor, axis='None'):
+        """
+        Calculate the loss of the rotation of the data.
+        """
         xEvent, Timestamp, yEvent = self.rotate(xEvent, Timestamp, yEvent, self.gamma, axis=axis)
         loss_rotate = torch.std(yEvent)
         return loss_rotate
 
     def derive(self, xEvent: torch.Tensor, Timestamp: torch.Tensor):
+        """
+        Perform partial differential operations.\n
+        The data manipulated by the function are all **torch.Tensor** type.
+        :return: partial differential tuple (∂4y/∂x4, ∂2y/∂x2, ∂2y/∂t2, ∂y/∂t)
+        """
         y = self.predict(xEvent, Timestamp)
 
         dy_dx = torch.autograd.grad(y, xEvent,
@@ -196,6 +217,11 @@ class PhysicsInformedNN:
         return d4y_dx4, d2y_dx2, d2y_dt2, dy_dt
 
     def physicalLoss(self, xEvent: torch.Tensor, Timestamp: torch.Tensor, yEvent: torch.Tensor):
+        """
+        Calculates the physical loss.\n
+        The physical equation is:\n
+        EI * ∂4y/∂x4 - T * ∂2y/∂x2 + M * ∂2y/∂t2 + c * ∂y/∂t = 0
+        """
         xEvent, Timestamp, yEvent = self.rotate(xEvent, Timestamp, yEvent, self.gamma, axis='y')
         d4y_dx4, d2y_dx2, d2y_dt2, dy_dt = self.derive(xEvent, Timestamp)
         y_PI_pred = \
@@ -204,6 +230,11 @@ class PhysicsInformedNN:
         return loss_Physical
 
     def plot_results(self, epoch: int):
+        """
+        Plots the results of the model in particular epoch.
+        :param epoch: Current number of model training rounds
+        :return: None. Just plot!
+        """
         self.dnn.eval()
         with torch.no_grad():
             # Plot the results in train set
