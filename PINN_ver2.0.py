@@ -384,11 +384,11 @@ if __name__ == '__main__':
     # xEvent = data['brushedData'][:, 1]
     # yEvent = data['brushedData'][:, 2]
 
-    filedir = r'data\npy\data1.npy'
+    filedir = r'dvSave-2023_03_26_02_21_16.npy'
     data = np.load(filedir, allow_pickle=True).item()
-    xEvent = data['x_event']
+    xEvent = data['xEvent']
     Timestamp = data['T']
-    yEvent = data['y_event']
+    yEvent = data['yEvent']
 
     # Data Cleansing
     (xEvent, Timestamp, yEvent) = HotPixel_cleansing(xEvent, Timestamp, yEvent)

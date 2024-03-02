@@ -1,7 +1,7 @@
 import numpy as np
 import matplotlib.pyplot as plt
 
-filedir = r'data\npy\data3.npy'
+filedir = r'data\npy\data1.npy'
 data = np.load(filedir, allow_pickle=True).item()
 xEvent = data['x_event']
 Timestamp = data['T']
