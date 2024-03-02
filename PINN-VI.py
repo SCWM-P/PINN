@@ -13,17 +13,18 @@ plt.rc('font', family='Times New Roman')
 
 # Check CUDA availability (for GPU acceleration)
 device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
-print("===Using device===")
-print(f"=====  {device}  =====")
+print("========  Using device  ========")
+print(f"============  {device}  ============")
 
 
-def HotPixel_brush(xEvent, Timestamp, yEvent):
+#%% Define functions and classes we need
+def HotPixel_cleansing(xEvent: np.ndarray, Timestamp: np.ndarray, yEvent: np.ndarray):
     """
-    :param xEvent: Event data of x
-    :param Timestamp: Event data of time
-    :param yEvent: Event data of y
-    :return: filtered event data
-    This function is used to brush the data via 3-sigma rule
+    :param xEvent: Event data of x (ndarray)
+    :param Timestamp: Event data of time (ndarray)
+    :param yEvent: Event data of y (ndarray)
+    :return: filtered event data (ndarray)
+    This function is used to brush the HotPixel of data via 3-sigma rule.
     """
     df = pd.DataFrame({'Timestamp': Timestamp, 'xEvent': xEvent, 'yEvent': yEvent})
     df['coords'] = list(zip(df['xEvent'], df['yEvent']))
@@ -38,19 +39,27 @@ def HotPixel_brush(xEvent, Timestamp, yEvent):
         (event['activity'] > act_mean - 3 * act_std) & (event['activity'] < act_mean + 1.5 * act_std) &
         (event['continuity'] > cont_mean - 3 * cont_std) & (event['continuity'] < cont_mean + 1.5 * cont_std)]
     filtered_events = df[df['coords'].isin(event_filtered.index)]
-    return filtered_events['xEvent'].to_numpy(), filtered_events['Timestamp'].to_numpy(), filtered_events['yEvent'].to_numpy()
+    return (filtered_events['xEvent'].to_numpy(),
+            filtered_events['Timestamp'].to_numpy(),
+            filtered_events['yEvent'].to_numpy())
 
 
-# 定义DNN类
+# Define DNN Classes
 class DNN(torch.nn.Module):
-    def __init__(self, layers, connections):
+    """
+    DNN model with residual link\n
+    Default activation function is tanh()
+    :param layers: list of layer sizes
+    :param connections: list of connection scheme
+    """
+    def __init__(self, layers: list, connections: list):
         super(DNN, self).__init__()
         self.layers = layers
         self.connections = connections
         self.num_layers = len(layers)
         if len(connections) != self.num_layers:
             raise ValueError("Length of connections must match the number of layers")
-        # 线性层
+        # Define Linear Layer
         self.linears = torch.nn.ModuleList(
             [torch.nn.Linear(layers[i], layers[i + 1]) for i in range(self.num_layers - 1)]
         )
@@ -69,10 +78,9 @@ class DNN(torch.nn.Module):
         return x
 
 
-# 定义物理信息神经网络类
+# Define Physical Information Neural Network Classes
 class PhysicsInformedNN:
     def __init__(self, layers, connections, device, xEvent, Timestamp, yEvent, validation_ratio=0.2):
-
         # Configuration
         self.device = device
         self.dnn = DNN(layers, connections).to(device)
@@ -90,7 +98,8 @@ class PhysicsInformedNN:
         self.x_train, self.x_val, self.t_train, self.t_val, self.y_train, self.y_val = train_test_split(
             self.xEvent, self.Timestamp, self.yEvent,
             test_size=validation_ratio,
-            random_state=42)
+            random_state=42
+        )
         # Define Optimizer
         self.optimizer = torch.optim.Adam(
             list(self.dnn.parameters()) + [self.EI, self.T, self.M, self.c, self.gamma],
@@ -100,14 +109,18 @@ class PhysicsInformedNN:
             weight_decay=0.0001
         )
 
-    def predict(self, xEvent, Timestamp):
+    def predict(self, xEvent: torch.Tensor, Timestamp: torch.Tensor):
         y_pred = self.dnn(torch.cat([xEvent, Timestamp], dim=1))
         return y_pred
 
     def normalize(self, x: torch.Tensor, t: torch.Tensor, y: torch.Tensor):
-        x = (x - self.xEvent.mean()) / self.xEvent.std()
-        t = (t - self.Timestamp.mean()) / self.Timestamp.std()
-        y = (y - self.yEvent.mean()) / self.yEvent.std()
+        """
+        Normalize data with mean and std
+        """
+        with torch.no_grad():
+            x = (x - self.xEvent.mean()) / self.xEvent.std()
+            t = (t - self.Timestamp.mean()) / self.Timestamp.std()
+            y = (y - self.yEvent.mean()) / self.yEvent.std()
         return x, t, y
 
     def denormalize(self, x: torch.Tensor, t: torch.Tensor, y: torch.Tensor):
@@ -183,7 +196,7 @@ class PhysicsInformedNN:
         xEvent, Timestamp, yEvent = self.rotate(xEvent, Timestamp, yEvent, self.gamma, axis='y')
         d4y_dx4, d2y_dx2, d2y_dt2, dy_dt = self.derive(xEvent, Timestamp)
         y_PI_pred = \
-        self.EI * d4y_dx4 - self.T * d2y_dx2 + self.M * d2y_dt2 + self.c * dy_dt
+            self.EI * d4y_dx4 - self.T * d2y_dx2 + self.M * d2y_dt2 + self.c * dy_dt
         loss_Physical = torch.nn.functional.mse_loss(y_PI_pred, torch.zeros_like(y_PI_pred))
         return loss_Physical
 
@@ -202,10 +215,12 @@ class PhysicsInformedNN:
             # Convert torch.Tensor to numpy.ndarray
             x_train = x_train.cpu().detach().numpy()
             t_train = t_train.cpu().detach().numpy()
+            y_train = y_train.cpu().detach().numpy()
             y_nn_pred_train = y_nn_pred_train.cpu().detach().numpy()
 
             x_val = x_val.cpu().detach().numpy()
             t_val = t_val.cpu().detach().numpy()
+            y_val = y_val.cpu().detach().numpy()
             y_nn_pred_val = y_nn_pred_val.cpu().detach().numpy()
 
             # Plot the results
@@ -218,19 +233,19 @@ class PhysicsInformedNN:
             ax_train.set_ylabel('$T (s)$', fontsize=18)
             ax_train.set_zlabel('$Y$', fontsize=18)
             ax_train.legend()
-            ax_train.title(f'Comparison at Epoch {epoch} in Train Set', fontsize=20)
+            ax_train.set_title(f'Comparison at Epoch {epoch} in Train Set', fontsize=20)
             ax_val.scatter(x_val, t_val, y_val, c='b', marker='.', label='Actual Dataset', alpha=0.5)
             ax_val.scatter(x_val, t_val, y_nn_pred_val, c='r', marker='.', label='Prediction of Natural Network', alpha=0.5)
             ax_val.set_xlabel('$X$', fontsize=18)
             ax_val.set_ylabel('$T (s)$', fontsize=18)
             ax_val.set_zlabel('$Y$', fontsize=18)
             ax_val.legend()
-            ax_val.title(f'Comparison at Epoch {epoch} in Validation Set', fontsize=20)
+            ax_val.set_title(f'Comparison at Epoch {epoch} in Validation Set', fontsize=20)
             plt.show()
 
     def train(self, epochs: int):
         self.history = {
-            'train_loss': torch.zeroes((epochs,)),
+            'train_loss': torch.zeros((epochs,)),
             'train_accuracy': torch.zeros((epochs,)),
             'EI': torch.zeros((epochs,)),
             'T': torch.zeros((epochs,)),
@@ -239,7 +254,7 @@ class PhysicsInformedNN:
             'gamma': torch.zeros((epochs,))
         }
         x_train, t_train, y_train = self.normalize(self.x_train, self.t_train, self.y_train)
-        for epoch in np.range(epochs):
+        for epoch in range(epochs):
             self.dnn.train()  # Train the  model in training set
             self.optimizer.zero_grad()
             # Loss of Natural Network
@@ -255,45 +270,105 @@ class PhysicsInformedNN:
             self.optimizer.step()
 
             # Record loss
-            with torch.no_grad():
-                self.dnn.eval()  # Evaluate the  model in validation set
-                truth_train = torch.sum(y_nn_pred[torch.abs(y_nn_pred - y_train) <= 1e-5])
-                self.history['train_loss'][epoch] = loss_nn.item()
-                self.history['train_accuracy'][epoch] = truth_train.item() / len(y_train)
-                self.history['EI'][epoch] = self.EI.item()
-                self.history['T'][epoch] = self.T.item()
-                self.history['M'][epoch] = self.M.item()
-                self.history['c'][epoch] = self.c.item()
-                self.history['gamma'][epoch] = self.gamma.item()
+            self.dnn.eval()  # Evaluate the  model in validation set
+            truth_train = torch.sum(y_nn_pred[torch.abs(y_nn_pred - y_train) <= 1e-5])
+            self.history['train_loss'][epoch] = loss_nn.item()
+            self.history['train_accuracy'][epoch] = truth_train.item() / len(y_train) * 100
+            self.history['EI'][epoch] = self.EI.item()
+            self.history['T'][epoch] = self.T.item()
+            self.history['M'][epoch] = self.M.item()
+            self.history['c'][epoch] = self.c.item()
+            self.history['gamma'][epoch] = self.gamma.item()
 
-                # Print epoch Results
-                if epoch % 50 == 0:
-                    x_val, t_val, y_val = self.normalize(self.x_val, self.t_val, self.y_val)
-                    y_nn_val_pred = self.predict(x_val, t_val)
-                    truth_val = torch.sum(y_nn_val_pred[torch.abs(y_nn_val_pred - y_val) <= 1e-5])
-                    loss_nn_val = torch.nn.functional.mse_loss(y_nn_val_pred, y_val)
-                    loss_physical_val = self.physicalLoss(self.x_val, self.t_val, self.y_val)
-                    print(f'========= Epoch {epoch} =========')
-                    print(f'Train Set Natural Loss:{loss_nn.item():.3f}')
-                    print(f'Train Set Physical  Equation Loss:{loss_physical.item():.3f}')
-                    print(f'Train Set Accuracy:{self.history["train_accuracy"][epoch]:.3f}')
-                    print(f'Validation Set Natural Loss:{loss_nn_val.item():.3f}')
-                    print(f'Validation Set Physical  Equation Loss:{loss_physical_val.item():.3f}')
-                    print(f'Validation Set Accuracy:{truth_val.item() / len(y_val):.3f}')
-                    print(f'EI: {self.EI.item():<10.4f}, EI_grad: {self.EI.grad.item():.8f}')
-                    print(f'T: {self.T.item():<10.4f}, T_grad: {self.T.grad.item():.8f}')
-                    print(f'M: {self.M.item():<10.4f}, M_grad: {self.M.grad.item():.8f}')
-                    print(f'c: {self.c.item():<10.4f}, c_grad: {self.c.grad.item():.8f}')
-                    print(f'gamma: {self.gamma.item():<10.4f}, gamma_grad: {self.gamma.grad.item():.8f}')
+            # Print epoch Results
+            if epoch % 50 == 0:
+                epoch_endTime = time.time()
+                epoch_time = (epoch_endTime - epoch_startTime) if locals().get('epoch_startTime') else 0
+                x_val, t_val, y_val = self.normalize(self.x_val, self.t_val, self.y_val)
+                y_nn_val_pred = self.predict(x_val, t_val)
+                truth_val = torch.sum(y_nn_val_pred[torch.abs(y_nn_val_pred - y_val) <= 1e-5])
+                loss_nn_val = torch.nn.functional.mse_loss(y_nn_val_pred, y_val)
+                loss_physical_val = self.physicalLoss(self.x_val, self.t_val, self.y_val)
+                print(f'========= Epoch {epoch} | Times Consumption {epoch_time:.3f}s per 50 epochs =========')
+                print('= = = = = = == === ====  Train  Set  ==== === == = = = = =')
+                print(f'Natural Loss:\n{loss_nn.item():.3f}')
+                print(f'Physical Equation Loss:\n{loss_physical.item():.3f}')
+                print(f'Accuracy:\n{self.history["train_accuracy"][epoch]*100:.2f}%')
+                print('= = = = = == === ====  Validation  Set  ==== === == = = = =')
+                print(f'Natural Loss:\n{loss_nn_val.item():.3f}',
+                      f'Physical Equation Loss:\n{loss_physical_val.item():.3f}',
+                      f'Accuracy:\n{(truth_val.item() / len(y_val))*100:.2f}%')
+                print(f'EI: {self.EI.item():<9.4f}, EI_grad: {self.EI.grad.item():.8f}')
+                print(f'T: {self.T.item():<10.4f}, T_grad: {self.T.grad.item():.8f}')
+                print(f'M: {self.M.item():<10.4f}, M_grad: {self.M.grad.item():.8f}')
+                print(f'c: {self.c.item():<10.4f}, c_grad: {self.c.grad.item():.8f}')
+                print(f'gamma: {self.gamma.item():<6.4f}, gamma_grad: {self.gamma.grad.item():.8f}')
+                epoch_startTime = time.time()
 
-                # Process Visualization
-                if epochs <= 10000:
+            # Process Visualization
+            if epochs <= 10000:
+                if epoch % 1000 == 0:
+                    self.plot_results(epoch)
+            else:
+                if epoch <= 10000:
                     if epoch % 1000 == 0:
                         self.plot_results(epoch)
-                else:
-                    if epoch <= 10000:
-                        if epoch % 1000 == 0:
-                            self.plot_results(epoch)
-                    elif epoch % (epochs // 20) == 0:
-                        if epoch <= 30000:
-                            self.plot_results(epoch)
+                elif epoch % (epochs // 20) == 0:
+                    if epoch <= 30000:
+                        self.plot_results(epoch)
+
+
+if __name__ == '__main__':
+    # Configuration and Load Data
+    epochs = 15000
+    layers = [2, 150, 150, 150, 150, 150, 150, 150, 1]
+    connections = [0, 1, 2, 3, 4, 5, 5, 5, 2]
+    data = scipy.io.loadmat('test16-1.mat')
+    Timestamp = data['brushedData'][:, 0]/1e6
+    xEvent = data['brushedData'][:, 1]
+    yEvent = data['brushedData'][:, 2]
+    # Data Cleansing
+    (xEvent, Timestamp, yEvent) = HotPixel_cleansing(xEvent, Timestamp, yEvent)
+    # Convert to torch.Tensor
+    xEvent = torch.tensor(xEvent, dtype=torch.float32, device=device, requires_grad=True).unsqueeze(1)
+    Timestamp = torch.tensor(Timestamp, dtype=torch.float32, device=device, requires_grad=True).unsqueeze(1)
+    yEvent = torch.tensor(yEvent, dtype=torch.float32, device=device, requires_grad=True).unsqueeze(1)
+
+    print('====== Data Loading Done! ======')
+    print('===== Model Initialization =====')
+    pinn = PhysicsInformedNN(layers, connections, device, xEvent, Timestamp, yEvent)
+    print('========= Model Training =======')
+
+    # Training the Model
+    start_time = time.time()
+    pinn.train(epochs)
+    end_time = time.time()
+    print('============Model Training Done!===========')
+    print("========Training time: {:.2f} seconds======".format(end_time - start_time))
+    print('===Average time per epoch: {:.4f} seconds==='.format((end_time - start_time) / epochs))
+    print('===========================================')
+
+    #%% Draw the final results for visualization
+
+    # Plot parameter change curves
+    fig1 = plt.figure()
+    plt.plot(pinn.history['EI'], label='EI')
+    plt.plot(pinn.history['T'], label='T')
+    plt.plot(pinn.history['M'], label='M')
+    plt.plot(pinn.history['c'], label='c')
+    plt.plot(pinn.history['gamma'], label='γ')
+    plt.xlabel('Epoch', fontsize=18)
+    plt.ylabel('Parameter Value', fontsize=18)
+    plt.legend()
+    plt.title('Parameter Evolution', fontsize=20)
+
+    # Plotting Loss Function and Accuracy Change
+    fig2, ax2_1 = plt.subplots()
+    ax2_2 = ax2_1.twinx()
+    ax2_1.plot(pinn.history['train_loss'], 'r-', label='Loss', linewidth=2)
+    ax2_2.plot(pinn.history['train_accuracy'], 'b.-', label='Accuracy', linewidth=2)
+    ax2_1.set_xlabel('Epoch', fontsize=18)
+    ax2_1.set_ylabel('Loss', fontsize=18)
+    ax2_2.set_ylabel('Accuracy (%)', fontsize=18)
+    plt.title('Loss and Accuracy Change', fontsize=20)
+    plt.legend()
