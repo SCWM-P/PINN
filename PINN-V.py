@@ -260,7 +260,7 @@ class PhysicsInformedNN:
                 with torch.no_grad():
                     x_val, T_val, y_val = self.normalize(self.x_val, self.T_val, self.y_val)
                     y_pred_val = self.net_u(x_val, T_val)
-                    loss_y_val = torch.nn.functional.mse_loss(y_pred_val, self.y_val)
+                    loss_y_val = torch.nn.functional.mse_loss(y_pred_val, y_val)
                     loss_PI_val = self.PIloss(self.x_val, self.T_val, self.y_val)
                     loss_val = loss_y_val + loss_PI_val
                 print(f'=======Epoch {epoch}=======\n'

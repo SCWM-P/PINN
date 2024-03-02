@@ -79,7 +79,7 @@ class PhysicsInformedNN:
         # Learning Parameters
         self.EI = torch.nn.Parameter(torch.tensor([1.0], device=device))
         self.T = torch.nn.Parameter(torch.tensor([1.0], device=device))
-        self.m = torch.nn.Parameter(torch.tensor([1.0], device=device))
+        self.M = torch.nn.Parameter(torch.tensor([1.0], device=device))
         self.c = torch.nn.Parameter(torch.tensor([1.0], device=device))
         self.gamma = torch.nn.Parameter(torch.tensor([torch.pi / 4], device=device))
         # Data
@@ -93,7 +93,7 @@ class PhysicsInformedNN:
             random_state=42)
         # Define Optimizer
         self.optimizer = torch.optim.Adam(
-            list(self.dnn.parameters()) + [self.EI, self.T, self.m, self.c],
+            list(self.dnn.parameters()) + [self.EI, self.T, self.M, self.c, self.gamma],
             lr=0.001,
             betas=(0.9, 0.999),
             eps=1e-15,
@@ -179,40 +179,121 @@ class PhysicsInformedNN:
                                       create_graph=True)[0]
         return d4y_dx4, d2y_dx2, d2y_dt2, dy_dt
 
-    def physicalLoss(self, xEvent:torch.Tensor, Timestamp:torch.Tensor, yEvent: torch.Tensor):
+    def physicalLoss(self, xEvent: torch.Tensor, Timestamp: torch.Tensor, yEvent: torch.Tensor):
         xEvent, Timestamp, yEvent = self.rotate(xEvent, Timestamp, yEvent, self.gamma, axis='y')
         d4y_dx4, d2y_dx2, d2y_dt2, dy_dt = self.derive(xEvent, Timestamp)
         y_PI_pred = \
-        self.EI * d4y_dx4 - self.T * d2y_dx2 + self.m * d2y_dt2 + self.c * dy_dt
+        self.EI * d4y_dx4 - self.T * d2y_dx2 + self.M * d2y_dt2 + self.c * dy_dt
         loss_Physical = torch.nn.functional.mse_loss(y_PI_pred, torch.zeros_like(y_PI_pred))
         return loss_Physical
 
-    def train(self, epochs):
+    def plot_results(self, epoch: int):
+        self.dnn.eval()
+        with torch.no_grad():
+            # Plot the results in train set
+            x_train, t_train, y_train = self.normalize(self.x_train, self.t_train, self.y_train)
+            y_nn_pred_train = self.predict(x_train, t_train).flatten()
+            x_train, t_train, y_nn_pred_train = self.denormalize(x_train, t_train, y_nn_pred_train)
+
+            # plot the results in validation set
+            x_val, t_val, y_val = self.normalize(self.x_val, self.t_val, self.y_val)
+            y_nn_pred_val = self.predict(x_val, t_val).flatten()
+
+            # Convert torch.Tensor to numpy.ndarray
+            x_train = x_train.cpu().detach().numpy()
+            t_train = t_train.cpu().detach().numpy()
+            y_nn_pred_train = y_nn_pred_train.cpu().detach().numpy()
+
+            x_val = x_val.cpu().detach().numpy()
+            t_val = t_val.cpu().detach().numpy()
+            y_nn_pred_val = y_nn_pred_val.cpu().detach().numpy()
+
+            # Plot the results
+            fig = plt.figure()
+            ax_train = fig.add_subplot(121, projection='3d')
+            ax_val = fig.add_subplot(122, projection='3d')
+            ax_train.scatter(x_train, t_train, y_train, c='b', marker='.', label='Actual Dataset', alpha=0.5)
+            ax_train.scatter(x_train, t_train, y_nn_pred_train, c='r', marker='.', label='Prediction of Natural Network', alpha=0.5)
+            ax_train.set_xlabel('$X$', fontsize=18)
+            ax_train.set_ylabel('$T (s)$', fontsize=18)
+            ax_train.set_zlabel('$Y$', fontsize=18)
+            ax_train.legend()
+            ax_train.title(f'Comparison at Epoch {epoch} in Train Set', fontsize=20)
+            ax_val.scatter(x_val, t_val, y_val, c='b', marker='.', label='Actual Dataset', alpha=0.5)
+            ax_val.scatter(x_val, t_val, y_nn_pred_val, c='r', marker='.', label='Prediction of Natural Network', alpha=0.5)
+            ax_val.set_xlabel('$X$', fontsize=18)
+            ax_val.set_ylabel('$T (s)$', fontsize=18)
+            ax_val.set_zlabel('$Y$', fontsize=18)
+            ax_val.legend()
+            ax_val.title(f'Comparison at Epoch {epoch} in Validation Set', fontsize=20)
+            plt.show()
+
+    def train(self, epochs: int):
         self.history = {
             'train_loss': torch.zeroes((epochs,)),
-            'val_loss': torch.zeros((epochs,)),
+            'train_accuracy': torch.zeros((epochs,)),
             'EI': torch.zeros((epochs,)),
             'T': torch.zeros((epochs,)),
-            'm': torch.zeros((epochs,)),
+            'M': torch.zeros((epochs,)),
             'c': torch.zeros((epochs,)),
             'gamma': torch.zeros((epochs,))
         }
         x_train, t_train, y_train = self.normalize(self.x_train, self.t_train, self.y_train)
         for epoch in np.range(epochs):
-            self.dnn.train()
+            self.dnn.train()  # Train the  model in training set
             self.optimizer.zero_grad()
             # Loss of Natural Network
             y_nn_pred = self.predict(x_train, t_train)
             loss_nn = torch.nn.functional.mse_loss(y_nn_pred, y_train)
             # Loss of Rotation
-            loss_rotation = self.rotateLoss(x_train, t_train, y_train, axis='y')
+            loss_rotation = self.rotateLoss(self.x_train, self.t_train, self.y_train, axis='y')
             # Loss of Physical Informed Equation
-            loss_physical = self.physicalLoss(x_train, t_train, y_train)
+            loss_physical = self.physicalLoss(self.x_train, self.t_train, self.y_train)
 
             Loss = loss_nn + 100*loss_rotation + 10000*loss_physical
             Loss.backward(retain_graph=True)
             self.optimizer.step()
 
-            # Record loss and EI
-            self.history['train_loss'][epoch] = loss_nn.item()
-            self
+            # Record loss
+            with torch.no_grad():
+                self.dnn.eval()  # Evaluate the  model in validation set
+                truth_train = torch.sum(y_nn_pred[torch.abs(y_nn_pred - y_train) <= 1e-5])
+                self.history['train_loss'][epoch] = loss_nn.item()
+                self.history['train_accuracy'][epoch] = truth_train.item() / len(y_train)
+                self.history['EI'][epoch] = self.EI.item()
+                self.history['T'][epoch] = self.T.item()
+                self.history['M'][epoch] = self.M.item()
+                self.history['c'][epoch] = self.c.item()
+                self.history['gamma'][epoch] = self.gamma.item()
+
+                # Print epoch Results
+                if epoch % 50 == 0:
+                    x_val, t_val, y_val = self.normalize(self.x_val, self.t_val, self.y_val)
+                    y_nn_val_pred = self.predict(x_val, t_val)
+                    truth_val = torch.sum(y_nn_val_pred[torch.abs(y_nn_val_pred - y_val) <= 1e-5])
+                    loss_nn_val = torch.nn.functional.mse_loss(y_nn_val_pred, y_val)
+                    loss_physical_val = self.physicalLoss(self.x_val, self.t_val, self.y_val)
+                    print(f'========= Epoch {epoch} =========')
+                    print(f'Train Set Natural Loss:{loss_nn.item():.3f}')
+                    print(f'Train Set Physical  Equation Loss:{loss_physical.item():.3f}')
+                    print(f'Train Set Accuracy:{self.history["train_accuracy"][epoch]:.3f}')
+                    print(f'Validation Set Natural Loss:{loss_nn_val.item():.3f}')
+                    print(f'Validation Set Physical  Equation Loss:{loss_physical_val.item():.3f}')
+                    print(f'Validation Set Accuracy:{truth_val.item() / len(y_val):.3f}')
+                    print(f'EI: {self.EI.item():<10.4f}, EI_grad: {self.EI.grad.item():.8f}')
+                    print(f'T: {self.T.item():<10.4f}, T_grad: {self.T.grad.item():.8f}')
+                    print(f'M: {self.M.item():<10.4f}, M_grad: {self.M.grad.item():.8f}')
+                    print(f'c: {self.c.item():<10.4f}, c_grad: {self.c.grad.item():.8f}')
+                    print(f'gamma: {self.gamma.item():<10.4f}, gamma_grad: {self.gamma.grad.item():.8f}')
+
+                # Process Visualization
+                if epochs <= 10000:
+                    if epoch % 1000 == 0:
+                        self.plot_results(epoch)
+                else:
+                    if epoch <= 10000:
+                        if epoch % 1000 == 0:
+                            self.plot_results(epoch)
+                    elif epoch % (epochs // 20) == 0:
+                        if epoch <= 30000:
+                            self.plot_results(epoch)
