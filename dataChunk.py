@@ -48,7 +48,7 @@ with AedatFile(f'data/aedat4/{filename}') as f:
     polarities = polarities[0::20]
 
 xEvent, T, yEvent, polarities = HotPixel_brush(xEvent, T, yEvent, polarities)
-data = {'xEvent': xEvent, 'T': T, 'yEvent': yEvent, 'polarities': polarities}
+data = {'xEvent': xEvent, 'Timestamp': T, 'yEvent': yEvent, 'polarities': polarities}
 np.save(f'data/npy/{filename[:-6]}.npy', data)
 fig = plt.figure()
 ax = fig.add_subplot(111, projection='3d')

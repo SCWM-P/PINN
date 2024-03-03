@@ -275,12 +275,12 @@ class PhysicsInformedNN:
             ax_val = fig.add_subplot(122, projection='3d')
             ax_train.scatter(
                 x_train, t_train, self.y_train.cpu().detach().numpy(),
-                c='b', marker='.', alpha=0.5,
+                c='b', marker='.', alpha=0.2,
                 label='Actual Dataset'
             )
             ax_train.scatter(
                 x_train, t_train, y_nn_pred_train,
-                c='r', marker='.', alpha=0.5,
+                c='r', marker='.', alpha=0.2,
                 label='Prediction of Natural Network'
             )
             ax_train.set_xlabel('$X$', fontsize=18)
@@ -290,7 +290,7 @@ class PhysicsInformedNN:
             ax_train.set_title(f'Comparison at Epoch {epoch} in Train Set', fontsize=20)
             ax_val.scatter(
                 x_val, t_val, self.y_val.cpu().detach().numpy(),
-                c='b', marker='.', alpha=0.5,
+                c='b', marker='.', alpha=0.2,
                 label='Actual Dataset'
             )
             ax_val.scatter(
@@ -384,10 +384,10 @@ if __name__ == '__main__':
     # xEvent = data['brushedData'][:, 1]
     # yEvent = data['brushedData'][:, 2]
 
-    filedir = r'dvSave-2023_03_26_02_21_16.npy'
-    data = np.load(filedir, allow_pickle=True).item()
+    filename = r'dvSave-2023_03_26_02_21_16.npy'
+    data = np.load(f'data/npy/{filename}.npy', allow_pickle=True).item()
     xEvent = data['xEvent']
-    Timestamp = data['T']
+    Timestamp = data['Timestamp']
     yEvent = data['yEvent']
 
     # Data Cleansing
