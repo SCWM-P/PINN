@@ -65,11 +65,13 @@ $$
 1. 修复了内存占用太大的问题
 2. 修复了在绘图和过程评估中梯度丢失报错的问题
 
-## dataChunking.py released
+## dataChunk.py released
 
 主要功能集成了`数据清洗`,`数据读取`,`数据切块`，`数据保存`等功能，并集成了可视化功能，使得更加方便地进行手动的对`aedat4`文件进行读取与切割、保存
 
-## 2024.3.7
+---
+
+# 2024.3.7
 
 ## PINN_ver2.1.py under advisement
 
@@ -77,3 +79,19 @@ $$
 1. 发现了一个ver2.0中的一个不合理的地方，会导致当数据整体为竖向的时候，模型的拟合效果大幅下降
 2. 同时发现模型的拟合趋势和`gamma`的初始值关系很大，所以将`gamma`的初始值选定方案有待升级优化
 3. 发现`rotate`函数的优化趋向，原来使用的使得`yEvent`的方差最小化的策略存在问题，在某些数据集下会导致拟合趋势有误
+4. 修复了`rotate`函数中的一个重大逻辑问题，因为变量赋值后，新赋值的量马上被用到了下一个赋值中，这是错误的，我们本来应该实现：
+
+$$
+\begin{cases}
+x = x \cdot \cos \theta + z \cdot \sin \theta \\
+y = y \\
+z = -x \cdot \sin \theta + z \cdot \cos \theta \\
+\end{cases}
+$$
+但是我们使用了错误的赋值方式：
+```python
+x = x * torch.cos(theta) + z * torch.sin(theta)
+y = y
+z = -x * torch.sin(theta) + z * torch.cos(theta)
+```
+这是因为`x`在被赋值后马上被用到了下一个赋值`z`的赋值语句中
