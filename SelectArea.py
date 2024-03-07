@@ -33,7 +33,7 @@ def update(frame):
     xEvent_selected = xEvent[startPoint:endPoint]
     T_selected = T[startPoint:endPoint]
     yEvent_selected = yEvent[startPoint:endPoint]
-    # xEvent_selected, T_selected, yEvent_selected = HotPixel_brush(xEvent_selected, T_selected, yEvent_selected)
+    xEvent_selected, T_selected, yEvent_selected = HotPixel_brush(xEvent_selected, T_selected, yEvent_selected)
     scat._offsets3d = (xEvent_selected, T_selected, yEvent_selected)
     ax.set_xlim(np.min(xEvent_selected)-10, np.max(xEvent_selected)+10)
     ax.set_ylim(np.min(T_selected), np.max(T_selected))
@@ -58,7 +58,7 @@ def pause_and_resume(event):
             ani.resume()
             isRunning = True
 
-filename = r'dvSave-2023_03_26_02_21_16.aedat4'
+filename = r'earthquake_ELCENTRO_1.aedat4'
 with AedatFile(f'data/aedat4/{filename}') as f:
     height, width = f['events'].size
     events = np.hstack([packet for packet in f['events'].numpy()])
@@ -80,10 +80,10 @@ plt.rc('font', family='Times New Roman')
 fig = plt.figure()
 ax = fig.add_subplot(111, projection='3d')
 scat = ax.scatter(xEvent_selected, T_selected, yEvent_selected, marker='.')
-ax.set_xlabel('X', fontsize=18)
-ax.set_ylabel('T (s)', fontsize=18)
-ax.set_zlabel('Y', fontsize=18)
-plt.title(f'Event from EventCamera of {filename}')
+ax.set_xlabel('$X$', fontsize=24)
+ax.set_ylabel('$T (s)$', fontsize=24)
+ax.set_zlabel('$Y$', fontsize=24)
+plt.title(f'$Event$ $from$ $EventCamera$ $of$ {filename}', fontsize=36)
 ani = FuncAnimation(fig,
                     update,
                     frames=np.arange(0, len(xEvent), 2000),
