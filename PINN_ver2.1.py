@@ -10,6 +10,7 @@ from sklearn.model_selection import train_test_split
 np.random.seed(1234)
 torch.manual_seed(1234)
 torch.autograd.set_detect_anomaly(True)
+plt.ion()
 plt.rc('font', family='Times New Roman')
 
 # Check CUDA availability (for GPU acceleration)
@@ -100,7 +101,7 @@ class PhysicsInformedNN:
         self.T = torch.nn.Parameter(torch.tensor([1.0], device=device))
         self.M = torch.nn.Parameter(torch.tensor([1.0], device=device))
         self.c = torch.nn.Parameter(torch.tensor([1.0], device=device))
-        self.gamma = torch.nn.Parameter(torch.tensor([torch.pi / 2], dtype=torch.float32, device=device))
+        self.gamma = torch.nn.Parameter(torch.tensor([torch.pi / 4], dtype=torch.float32, device=device))
         # Data
         self.xEvent = xEvent
         self.Timestamp = Timestamp
@@ -124,7 +125,7 @@ class PhysicsInformedNN:
         # Define Optimizer
         self.optimizer = torch.optim.Adam(
             list(self.dnn.parameters()) + [self.EI, self.T, self.M, self.c, self.gamma],
-            lr=0.003,
+            lr=0.01,
             betas=(0.9, 0.999),
             eps=1e-15,
             weight_decay=0.0001
@@ -190,6 +191,12 @@ class PhysicsInformedNN:
         loss_rotate = torch.std(yEvent)
         return loss_rotate
 
+    def phi(self, x: float,mu: float, sigma:float ):
+        """
+        Calculate the value of the normal distribution function.
+        """
+        return (1 / (sigma * np.sqrt(2 * np.pi))) * np.exp(-((x - mu) ** 2) / (2 * (sigma ** 2)))
+
     def derive(self, xEvent: torch.Tensor, Timestamp: torch.Tensor):
         """
         Perform partial differential operations.\n
@@ -202,29 +209,39 @@ class PhysicsInformedNN:
                                     retain_graph=True,
                                     create_graph=True)[0]
         # We need ∂2y/∂x2
-        d2y_dx2 = torch.autograd.grad(dy_dx, xEvent,
-                                      grad_outputs=torch.ones_like(dy_dx),
-                                      retain_graph=True,
-                                      create_graph=True)[0]
-        d3y_dx3 = torch.autograd.grad(d2y_dx2, xEvent,
-                                      grad_outputs=torch.ones_like(d2y_dx2),
-                                      retain_graph=True,
-                                      create_graph=True)[0]
+        d2y_dx2 = torch.autograd.grad(
+            dy_dx, xEvent,
+            grad_outputs=torch.ones_like(dy_dx),
+            retain_graph=True,
+            create_graph=True
+        )[0]
+        d3y_dx3 = torch.autograd.grad(
+            d2y_dx2, xEvent,
+            grad_outputs=torch.ones_like(d2y_dx2),
+            retain_graph=True,
+            create_graph=True
+        )[0]
         # We need ∂4y/∂x4
-        d4y_dx4 = torch.autograd.grad(d3y_dx3, xEvent,
-                                      grad_outputs=torch.ones_like(d3y_dx3),
-                                      retain_graph=True,
-                                      create_graph=True)[0]
+        d4y_dx4 = torch.autograd.grad(
+            d3y_dx3, xEvent,
+            grad_outputs=torch.ones_like(d3y_dx3),
+            retain_graph=True,
+            create_graph=True
+        )[0]
         # We need ∂y/∂t
-        dy_dt = torch.autograd.grad(y, Timestamp,
-                                    grad_outputs=torch.ones_like(y),
-                                    retain_graph=True,
-                                    create_graph=True)[0]
+        dy_dt = torch.autograd.grad(
+            y, Timestamp,
+            grad_outputs=torch.ones_like(y),
+            retain_graph=True,
+            create_graph=True
+        )[0]
         # We need ∂2y/∂t2
-        d2y_dt2 = torch.autograd.grad(dy_dt, Timestamp,
-                                      grad_outputs=torch.ones_like(dy_dt),
-                                      retain_graph=True,
-                                      create_graph=True)[0]
+        d2y_dt2 = torch.autograd.grad(
+            dy_dt, Timestamp,
+            grad_outputs=torch.ones_like(dy_dt),
+            retain_graph=True,
+            create_graph=True
+        )[0]
         return d4y_dx4, d2y_dx2, d2y_dt2, dy_dt
 
     def physicalLoss(self, xEvent: torch.Tensor, Timestamp: torch.Tensor, yEvent: torch.Tensor):
@@ -327,7 +344,9 @@ class PhysicsInformedNN:
             # Loss of Physical Informed Equation
             loss_physical = self.physicalLoss(self.x_train, self.t_train, self.y_train)
 
-            Loss = loss_nn + 10000*loss_rotation + 100*loss_physical
+            Loss = 10 * self.phi(epoch/epochs, 0.5, 0.6) * loss_nn + \
+                   self.phi(epoch/epochs, 0, 0.2) * loss_rotation + \
+                   self.phi(epoch/epochs, 1, 0.2) * loss_physical
             Loss.backward(retain_graph=True)
             self.optimizer.step()
 
@@ -351,7 +370,8 @@ class PhysicsInformedNN:
                 truth_val = torch.sum(torch.abs(y_nn_val_pred - y_val) <= 0.1 * torch.abs(y_val))
                 loss_nn_val = torch.nn.functional.mse_loss(y_nn_val_pred, y_val)
                 loss_physical_val = self.physicalLoss(self.x_val, self.t_val, self.y_val)
-                print(f'\n== Epoch {epoch} | Cost {epoch_time:.1f}s per 50 epochs ==')
+                print(f'\n========  Epoch {epoch} / Total {epochs}  =======')
+                print(f'======== Cost {epoch_time:.1f}s per 50 epochs ========')
                 print('= = == === ====  Train  Set  ==== === == =')
                 print(f'Natural Network Loss:{loss_nn.item():.3e}')
                 print(f'Physical Equation Loss:{loss_physical.item():.3e}')
@@ -361,11 +381,11 @@ class PhysicsInformedNN:
                 print(f'Physical Equation Loss:{loss_physical_val.item():.3e}')
                 print(f'Accuracy:{(truth_val.item() / y_val.numel())*100:.2f}%')
                 print('------------------------------------------')
-                print(f'EI: {self.EI.item():<9.4e}, EI_grad: {self.EI.grad.item():.8f}')
-                print(f'T: {self.T.item():<10.4e}, T_grad: {self.T.grad.item():.8f}')
-                print(f'M: {self.M.item():<10.4e}, M_grad: {self.M.grad.item():.8f}')
-                print(f'c: {self.c.item():<10.4e}, c_grad: {self.c.grad.item():.8f}')
-                print(f'gamma: {self.gamma.item():<6.4f}, gamma_grad: {self.gamma.grad.item():.8f}\n')
+                print(f'EI: {self.EI.item():<9.4e}, EI_grad: {self.EI.grad.item():.4e}')
+                print(f'T: {self.T.item():<10.4e}, T_grad: {self.T.grad.item():.4e}')
+                print(f'M: {self.M.item():<10.4e}, M_grad: {self.M.grad.item():.4e}')
+                print(f'c: {self.c.item():<10.4e}, c_grad: {self.c.grad.item():.4e}')
+                print(f'gamma: {self.gamma.item():<6.4f}, gamma_grad: {self.gamma.grad.item():.4e}\n')
                 epoch_startTime = time.time()
 
             # Process Visualization
@@ -384,8 +404,8 @@ class PhysicsInformedNN:
 if __name__ == '__main__':
     # Configuration and Load Data
     epochs = 1000
-    layers = [2, 100, 100, 100, 100, 100, 100, 1]
-    connections = [0, 1, 2, 3, 4, 5, 5, 2]
+    layers = [2, 80, 80, 80, 80, 80, 80, 1]
+    connections = [0, 1, 2, 3, 4, 4, 4, 2]
 
 
     # data = scipy.io.loadmat('test16-1.mat')
@@ -424,16 +444,25 @@ if __name__ == '__main__':
     #%% Draw the final results for visualization
 
     # Plot parameter change curves
-    fig1 = plt.figure()
-    plt.plot(pinn.history['EI'], label='EI')
-    plt.plot(pinn.history['T'], label='T')
-    plt.plot(pinn.history['M'], label='M')
-    plt.plot(pinn.history['c'], label='c')
-    plt.plot(pinn.history['gamma'], label='γ')
-    plt.xlabel('Epoch', fontsize=18)
-    plt.ylabel('Parameter Value', fontsize=18)
-    plt.legend()
-    plt.title('Parameter Evolution', fontsize=20)
+    fig = plt.figure(figsize=(18, 10))
+    plt.rcParams.update({'font.size': 16})
+    layout = (3, 3)
+    subplots = [plt.subplot2grid(layout, (0, 0)), plt.subplot2grid(layout, (0, 1)), plt.subplot2grid(layout, (0, 2)),
+                plt.subplot2grid(layout, (1, 1)), plt.subplot2grid(layout, (2, 1))]
+    line_styles = ['-', '--', '-.', ':', '-']
+    plots = [subplots[0].plot(pinn.history['EI'], c='r', ls=line_styles[0], label='EI'),
+             subplots[1].plot(pinn.history['T'], c='g', ls=line_styles[1], label='T'),
+             subplots[2].plot(pinn.history['M'], c='b', ls=line_styles[2], label='M'),
+             subplots[3].plot(pinn.history['c'], c='c', ls=line_styles[3], label='c'),
+             subplots[4].plot(pinn.history['gamma'], c='m', ls=line_styles[4], label='γ')]
+    for i, ax in enumerate(subplots):
+        ax.set_title(f"Parameter {['EI', 'T', 'M', 'c', 'γ'][i]}", fontsize=16)
+        ax.set_xlabel('Epoch', fontsize=16)
+        ax.set_ylabel('Parameter Value', fontsize=16)
+        ax.legend()
+    plt.subplots_adjust(hspace=0.5, wspace=0.3)
+    fig.suptitle('Parameter Evolution', fontsize=20)
+    plt.show()
 
     # Plotting Loss Function and Accuracy Change
     fig2, ax2_1 = plt.subplots()
