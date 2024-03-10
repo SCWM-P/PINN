@@ -164,12 +164,7 @@ class PhysicsInformedNN:
         :param axis: axis of rotation you specify
         :return: rotated data tuple with (x, y, z)
         """
-        if axis == 'None':
-            raise Exception(
-                '\nNo axis specified! Please specify an axis.\n'
-                'For example axis=\'x\' if you want to rotate around the x-axis.'
-            )
-        elif axis == 'x':
+        if axis == 'x':
             x_r = x
             y_r = y * torch.cos(gamma) - z * torch.sin(gamma)
             z_r = y * torch.sin(gamma) + z * torch.cos(gamma)
@@ -177,10 +172,21 @@ class PhysicsInformedNN:
             x_r = x * torch.cos(gamma) + z * torch.sin(gamma)
             y_r = y
             z_r = -x * torch.sin(gamma) + z * torch.cos(gamma)
+            dy_dx = torch.autograd.grad(
+                z_r, x_r,
+                grad_outputs=torch.ones_like(y),
+                retain_graph=True,
+                create_graph=True,
+            )[0]
         elif axis == 'z':
             x_r = x * torch.cos(gamma) - y * torch.sin(gamma)
             y_r = x * torch.sin(gamma) + y * torch.cos(gamma)
             z_r = z
+        else:
+            raise Exception(
+                '\nNo axis specified! Please specify an axis.\n'
+                'For example axis=\'x\' if you want to rotate around the x-axis.'
+            )
         return x_r, y_r, z_r
 
     def rotateLoss(self, xEvent: torch.Tensor, Timestamp: torch.Tensor, yEvent: torch.Tensor):
@@ -197,17 +203,24 @@ class PhysicsInformedNN:
         """
         return (1 / (sigma * np.sqrt(2 * np.pi))) * np.exp(-((x - mu) ** 2) / (2 * (sigma ** 2)))
 
-    def derive(self, xEvent: torch.Tensor, Timestamp: torch.Tensor):
+    def derive(self, xEvent: torch.Tensor, Timestamp: torch.Tensor, yEvent: torch.Tensor):
         """
         Perform partial differential operations.\n
         The data manipulated by the function are all **torch.Tensor** type.
         :return: partial differential tuple (∂4y/∂x4, ∂2y/∂x2, ∂2y/∂t2, ∂y/∂t)
         """
+        gamma = self.gamma.clone().detach()
+        xEvent, Timestamp, _ = self.normalize(xEvent, Timestamp, yEvent)
+        xEvent, Timestamp, _ = self.rotate(xEvent, Timestamp, yEvent, gamma, axis='y')
         y = self.predict(xEvent, Timestamp)
-        dy_dx = torch.autograd.grad(y, xEvent,
-                                    grad_outputs=torch.ones_like(y),
-                                    retain_graph=True,
-                                    create_graph=True)[0]
+        xEvent, Timestamp, y = self.rotate(xEvent, Timestamp, y, -gamma, axis='y')
+        xEvent, Timestamp, y = self.denormalize(xEvent, Timestamp, y)
+        dy_dx = torch.autograd.grad(
+            y, xEvent,
+            grad_outputs=torch.ones_like(y),
+            retain_graph=True,
+            create_graph=True,
+        )[0]
         # We need ∂2y/∂x2
         d2y_dx2 = torch.autograd.grad(
             dy_dx, xEvent,
@@ -250,8 +263,7 @@ class PhysicsInformedNN:
         The physical equation is:\n
         EI * ∂4y/∂x4 - T * ∂2y/∂x2 + M * ∂2y/∂t2 + c * ∂y/∂t = 0
         """
-        xEvent, Timestamp, yEvent = self.rotate(xEvent, Timestamp, yEvent, self.gamma, axis='y')
-        d4y_dx4, d2y_dx2, d2y_dt2, dy_dt = self.derive(xEvent, Timestamp)
+        d4y_dx4, d2y_dx2, d2y_dt2, dy_dt = self.derive(xEvent, Timestamp, yEvent)
         y_PI_pred = \
             self.EI * d4y_dx4 - self.T * d2y_dx2 + self.M * d2y_dt2 + self.c * dy_dt
         loss_Physical = torch.nn.functional.mse_loss(y_PI_pred, torch.zeros_like(y_PI_pred))
@@ -342,11 +354,12 @@ class PhysicsInformedNN:
             # Loss of Rotation
             loss_rotation = self.rotateLoss(self.x_train, self.t_train, self.y_train)
             # Loss of Physical Informed Equation
+            x_train, t_train, y_train = self.rotate(x_train, t_train, y_train, -gamma, axis='y')
             loss_physical = self.physicalLoss(self.x_train, self.t_train, self.y_train)
 
-            Loss = 10 * self.phi(epoch/epochs, 0.5, 0.6) * loss_nn + \
-                   self.phi(epoch/epochs, 0, 0.2) * loss_rotation + \
-                   self.phi(epoch/epochs, 1, 0.2) * loss_physical
+            Loss = 100 * self.phi(epoch/epochs, 0.5, 1) * loss_nn + \
+                        self.phi(epoch/epochs, 0, 0.05) * loss_rotation + \
+                        self.phi(epoch/epochs, 1, 0.2) * loss_physical
             Loss.backward(retain_graph=True)
             self.optimizer.step()
 
@@ -405,7 +418,7 @@ if __name__ == '__main__':
     # Configuration and Load Data
     epochs = 1000
     layers = [2, 80, 80, 80, 80, 80, 80, 1]
-    connections = [0, 1, 2, 3, 4, 4, 4, 2]
+    connections = [0, 1, 2, 3, 4, 5, 5, 2]
 
 
     # data = scipy.io.loadmat('test16-1.mat')
