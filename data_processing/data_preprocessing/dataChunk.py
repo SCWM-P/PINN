@@ -1,8 +1,10 @@
+import sys
+import matplotlib.pyplot as plt
 import numpy as np
 import pandas as pd
-import matplotlib.pyplot as plt
 from dv import AedatFile
-
+sys.path.append('..')
+from data_cleansing import HotPixel_cleansing
 
 def HotPixel_brush(xEvent, T, yEvent, polarities):
     """
