@@ -113,6 +113,3 @@ if __name__ == '__main__':
 
     # plot the final 3D result
     pinn.plot_results(epochs)
-
-
-    ## heihei
