@@ -1,6 +1,6 @@
 import data_cleansing
-import data_preprocessing
-
+import rotate
 
 HotPixel_cleansing = data_cleansing.HotPixel_cleansing
+data_rotate = rotate.data_rotate
 

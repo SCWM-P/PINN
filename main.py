@@ -2,43 +2,61 @@ import torch
 import time
 import numpy as np
 import matplotlib.pyplot as plt
-import HotPixel_cleansing
+import data_processing as dp
 from module import PhysicsInformedNN
 
 
 if __name__ == '__main__':
-    # Configuration and Load Data
+    # Configuration
     epochs = 1000
-    layers = [2, 80, 80, 80, 80, 80, 80, 1]
-    connections = [0, 1, 2, 3, 4, 5, 5, 2]
+    layers = [2, 80, 80, 80, 80, 1]
+    connections = [0, 1, 2, 3, 3, 2]
     np.random.seed(1234)
     torch.manual_seed(1234)
     torch.autograd.set_detect_anomaly(True)
     plt.ion()
     plt.rc('font', family='Times New Roman')
+
     # Check CUDA availability (for GPU acceleration)
     device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
     print("========  Using device  ========")
     print(f"============  {device}  ============")
 
-
-    # data = scipy.io.loadmat('test16-1.mat')
+    # Load Data
+    # filename = 'test16-1.mat'
+    # data = scipy.io.loadmat(f'data/mat/{filename}')
     # Timestamp = data['brushedData'][:, 0]/1e6
     # xEvent = data['brushedData'][:, 1]
     # yEvent = data['brushedData'][:, 2]
-
-    filename = r'dvSave-2023_03_26_02_21_16.npy'
+    filename = 'dvSave-2023_03_26_02_21_16.npy'
     data = np.load(f'data/npy/{filename}', allow_pickle=True).item()
     xEvent = data['xEvent']
     Timestamp = data['Timestamp']
     yEvent = data['yEvent']
+    polarities = data['polarities']
 
     # Data Cleansing
-    (xEvent, Timestamp, yEvent) = HotPixel_cleansing(xEvent, Timestamp, yEvent)
+    (xEvent, Timestamp, yEvent, polarities) = dp.HotPixel_cleansing(xEvent, Timestamp, yEvent, polarities)
+
     # Convert to torch.Tensor
-    xEvent = torch.tensor(xEvent, dtype=torch.float32, device=device, requires_grad=True).unsqueeze(1)
-    Timestamp = torch.tensor(Timestamp, dtype=torch.float32, device=device, requires_grad=True).unsqueeze(1)
-    yEvent = torch.tensor(yEvent, dtype=torch.float32, device=device, requires_grad=True).unsqueeze(1)
+    xEvent = torch.tensor(
+        xEvent,
+        dtype=torch.float32,
+        device=device,
+        requires_grad=True
+    ).unsqueeze(1)
+    Timestamp = torch.tensor(
+        Timestamp,
+        dtype=torch.float32,
+        device=device,
+        requires_grad=True
+    ).unsqueeze(1)
+    yEvent = torch.tensor(
+        yEvent,
+        dtype=torch.float32,
+        device=device,
+        requires_grad=True
+    ).unsqueeze(1)
 
     print('====== Data Loading Done! ======')
     print('===== Model Initialization =====')
@@ -70,7 +88,7 @@ if __name__ == '__main__':
              subplots[3].plot(pinn.history['c'], c='c', ls=line_styles[3], label='c'),
              subplots[4].plot(pinn.history['gamma'], c='m', ls=line_styles[4], label='γ')]
     for i, ax in enumerate(subplots):
-        ax.set_title(f"Parameter {['EI', 'T', 'M', 'c', 'γ'][i]}", fontsize=16)
+        ax.set_title(f"Parameter {['EI', 'Tension', 'M', 'c', 'γ'][i]}", fontsize=16)
         ax.set_xlabel('Epoch', fontsize=16)
         ax.set_ylabel('Parameter Value', fontsize=16)
         ax.legend()
@@ -89,4 +107,5 @@ if __name__ == '__main__':
     plt.title('Loss and Accuracy Change', fontsize=20)
     plt.legend()
 
+    # plot the final 3D result
     pinn.plot_results(epochs)

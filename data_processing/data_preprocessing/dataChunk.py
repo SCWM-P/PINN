@@ -1,32 +1,10 @@
-import sys
 import matplotlib.pyplot as plt
 import numpy as np
 import pandas as pd
 from dv import AedatFile
-sys.path.append('..')
-from data_cleansing import HotPixel_cleansing
+from .. import data_cleansing
 
-def HotPixel_brush(xEvent, T, yEvent, polarities):
-    """
-    :param xEvent: Event data of x
-    :param T: Event data of time
-    :param yEvent: Event data of y
-    :return: filtered event data
-    """
-    df = pd.DataFrame({'T': T, 'xEvent': xEvent, 'yEvent': yEvent, 'polarities': polarities})
-    df['coords'] = list(zip(df['xEvent'], df['yEvent']))
-    grouped = df.groupby('coords')
-    event = grouped.agg(activity=('coords', 'size'),
-                        continuity=('T', lambda x: np.mean(np.diff(sorted(x))) if len(x) > 1 else np.nan))
-    act_mean = event['activity'].mean()
-    act_std = event['activity'].std()
-    cont_mean = event['continuity'].mean()
-    cont_std = event['continuity'].std()
-    event_filtered = event[(event['activity'] > act_mean - 2 * act_std) & (event['activity'] < act_mean + 1.5 * act_std) &
-                           (event['continuity'] > cont_mean - 2 * cont_std) & (event['continuity'] < cont_mean + 1.5 * cont_std)]
-    filtered_events = df[df['coords'].isin(event_filtered.index)]
-    return filtered_events['xEvent'].to_numpy(), filtered_events['T'].to_numpy(), filtered_events['yEvent'].to_numpy(), filtered_events['polarities'].to_numpy()
-
+HotPixel_cleansing = data_cleansing.HotPixel_cleansing
 
 filename = r'test_4mm_3Hz.aedat4'
 with AedatFile(f'data/aedat4/{filename}') as f:
@@ -49,7 +27,7 @@ with AedatFile(f'data/aedat4/{filename}') as f:
     yEvent = yEvent[0::20]
     polarities = polarities[0::20]
 
-# xEvent, T, yEvent, polarities = HotPixel_brush(xEvent, T, yEvent, polarities)
+xEvent, T, yEvent, polarities = HotPixel_cleansing(xEvent, T, yEvent, polarities)
 data = {'xEvent': xEvent, 'Timestamp': T, 'yEvent': yEvent, 'polarities': polarities}
 np.save(f'data/npy/{filename[:-7]}.npy', data)
 fig = plt.figure()

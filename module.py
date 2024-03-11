@@ -56,7 +56,7 @@ class PhysicsInformedNN:
         self.dnn = DNN(layers, connections).to(device)
         # Learning Parameters
         self.EI = torch.nn.Parameter(torch.tensor([1.0], device=device))
-        self.T = torch.nn.Parameter(torch.tensor([1.0], device=device))
+        self.Tension = torch.nn.Parameter(torch.tensor([1.0], device=device))
         self.M = torch.nn.Parameter(torch.tensor([1.0], device=device))
         self.c = torch.nn.Parameter(torch.tensor([1.0], device=device))
         self.gamma = torch.nn.Parameter(torch.tensor([torch.pi / 4], dtype=torch.float32, device=device))
@@ -76,14 +76,14 @@ class PhysicsInformedNN:
             'train_loss': torch.zeros((epochs,)),
             'train_accuracy': torch.zeros((epochs,)),
             'EI': torch.zeros((epochs,)),
-            'T': torch.zeros((epochs,)),
+            'Tension': torch.zeros((epochs,)),
             'M': torch.zeros((epochs,)),
             'c': torch.zeros((epochs,)),
             'gamma': torch.zeros((epochs,))
         }
         # Define Optimizer
         self.optimizer = torch.optim.Adam(
-            list(self.dnn.parameters()) + [self.EI, self.T, self.M, self.c, self.gamma],
+            list(self.dnn.parameters()) + [self.EI, self.Tension, self.M, self.c, self.gamma],
             lr=0.01,
             betas=(0.9, 0.999),
             eps=1e-15,
@@ -224,7 +224,7 @@ class PhysicsInformedNN:
         """
         d4y_dx4, d2y_dx2, d2y_dt2, dy_dt = self.derive(xEvent, Timestamp, yEvent)
         y_PI_pred = \
-            self.EI * d4y_dx4 - self.T * d2y_dx2 + self.M * d2y_dt2 + self.c * dy_dt
+            self.EI * d4y_dx4 - self.Tension * d2y_dx2 + self.M * d2y_dt2 + self.c * dy_dt
         loss_Physical = torch.nn.functional.mse_loss(y_PI_pred, torch.zeros_like(y_PI_pred))
         return loss_Physical
 
@@ -329,7 +329,7 @@ class PhysicsInformedNN:
             self.history['train_loss'][epoch] = loss_nn.item()
             self.history['train_accuracy'][epoch] = truth_train.item() / y_train.numel() * 100
             self.history['EI'][epoch] = self.EI.item()
-            self.history['T'][epoch] = self.T.item()
+            self.history['Tension'][epoch] = self.Tension.item()
             self.history['M'][epoch] = self.M.item()
             self.history['c'][epoch] = self.c.item()
             self.history['gamma'][epoch] = self.gamma.item()
@@ -355,7 +355,7 @@ class PhysicsInformedNN:
                 print(f'Accuracy:{(truth_val.item() / y_val.numel())*100:.2f}%')
                 print('------------------------------------------')
                 print(f'EI: {self.EI.item():<9.4e}, EI_grad: {self.EI.grad.item():.4e}')
-                print(f'T: {self.T.item():<10.4e}, T_grad: {self.T.grad.item():.4e}')
+                print(f'T: {self.Tension.item():<10.4e}, T_grad: {self.Tension.grad.item():.4e}')
                 print(f'M: {self.M.item():<10.4e}, M_grad: {self.M.grad.item():.4e}')
                 print(f'c: {self.c.item():<10.4e}, c_grad: {self.c.grad.item():.4e}')
                 print(f'gamma: {self.gamma.item():<6.4f}, gamma_grad: {self.gamma.grad.item():.4e}\n')
