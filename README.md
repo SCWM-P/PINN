@@ -21,7 +21,8 @@
 
 实验功能
 1. 为了避免物理方程被拟合成平面，对a参数对逐渐减弱的扰动
-2. 添加新的学习参数振幅`Y`，现在的物理方程公式为:
+2. 添加新的学习参数振幅`Y`，现在的物理方程公式为
+
 $$
 y = Y \cdot \sin (ax+b) \cdot \sin (\omega \sqrt{1 - \zeta ^2} t) \cdot e^{-\omega \zeta t}
 $$
@@ -42,9 +43,11 @@ $$
 
 功能更新：
 1. 整个文件重写，主要修改了物理方程为偏微分方程约束：
+
 $$
 EI \cdot \frac{\partial ^4 y}{\partial x ^4} - T \cdot \frac{\partial ^2 y}{\partial x ^2} + M \cdot \frac{\partial ^2 y}{\partial t^2} + c \cdot \frac{\partial y}{\partial t} = 0
 $$
+
 2. 重写了旋转函数，支持根据旋转轴进行旋转，通过关键字参数`axis`实现
 3. 添加了`normalize`函数与`denormalize`函数，用于对数据进行标准化与反标准化
 4. 删除了`net_u`函数，将其与`predict`函数功能合并
@@ -88,6 +91,7 @@ y = y \\
 z = -x \cdot \sin \theta + z \cdot \cos \theta \\
 \end{cases}
 $$
+
 但是我们使用了错误的赋值方式：
 ```python
 x = x * torch.cos(theta) + z * torch.sin(theta)

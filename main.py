@@ -36,6 +36,7 @@ if __name__ == '__main__':
     polarities = data['polarities']
 
     # Data Cleansing
+    (xEvent, Timestamp, yEvent) = dp.data_rotate(xEvent, Timestamp, yEvent)
     (xEvent, Timestamp, yEvent, polarities) = dp.HotPixel_cleansing(xEvent, Timestamp, yEvent, polarities)
 
     # Convert to torch.Tensor
