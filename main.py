@@ -16,7 +16,6 @@ plt.rc('grid', color='k', alpha=0.2)
 
 
 if __name__ == '__main__':
-#%%
     # Configuration
     epochs = 500
     layers = [2, 50, 50, 50, 50, 1]
@@ -28,18 +27,18 @@ if __name__ == '__main__':
     print(f"============  {device}  ============")
 
     # Load Data
-    # filename = 'test16-1.mat'
-    # data = scipy.io.loadmat(f'data/mat/{filename}')
-    # Timestamp = data['brushedData'][:, 0]/1e6
-    # xEvent = data['brushedData'][:, 1]
-    # yEvent = data['brushedData'][:, 2]
-    # polarities = np.zeros_like(xEvent)
-    filename = 'dvSave-2023_03_26_02_21_16.npy'
-    data = np.load(f'data/npy/{filename}', allow_pickle=True).item()
-    xEvent = data['xEvent']
-    Timestamp = data['Timestamp']
-    yEvent = data['yEvent']
-    polarities = data['polarities']
+    filename = 'test16-1.mat'
+    data = scipy.io.loadmat(f'data/mat/{filename}')
+    Timestamp = data['brushedData'][:, 0]/1e6
+    xEvent = data['brushedData'][:, 1]
+    yEvent = data['brushedData'][:, 2]
+    polarities = np.zeros_like(xEvent)
+    # filename = 'dvSave-2023_03_26_02_21_16.npy'
+    # data = np.load(f'data/npy/{filename}', allow_pickle=True).item()
+    # xEvent = data['xEvent']
+    # Timestamp = data['Timestamp']
+    # yEvent = data['yEvent']
+    # polarities = data['polarities']
 
     # Data Cleansing
     fig = plt.figure()
