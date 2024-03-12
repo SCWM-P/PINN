@@ -7,8 +7,7 @@ from sklearn.model_selection import train_test_split
 # Configuration
 plt.rc('font', family='Times New Roman')
 plt.rc('text', usetex=True)
-plt.rcParams['figure.dpi'] = 300
-plt.rc('grid', color='k',alpha=0.5)
+plt.rc('grid', color='k', alpha=0.2)
 
 class DNN(torch.nn.Module):
     """
@@ -227,11 +226,11 @@ class PhysicsInformedNN:
                 c='r', marker='.', alpha=0.2,
                 label='Prediction of Natural Network'
             )
-            ax_train.set_xlabel('$X$', fontsize=18)
-            ax_train.set_ylabel('$T (s)$', fontsize=18)
-            ax_train.set_zlabel('$Y$', fontsize=18)
+            ax_train.set_xlabel('$X$', fontsize=16)
+            ax_train.set_ylabel('$T (s)$', fontsize=16)
+            ax_train.set_zlabel('$Y$', fontsize=16)
             ax_train.legend()
-            ax_train.set_title(f'Comparison at Epoch {epoch} in Train Set', fontsize=20)
+            ax_train.set_title(f'Comparison at Epoch {epoch} in Train Set', fontsize=18)
             ax_val.scatter(
                 self.x_val.cpu().detach().numpy(),
                 self.t_val.cpu().detach().numpy(),
@@ -244,11 +243,11 @@ class PhysicsInformedNN:
                 c='r', marker='.', alpha=0.5,
                 label='Prediction of Natural Network'
             )
-            ax_val.set_xlabel('$X$', fontsize=18)
-            ax_val.set_ylabel('$T (s)$', fontsize=18)
-            ax_val.set_zlabel('$Y$', fontsize=18)
+            ax_val.set_xlabel('$X$', fontsize=16)
+            ax_val.set_ylabel('$T (s)$', fontsize=16)
+            ax_val.set_zlabel('$Y$', fontsize=16)
             ax_val.legend()
-            ax_val.set_title(f'Comparison at Epoch {epoch} in Validation Set', fontsize=20)
+            ax_val.set_title(f'Comparison at Epoch {epoch} in Validation Set', fontsize=18)
             plt.show()
 
     def train(self):
@@ -263,7 +262,7 @@ class PhysicsInformedNN:
             # Loss of Physical Informed Equation
             loss_physical = self.physicalLoss(self.x_train, self.t_train, self.y_train)
 
-            Loss = 100 * self.phi(epoch/epochs, 0, 0.4) * loss_nn + \
+            Loss = 100 * self.phi(epoch/epochs, 0, 0.2) * loss_nn + \
                         self.phi(epoch/epochs, 1, 0.4) * loss_physical
             Loss.backward(retain_graph=True)
             self.optimizer.step()
