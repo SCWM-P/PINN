@@ -5,7 +5,7 @@ import pandas as pd
 def HotPixel_cleansing(
         xEvent: np.ndarray,
         Timestamp: np.ndarray,
-        yEvent: np.ndarra,
+        yEvent: np.ndarray,
         polarities: np.ndarray
 ):
     """

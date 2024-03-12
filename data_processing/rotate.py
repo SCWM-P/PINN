@@ -40,7 +40,7 @@ def data_rotate(xEvent: np.ndarray, Timestamp: np.ndarray, yEvent: np.ndarray):
     :param yEvent: y-axis data of event
     :return: rotated data tuple with (x, y, z)
     """
-    [k, b] = np.polyfit(xEvent, yEvent)
+    [k, b] = np.polyfit(xEvent, yEvent, 1)
     gamma = np.arctan(k)
     xEvent, Timestamp, yEvent = rotate(xEvent, Timestamp, yEvent, gamma, 'y')
     return xEvent, Timestamp, yEvent

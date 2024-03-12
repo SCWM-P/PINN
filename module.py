@@ -129,47 +129,47 @@ class PhysicsInformedNN:
         """
         xEvent, Timestamp, _ = self.normalize(xEvent, Timestamp, yEvent)
         y = self.predict(xEvent, Timestamp)
-        xEvent, Timestamp, y = self.denormalize(xEvent, Timestamp, y)
+        _, _, y = self.denormalize(xEvent, Timestamp, y)
         dy_dx = torch.autograd.grad(
             y, xEvent,
             grad_outputs=torch.ones_like(y),
             retain_graph=True,
             create_graph=True,
-        )[0]
+        )[0] / self.xEvent.std()
         # We need ∂2y/∂x2
         d2y_dx2 = torch.autograd.grad(
             dy_dx, xEvent,
             grad_outputs=torch.ones_like(dy_dx),
             retain_graph=True,
             create_graph=True
-        )[0]
+        )[0] / self.xEvent.std()
         d3y_dx3 = torch.autograd.grad(
             d2y_dx2, xEvent,
             grad_outputs=torch.ones_like(d2y_dx2),
             retain_graph=True,
             create_graph=True
-        )[0]
+        )[0] / self.xEvent.std()
         # We need ∂4y/∂x4
         d4y_dx4 = torch.autograd.grad(
             d3y_dx3, xEvent,
             grad_outputs=torch.ones_like(d3y_dx3),
             retain_graph=True,
             create_graph=True
-        )[0]
+        )[0] / self.xEvent.std()
         # We need ∂y/∂t
         dy_dt = torch.autograd.grad(
             y, Timestamp,
             grad_outputs=torch.ones_like(y),
             retain_graph=True,
             create_graph=True
-        )[0]
+        )[0] / self.Timestamp.std()
         # We need ∂2y/∂t2
         d2y_dt2 = torch.autograd.grad(
             dy_dt, Timestamp,
             grad_outputs=torch.ones_like(dy_dt),
             retain_graph=True,
             create_graph=True
-        )[0]
+        )[0] / self.Timestamp.std()
         return d4y_dx4, d2y_dx2, d2y_dt2, dy_dt
 
     def physicalLoss(self, xEvent: torch.Tensor, Timestamp: torch.Tensor, yEvent: torch.Tensor):

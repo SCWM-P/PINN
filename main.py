@@ -17,7 +17,7 @@ plt.rc('grid', color='k',alpha=0.5)
 if __name__ == '__main__':
     # Configuration
     epochs = 1000
-    layers = [2, 80, 80, 80, 80, 1]
+    layers = [2, 50, 50, 50, 50, 1]
     connections = [0, 1, 2, 3, 3, 2]
 
     # Check CUDA availability (for GPU acceleration)
@@ -113,6 +113,3 @@ if __name__ == '__main__':
 
     # plot the final 3D result
     pinn.plot_results(epochs)
-
-
-    ##heihei
