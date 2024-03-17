@@ -1,6 +1,7 @@
 import torch
 import time
 import numpy as np
+import data_processing as dp
 import matplotlib.pyplot as plt
 from sklearn.model_selection import train_test_split
 
@@ -8,6 +9,7 @@ from sklearn.model_selection import train_test_split
 plt.rc('font', family='Times New Roman')
 plt.rc('text', usetex=True)
 plt.rc('grid', color='k', alpha=0.2)
+
 
 class DNN(torch.nn.Module):
     """
@@ -86,11 +88,12 @@ class PhysicsInformedNN:
         # Define Optimizer
         self.optimizer = torch.optim.Adam(
             list(self.dnn.parameters()) + [self.EI, self.Tension, self.M, self.c],
-            lr=0.01,
+            lr=0.1,
             betas=(0.9, 0.999),
             eps=1e-15,
             weight_decay=0.0001
         )
+        self.exponent_schedule = torch.optim.lr_scheduler.ExponentialLR(self.optimizer, 0.999)
 
     def predict(self, xEvent: torch.Tensor, Timestamp: torch.Tensor):
         y_pred = self.dnn(torch.cat([xEvent, Timestamp], dim=1))
@@ -113,12 +116,6 @@ class PhysicsInformedNN:
         t = t * self.Timestamp.std() + self.Timestamp.mean()
         y = y * self.yEvent.std() + self.yEvent.mean()
         return x, t, y
-
-    def phi(self, x: float,mu: float, sigma:float ):
-        """
-        Calculate the value of the normal distribution function.
-        """
-        return (1 / (sigma * np.sqrt(2 * np.pi))) * np.exp(-((x - mu) ** 2) / (2 * (sigma ** 2)))
 
     def derive(self, xEvent: torch.Tensor, Timestamp: torch.Tensor, yEvent: torch.Tensor):
         """
@@ -169,7 +166,12 @@ class PhysicsInformedNN:
             retain_graph=True,
             create_graph=True
         )[0] / self.Timestamp.std()
-        return d4y_dx4, d2y_dx2, d2y_dt2, dy_dt
+        return (
+            d4y_dx4.detach(),
+            d2y_dx2.detach(),
+            d2y_dt2.detach(),
+            dy_dt.detach()
+        )
 
     def physicalLoss(self, xEvent: torch.Tensor, Timestamp: torch.Tensor, yEvent: torch.Tensor):
         """
@@ -262,10 +264,11 @@ class PhysicsInformedNN:
             # Loss of Physical Informed Equation
             loss_physical = self.physicalLoss(self.x_train, self.t_train, self.y_train)
 
-            Loss = 100 * self.phi(epoch/epochs, 0, 0.2) * loss_nn + \
-                        self.phi(epoch/epochs, 1, 0.4) * loss_physical
+            Loss = loss_nn \
+                + loss_physical
             Loss.backward(retain_graph=True)
             self.optimizer.step()
+            self.exponent_schedule.step()
 
             # Record loss
             self.dnn.eval()  # Evaluate the  model in validation set
@@ -297,10 +300,22 @@ class PhysicsInformedNN:
                 print(f'Physical Equation Loss:{loss_physical_val.item():.3e}')
                 print(f'Accuracy:{(truth_val.item() / y_val.numel())*100:.2f}%')
                 print('------------------------------------------')
-                print(f'刚度EI: {self.EI.item():<9.4e}, EI_grad: {self.EI.grad.item():.4e}')
-                print(f'张力Tension: {self.Tension.item():<4.4e}, Tension_grad: {self.Tension.grad.item():.4e}')
-                print(f'质量M: {self.M.item():<10.4e}, M_grad: {self.M.grad.item():.4e}')
-                print(f'阻尼c: {self.c.item():<10.4e}, c_grad: {self.c.grad.item():.4e}')
+                print(
+                    f'刚度EI: {self.EI.item():<14.4e},'
+                    f'EI_grad: {self.EI.grad.item():.4e}'
+                )
+                print(
+                    f'张力Tension: {self.Tension.item():<9.4e},'
+                    f'Tension_grad: {self.Tension.grad.item():.4e}'
+                )
+                print(
+                    f'质量M: {self.M.item():<15.4e},'
+                    f'M_grad: {self.M.grad.item():.4e}'
+                )
+                print(
+                    f'阻尼c: {self.c.item():<15.4e},'
+                    f'c_grad: {self.c.grad.item():.4e}'
+                )
                 epoch_startTime = time.time()
 
             # Process Visualization
