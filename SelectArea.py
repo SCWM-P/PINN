@@ -58,8 +58,10 @@ def pause_and_resume(event):
             ani.resume()
             isRunning = True
 
+
 filename = r'earthquake_ELCENTRO_1.aedat4'
-with AedatFile(f'data/aedat4/{filename}') as f:
+# with AedatFile(f'/data/aedat4/{filename}') as f:
+with AedatFile(r'D:\Projects\PINN\data\aedat4\test_4mm_3Hz.aedat4') as f:
     height, width = f['events'].size
     events = np.hstack([packet for packet in f['events'].numpy()])
     T, xEvent, yEvent, polarities = events['timestamp'], events['x'], events['y'], events['polarity']
@@ -84,12 +86,11 @@ ax.set_xlabel('$X$', fontsize=24)
 ax.set_ylabel('$T (s)$', fontsize=24)
 ax.set_zlabel('$Y$', fontsize=24)
 plt.title(f'$Event$ $from$ $EventCamera$ $of$ {filename}', fontsize=36)
-ani = FuncAnimation(fig,
-                    update,
-                    frames=np.arange(0, len(xEvent), 2000),
-                    interval=10,
-                    init_func=init,
-                    blit=False
-                    )
+ani = FuncAnimation(
+    fig, update,
+    frames=np.arange(0, len(xEvent), 2000),
+    interval=10,init_func=init,
+    blit=False
+)
 fig.canvas.mpl_connect('key_press_event', pause_and_resume)
 plt.show()

@@ -2,12 +2,12 @@ import matplotlib.pyplot as plt
 import numpy as np
 import pandas as pd
 from dv import AedatFile
-from .. import data_cleansing
+from data_processing import data_cleansing
 
 HotPixel_cleansing = data_cleansing.HotPixel_cleansing
 
 filename = r'test_4mm_3Hz.aedat4'
-with AedatFile(f'data/aedat4/{filename}') as f:
+with AedatFile(f'../data/aedat4/{filename}') as f:
     height, width = f['events'].size
     events = np.hstack([packet for packet in f['events'].numpy()])
 
@@ -29,10 +29,10 @@ with AedatFile(f'data/aedat4/{filename}') as f:
 
 xEvent, T, yEvent, polarities = HotPixel_cleansing(xEvent, T, yEvent, polarities)
 data = {'xEvent': xEvent, 'Timestamp': T, 'yEvent': yEvent, 'polarities': polarities}
-np.save(f'data/npy/{filename[:-7]}.npy', data)
-fig = plt.figure()
+np.save(f'../data/npy/{filename[:-7]}.npy', data)
+fig = plt.figure(figsize=(10, 10))
 ax = fig.add_subplot(111, projection='3d')
-ax.scatter(xEvent, T, yEvent, c=polarities, cmap='cividis', marker='.', alpha=0.5)
+ax.scatter(xEvent, T, yEvent, c=polarities, cmap='PiYG', marker='o', alpha=0.9)
 ax.set_title(f'{filename[:-7]}', fontsize=36)
 ax.set_xlabel('$X$', fontsize=24)
 ax.set_ylabel('$T$', fontsize=24)
