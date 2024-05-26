@@ -20,14 +20,14 @@ def HotPixel_cleansing(
     df['coords'] = list(zip(df['xEvent'], df['yEvent']))
     grouped = df.groupby('coords')
     event = grouped.agg(activity=('coords', 'size'),
-                        continuity=('Timestamp', lambda x: np.mean(np.diff(sorted(x))) if len(x) > 1 else np.nan))
+                        continuity=('Timestamp', lambda x: np.mean(np.diff(sorted(x))) if len(x) > 1 else 0))
     act_mean = event['activity'].mean()
     act_std = event['activity'].std()
     cont_mean = event['continuity'].mean()
     cont_std = event['continuity'].std()
     event_filtered = event[
-        (event['activity'] > act_mean - 3 * act_std) & (event['activity'] < act_mean + 1.5 * act_std) &
-        (event['continuity'] > cont_mean - 3 * cont_std) & (event['continuity'] < cont_mean + 1.5 * cont_std)]
+        (event['activity'] >= act_mean - 3 * act_std) & (event['activity'] <= act_mean + 1.5 * act_std) &
+        (event['continuity'] >= cont_mean - 3 * cont_std) & (event['continuity'] <= cont_mean + 1.5 * cont_std)]
     filtered_events = df[df['coords'].isin(event_filtered.index)]
     return (
         filtered_events['xEvent'].to_numpy(),

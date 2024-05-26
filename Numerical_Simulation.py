@@ -8,7 +8,7 @@ from data_processing.fdm import rk4th, mkc
 matplotlib.use('TkAgg')
 plt.ion()
 
-use_filedata = False
+use_filedata = True
 if not use_filedata:
     # 定义物理参数和初始条件
     L = 2.0  # 总长度
@@ -66,7 +66,7 @@ if not use_filedata:
     Z, dZ, t_comp = rk4th(dz, t, z0, Fext)
     displ = Z[:n, :]
     acc = dZ[n:2 * n, :]
-    T, X = np.meshgrid( np.linspace(0, L, N - 1), t)
+    T, X = np.meshgrid(np.linspace(0, L, N - 1), t)
 
     variables = {
         name: val for name, val in globals().items()

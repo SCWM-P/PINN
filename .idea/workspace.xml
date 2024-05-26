@@ -4,7 +4,15 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="adbbd5d0-5b79-4adb-ba77-89cd9ee51a24" name="Changes" comment="New Commit" />
+    <list default="true" id="adbbd5d0-5b79-4adb-ba77-89cd9ee51a24" name="Changes" comment="New Commit">
+      <change beforePath="$PROJECT_DIR$/.gitignore" beforeDir="false" afterPath="$PROJECT_DIR$/.gitignore" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Numerical_Simulation.py" beforeDir="false" afterPath="$PROJECT_DIR$/Numerical_Simulation.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/data_processing/data_cleansing.py" beforeDir="false" afterPath="$PROJECT_DIR$/data_processing/data_cleansing.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/data_processing/load_data.py" beforeDir="false" afterPath="$PROJECT_DIR$/data_processing/load_data.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/main.py" beforeDir="false" afterPath="$PROJECT_DIR$/main.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/temp.xlsx" beforeDir="false" />
+    </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
@@ -78,7 +86,7 @@
       </console-settings>
     </option>
   </component>
-  <component name="RunManager" selected="Python.main">
+  <component name="RunManager">
     <configuration name="Torch_NN" type="PythonConfigurationType" factoryName="Python" nameIsGenerated="true">
       <module name="Pytorch 2.1.2" />
       <option name="INTERPRETER_OPTIONS" value="" />
@@ -319,13 +327,7 @@
       <workItem from="1716694843613" duration="6344000" />
       <workItem from="1716702304490" duration="18543000" />
       <workItem from="1716739382699" duration="5000" />
-    </task>
-    <task id="LOCAL-00016" summary="Initial commit">
-      <created>1709309890978</created>
-      <option name="number" value="00016" />
-      <option name="presentableId" value="LOCAL-00016" />
-      <option name="project" value="LOCAL" />
-      <updated>1709309890978</updated>
+      <workItem from="1716739404546" duration="4673000" />
     </task>
     <task id="LOCAL-00017" summary="Initial commit">
       <created>1709349687215</created>
@@ -663,7 +665,14 @@
       <option name="project" value="LOCAL" />
       <updated>1716736359910</updated>
     </task>
-    <option name="localTasksCounter" value="65" />
+    <task id="LOCAL-00065" summary="New Commit">
+      <created>1716739467633</created>
+      <option name="number" value="00065" />
+      <option name="presentableId" value="LOCAL-00065" />
+      <option name="project" value="LOCAL" />
+      <updated>1716739467633</updated>
+    </task>
+    <option name="localTasksCounter" value="66" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -718,14 +727,14 @@
     <breakpoint-manager>
       <breakpoints>
         <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
-          <url>file://$PROJECT_DIR$/data_processing/fdm.py</url>
-          <line>31</line>
-          <option name="timeStamp" value="3" />
+          <url>file://$PROJECT_DIR$/Numerical_Simulation.py</url>
+          <line>115</line>
+          <option name="timeStamp" value="7" />
         </line-breakpoint>
         <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
-          <url>file://$PROJECT_DIR$/main.py</url>
-          <line>35</line>
-          <option name="timeStamp" value="4" />
+          <url>file://$PROJECT_DIR$/data_processing/rotate.py</url>
+          <line>75</line>
+          <option name="timeStamp" value="11" />
         </line-breakpoint>
       </breakpoints>
     </breakpoint-manager>
@@ -741,8 +750,8 @@
     <SUITE FILE_PATH="coverage/PINN$Doctests_in_functional.coverage" NAME="Doctests in functional Coverage Results" MODIFIED="1706118811712" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/venv/Lib/site-packages/torch/nn" />
     <SUITE FILE_PATH="coverage/PINN$PINN_III.coverage" NAME="PINN-III Coverage Results" MODIFIED="1706580164845" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$" />
     <SUITE FILE_PATH="coverage/PINN$Torch_NN.coverage" NAME="Torch_NN Coverage Results" MODIFIED="1704702524901" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$" />
-    <SUITE FILE_PATH="coverage/PINN$Numerical_Simulation.coverage" NAME="Numerical_Simulation Coverage Results" MODIFIED="1716732137504" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$" />
-    <SUITE FILE_PATH="coverage/PINN$main.coverage" NAME="main Coverage Results" MODIFIED="1716738974231" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$" />
+    <SUITE FILE_PATH="coverage/PINN$Numerical_Simulation.coverage" NAME="Numerical_Simulation Coverage Results" MODIFIED="1716741457055" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$" />
+    <SUITE FILE_PATH="coverage/PINN$main.coverage" NAME="main Coverage Results" MODIFIED="1716743767742" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$" />
     <SUITE FILE_PATH="coverage/PINN$PINN_ver2_1.coverage" NAME="PINN_ver2.1 Coverage Results" MODIFIED="1710047215849" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/code" />
     <SUITE FILE_PATH="coverage/PINN$PINN_VI.coverage" NAME="PINN-VI Coverage Results" MODIFIED="1709363332807" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/code" />
     <SUITE FILE_PATH="coverage/PINN$EulerReq_0610.coverage" NAME="EulerReq_0610 Coverage Results" MODIFIED="1704620452659" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$" />
@@ -753,6 +762,7 @@
     <SUITE FILE_PATH="coverage/PINN$PINN_IV.coverage" NAME="PINN-IV Coverage Results" MODIFIED="1709050643357" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/code" />
     <SUITE FILE_PATH="coverage/PINN$SelectArea.coverage" NAME="SelectArea Coverage Results" MODIFIED="1709032210408" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/code" />
     <SUITE FILE_PATH="coverage/PINN$fdm.coverage" NAME="fdm Coverage Results" MODIFIED="1716732131983" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/data_processing" />
+    <SUITE FILE_PATH="coverage/PINN$model.coverage" NAME="model Coverage Results" MODIFIED="1716742810339" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$" />
     <SUITE FILE_PATH="coverage/PINN$PINN.coverage" NAME="PINN Coverage Results" MODIFIED="1706521867002" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$" />
   </component>
 </project>

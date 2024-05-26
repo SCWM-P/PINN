@@ -1,9 +1,10 @@
 import numpy as np
 import scipy.io
 import os
+np.random.seed(2024)
 
 
-def load_data(option: str, current_path, filename: str):
+def load_data(option: str, current_path, filename: str, alpha: float=100):
     """
     从指定路径加载数据。
 
@@ -45,6 +46,16 @@ def load_data(option: str, current_path, filename: str):
         xEvent = data['X'].flatten()
         yEvent = data['displ'].flatten()
         polarities = np.ones_like(xEvent)
+        index = np.random.choice(
+            range(len(Timestamp)),
+            int(len(Timestamp)/alpha),
+            replace=False
+        )
+        index.sort()
+        Timestamp = Timestamp[index]
+        xEvent = xEvent[index]
+        yEvent = yEvent[index]
+        polarities = polarities[index]
     else:
         raise ValueError('Invalid option')
     return Timestamp, xEvent, yEvent, polarities
