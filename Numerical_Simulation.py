@@ -18,8 +18,8 @@ if not use_filedata:
     m = 11.3  # 单位长度质量
 
     # 构造一维数组
-    EI_array = np.ones(N + 1) * EI
-    m_array = np.ones(N - 1) * m
+    EI = np.ones(N + 1) * EI
+    m = np.ones(N - 1) * m
     EA = 100 * np.ones(N - 1)  # 轴向刚度
     y = np.zeros(N + 1)  # 初始位移
     kbc = np.array([0.0, 0.0])  # 边界条件参数
