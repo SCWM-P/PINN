@@ -2,34 +2,36 @@ import sys
 import os
 import numpy as np
 import matplotlib.pyplot as plt
+from mpl_toolkits.mplot3d import Axes3D
 from data_processing.fdm import rk4th, mkc
 
-use_filedata = False
+use_filedata = True
 if not use_filedata:
-    # Define parameters
-    L = 2          # m
-    H = 212.25 * 10  # N
-    N = 101        # divided into N-1 segments leading to N nodes
-    EI = 3928      # Nm2
-    m = 11.3       # kg/m
+    # 定义物理参数和初始条件
+    L = 2.0  # 总长度
+    H = 2122.5  # 横向力
+    N = 101  # 分段数
+    EI = 3928.0  # 弯曲刚度
+    m = 11.3  # 单位长度质量
 
-    EI = EI * np.ones(N + 1)
-    m = np.ones(N - 1) * m
-    EA = 100 * np.ones(N - 1)
-    y = np.zeros(N + 1)
-    kbc = [0**2, 0**2]
+    # 构造一维数组
+    EI_array = np.ones(N + 1) * EI
+    m_array = np.ones(N - 1) * m
+    EA = 100 * np.ones(N - 1)  # 轴向刚度
+    y = np.zeros(N + 1)  # 初始位移
+    kbc = np.array([0.0, 0.0])  # 边界条件参数
 
     n = N - 1
     M, K, C = mkc(m, EA, EI, y, H, L, N, 0.005, kbc)
 
     A = np.zeros((2 * n, 2 * n))
-    A[0:n, n:2 * n] = np.eye(n)
-    A[n:2 * n, 0:n] = -np.linalg.inv(M) @ K
+    A[:n, n:2 * n] = np.eye(n)
+    A[n:2 * n, :n] = -np.linalg.inv(M) @ K
     A[n:2 * n, n:2 * n] = -np.linalg.inv(M) @ C
     D, V = np.linalg.eig(A)
 
     n_mode = 10
-    # Post processing
+    # Post-processing
     d = np.diag(D)
     index = np.imag(d) > 0
     omega = d[index]
@@ -82,25 +84,28 @@ else:
     variables = np.load(os.path.join(
         'data', 'npy',
         'variables.npz'
-    ))
+    ), allow_pickle=True)
     for name, val in variables.items():
         globals()[name] = val
 
 
 # %%
+alpha = 100
 # Plot results
 plt.figure(1)
 plt.subplot(2, 1, 1)
-plt.plot(t[:100:], Fext.T[:100:], 'o')
+plt.plot(t[::alpha], Fext.T[::alpha], 'o')
 plt.subplot(2, 1, 2)
-plt.plot(t[:100:], displ[[10, 20, 30, 50], :100:].T)  # plot displacement at specific points
+plt.plot(t[::alpha], displ[[10, 20, 30, 50], :].T[::alpha])  # plot displacement at specific points
 # %%
 # Plot all data
 plt.figure(2)
-x = np.linspace(0, L, N + 1)
-T, X = np.meshgrid(t[:100:], x[1:-1])
-plt.contourf(X, T, displ[:, :100:], cmap='viridis')
-plt.xlabel('$x$ (m)')
-plt.ylabel('$t$ (s)')
-plt.colorbar(label='$v(x,t)$ (m)')
+ax = plt.figure().add_subplot(111, projection='3d')
+X, T = np.meshgrid(np.linspace(0, L, N - 1), t[::alpha])
+surf = ax.plot_surface(T, X, displ.T[::alpha, :], cmap='viridis')
+ax.set_title('3D Surface plot of Displacement over Time and Length')
+ax.set_xlabel('Time $t$[s]')
+ax.set_ylabel('Position along beam $x$[m]')
+ax.set_zlabel('Displacement $u$[m]')
+plt.colorbar(surf, ax=ax, shrink=0.5, aspect=5)
 plt.show()
