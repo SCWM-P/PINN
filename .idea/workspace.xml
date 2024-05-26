@@ -1,0 +1,740 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="AutoImportSettings">
+    <option name="autoReloadType" value="SELECTIVE" />
+  </component>
+  <component name="ChangeListManager">
+    <list default="true" id="adbbd5d0-5b79-4adb-ba77-89cd9ee51a24" name="Changes" comment="New Commit">
+      <change beforePath="$PROJECT_DIR$/App/SelectArea.py" beforeDir="false" afterPath="$PROJECT_DIR$/App/SelectArea.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/SelectArea.py" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/data/npy/test_4mm_3Hz.npy" beforeDir="false" afterPath="$PROJECT_DIR$/data/npy/test_4mm_3Hz.npy" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/derivation_test.py" beforeDir="false" afterPath="$PROJECT_DIR$/derivation_test.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/main.py" beforeDir="false" afterPath="$PROJECT_DIR$/main.py" afterDir="false" />
+    </list>
+    <option name="SHOW_DIALOG" value="false" />
+    <option name="HIGHLIGHT_CONFLICTS" value="true" />
+    <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
+    <option name="LAST_RESOLUTION" value="IGNORE" />
+  </component>
+  <component name="CopyImageOptionsProvider">
+    <option name="myChopIndentation" value="false" />
+  </component>
+  <component name="FileTemplateManagerImpl">
+    <option name="RECENT_TEMPLATES">
+      <list>
+        <option value="Jupyter Notebook" />
+        <option value="Markdown" />
+        <option value="Python Script" />
+      </list>
+    </option>
+  </component>
+  <component name="Git.Settings">
+    <option name="RECENT_BRANCH_BY_REPOSITORY">
+      <map>
+        <entry key="$PROJECT_DIR$" value="master" />
+      </map>
+    </option>
+    <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
+  </component>
+  <component name="GithubDefaultAccount">
+    <option name="defaultAccountId" value="5a3cd270-f1c9-453a-910a-b87a2784a4a6" />
+  </component>
+  <component name="HighlightingSettingsPerFile">
+    <setting file="file://$PROJECT_DIR$/code/README.md" root0="FORCE_HIGHLIGHTING" root1="SKIP_HIGHLIGHTING" />
+  </component>
+  <component name="MarkdownSettingsMigration">
+    <option name="stateVersion" value="1" />
+  </component>
+  <component name="ProjectId" id="2aXY720xUOHdJqnvWLg7tVeUHmI" />
+  <component name="ProjectLevelVcsManager" settingsEditedManually="true">
+    <ConfirmationsSetting value="2" id="Add" />
+  </component>
+  <component name="ProjectViewState">
+    <option name="hideEmptyMiddlePackages" value="true" />
+    <option name="showLibraryContents" value="true" />
+  </component>
+  <component name="PropertiesComponent">{
+  &quot;keyToString&quot;: {
+    &quot;ASKED_ADD_EXTERNAL_FILES&quot;: &quot;true&quot;,
+    &quot;RunOnceActivity.ShowReadmeOnStart&quot;: &quot;true&quot;,
+    &quot;WebServerToolWindowFactoryState&quot;: &quot;false&quot;,
+    &quot;ignore.virus.scanning.warn.message&quot;: &quot;true&quot;,
+    &quot;last_opened_file_path&quot;: &quot;D:/Projects/MyGPT/gpt_academic&quot;,
+    &quot;node.js.detected.package.eslint&quot;: &quot;true&quot;,
+    &quot;node.js.detected.package.tslint&quot;: &quot;true&quot;,
+    &quot;node.js.selected.package.eslint&quot;: &quot;(autodetect)&quot;,
+    &quot;node.js.selected.package.tslint&quot;: &quot;(autodetect)&quot;,
+    &quot;nodejs_package_manager_path&quot;: &quot;npm&quot;,
+    &quot;settings.editor.selected.configurable&quot;: &quot;preferences.pluginManager&quot;,
+    &quot;vue.rearranger.settings.migration&quot;: &quot;true&quot;
+  },
+  &quot;keyToStringList&quot;: {
+    &quot;ChangesTree.GroupingKeys&quot;: [
+    ]
+  }
+}</component>
+  <component name="PyConsoleOptionsProvider">
+    <option name="myPythonConsoleState">
+      <console-settings module-name="Pytorch 2.1.2" is-module-sdk="true">
+        <option name="myUseModuleSdk" value="true" />
+        <option name="myModuleName" value="Pytorch 2.1.2" />
+      </console-settings>
+    </option>
+  </component>
+  <component name="RunManager" selected="Python.main">
+    <configuration name="EulerReq_0610" type="PythonConfigurationType" factoryName="Python" temporary="true" nameIsGenerated="true">
+      <module name="Pytorch 2.1.2" />
+      <option name="INTERPRETER_OPTIONS" value="" />
+      <option name="PARENT_ENVS" value="true" />
+      <envs>
+        <env name="PYTHONUNBUFFERED" value="1" />
+      </envs>
+      <option name="SDK_HOME" value="" />
+      <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$" />
+      <option name="IS_MODULE_SDK" value="true" />
+      <option name="ADD_CONTENT_ROOTS" value="true" />
+      <option name="ADD_SOURCE_ROOTS" value="true" />
+      <EXTENSION ID="PythonCoverageRunConfigurationExtension" runner="coverage.py" />
+      <option name="SCRIPT_NAME" value="$PROJECT_DIR$/EulerReq_0610.py" />
+      <option name="PARAMETERS" value="" />
+      <option name="SHOW_COMMAND_LINE" value="true" />
+      <option name="EMULATE_TERMINAL" value="false" />
+      <option name="MODULE_MODE" value="false" />
+      <option name="REDIRECT_INPUT" value="false" />
+      <option name="INPUT_FILE" value="" />
+      <method v="2" />
+    </configuration>
+    <configuration name="Torch_NN" type="PythonConfigurationType" factoryName="Python" nameIsGenerated="true">
+      <module name="Pytorch 2.1.2" />
+      <option name="INTERPRETER_OPTIONS" value="" />
+      <option name="PARENT_ENVS" value="true" />
+      <envs>
+        <env name="PYTHONUNBUFFERED" value="1" />
+      </envs>
+      <option name="SDK_HOME" value="" />
+      <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$" />
+      <option name="IS_MODULE_SDK" value="true" />
+      <option name="ADD_CONTENT_ROOTS" value="true" />
+      <option name="ADD_SOURCE_ROOTS" value="true" />
+      <EXTENSION ID="PythonCoverageRunConfigurationExtension" runner="coverage.py" />
+      <option name="SCRIPT_NAME" value="$PROJECT_DIR$/Torch_NN.py" />
+      <option name="PARAMETERS" value="" />
+      <option name="SHOW_COMMAND_LINE" value="true" />
+      <option name="EMULATE_TERMINAL" value="false" />
+      <option name="MODULE_MODE" value="false" />
+      <option name="REDIRECT_INPUT" value="false" />
+      <option name="INPUT_FILE" value="" />
+      <method v="2" />
+    </configuration>
+    <configuration default="true" type="PythonConfigurationType" factoryName="Python">
+      <module name="Pytorch 2.1.2" />
+      <option name="INTERPRETER_OPTIONS" value="" />
+      <option name="PARENT_ENVS" value="true" />
+      <envs>
+        <env name="PYTHONUNBUFFERED" value="1" />
+      </envs>
+      <option name="SDK_HOME" value="" />
+      <option name="WORKING_DIRECTORY" value="" />
+      <option name="IS_MODULE_SDK" value="false" />
+      <option name="ADD_CONTENT_ROOTS" value="true" />
+      <option name="ADD_SOURCE_ROOTS" value="true" />
+      <EXTENSION ID="PythonCoverageRunConfigurationExtension" runner="coverage.py" />
+      <option name="SCRIPT_NAME" value="" />
+      <option name="PARAMETERS" value="" />
+      <option name="SHOW_COMMAND_LINE" value="true" />
+      <option name="EMULATE_TERMINAL" value="false" />
+      <option name="MODULE_MODE" value="false" />
+      <option name="REDIRECT_INPUT" value="false" />
+      <option name="INPUT_FILE" value="" />
+      <method v="2" />
+    </configuration>
+    <configuration name="main" type="PythonConfigurationType" factoryName="Python" nameIsGenerated="true">
+      <module name="Pytorch 2.1.2" />
+      <option name="INTERPRETER_OPTIONS" value="" />
+      <option name="PARENT_ENVS" value="true" />
+      <envs>
+        <env name="PYTHONUNBUFFERED" value="1" />
+      </envs>
+      <option name="SDK_HOME" value="" />
+      <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$" />
+      <option name="IS_MODULE_SDK" value="true" />
+      <option name="ADD_CONTENT_ROOTS" value="true" />
+      <option name="ADD_SOURCE_ROOTS" value="true" />
+      <EXTENSION ID="PythonCoverageRunConfigurationExtension" runner="coverage.py" />
+      <option name="SCRIPT_NAME" value="$PROJECT_DIR$/main.py" />
+      <option name="PARAMETERS" value="" />
+      <option name="SHOW_COMMAND_LINE" value="true" />
+      <option name="EMULATE_TERMINAL" value="false" />
+      <option name="MODULE_MODE" value="false" />
+      <option name="REDIRECT_INPUT" value="false" />
+      <option name="INPUT_FILE" value="" />
+      <method v="2" />
+    </configuration>
+    <recent_temporary>
+      <list>
+        <item itemvalue="Python.EulerReq_0610" />
+      </list>
+    </recent_temporary>
+  </component>
+  <component name="SpellCheckerSettings" RuntimeDictionaries="0" Folders="0" CustomDictionaries="0" DefaultDictionary="application-level" UseSingleDictionary="true" transferred="true" />
+  <component name="SvnConfiguration">
+    <configuration>C:\Users\SCWM-\AppData\Roaming\Subversion</configuration>
+  </component>
+  <component name="TaskManager">
+    <task active="true" id="Default" summary="Default task">
+      <changelist id="adbbd5d0-5b79-4adb-ba77-89cd9ee51a24" name="Changes" comment="" />
+      <created>1704466220072</created>
+      <option name="number" value="Default" />
+      <option name="presentableId" value="Default" />
+      <updated>1704466220072</updated>
+      <workItem from="1704466224481" duration="396000" />
+      <workItem from="1704466642892" duration="1135000" />
+      <workItem from="1704468195467" duration="1990000" />
+      <workItem from="1704598145213" duration="7813000" />
+      <workItem from="1704612156736" duration="11486000" />
+      <workItem from="1704626223339" duration="1707000" />
+      <workItem from="1704628451383" duration="990000" />
+      <workItem from="1704645037959" duration="38000" />
+      <workItem from="1704697921925" duration="10000" />
+      <workItem from="1704697967835" duration="187000" />
+      <workItem from="1704698318585" duration="10000" />
+      <workItem from="1704698339758" duration="12690000" />
+      <workItem from="1704723922216" duration="264000" />
+      <workItem from="1704724735771" duration="11000" />
+      <workItem from="1704724759038" duration="98000" />
+      <workItem from="1704725014775" duration="4384000" />
+      <workItem from="1704798906991" duration="633000" />
+      <workItem from="1704800238280" duration="113000" />
+      <workItem from="1704801322979" duration="1459000" />
+      <workItem from="1705596181015" duration="102000" />
+      <workItem from="1706012702818" duration="6772000" />
+      <workItem from="1706067691389" duration="2360000" />
+      <workItem from="1706080283576" duration="30343000" />
+      <workItem from="1706119049514" duration="23000" />
+      <workItem from="1706119082675" duration="1572000" />
+      <workItem from="1706121048546" duration="2365000" />
+      <workItem from="1706153685660" duration="47810000" />
+      <workItem from="1706359060684" duration="4512000" />
+      <workItem from="1706412756605" duration="7120000" />
+      <workItem from="1706443746356" duration="727000" />
+      <workItem from="1706444882645" duration="1919000" />
+      <workItem from="1706446906666" duration="2514000" />
+      <workItem from="1706451258864" duration="423000" />
+      <workItem from="1706451711832" duration="374000" />
+      <workItem from="1706452215859" duration="615000" />
+      <workItem from="1706454290663" duration="138000" />
+      <workItem from="1706467480377" duration="35287000" />
+      <workItem from="1706542073496" duration="13912000" />
+      <workItem from="1706608798647" duration="2000" />
+      <workItem from="1706609604358" duration="190000" />
+      <workItem from="1706637767588" duration="81000" />
+      <workItem from="1708151333824" duration="6257000" />
+      <workItem from="1708254744952" duration="146000" />
+      <workItem from="1708255047151" duration="15420000" />
+      <workItem from="1708837988189" duration="24000" />
+      <workItem from="1708838027141" duration="1141000" />
+      <workItem from="1708844163258" duration="19000" />
+      <workItem from="1708860738209" duration="6000" />
+      <workItem from="1708869021988" duration="7000" />
+      <workItem from="1708953766894" duration="5358000" />
+      <workItem from="1708960992912" duration="207000" />
+      <workItem from="1708961206292" duration="1997000" />
+      <workItem from="1709003535226" duration="24897000" />
+      <workItem from="1709044760203" duration="4948000" />
+      <workItem from="1709097706560" duration="27145000" />
+      <workItem from="1709134352973" duration="2028000" />
+      <workItem from="1709181615693" duration="2459000" />
+      <workItem from="1709192221364" duration="48000" />
+      <workItem from="1709281978147" duration="7802000" />
+      <workItem from="1709308669127" duration="1230000" />
+      <workItem from="1709344226657" duration="24627000" />
+      <workItem from="1709372549395" duration="4690000" />
+      <workItem from="1709379712724" duration="10357000" />
+      <workItem from="1709431419394" duration="1551000" />
+      <workItem from="1709450700849" duration="3284000" />
+      <workItem from="1709473269103" duration="2231000" />
+      <workItem from="1709797579117" duration="5437000" />
+      <workItem from="1709808443196" duration="654000" />
+      <workItem from="1709819738510" duration="1071000" />
+      <workItem from="1709820907885" duration="5436000" />
+      <workItem from="1709826571372" duration="11642000" />
+      <workItem from="1709983226341" duration="18675000" />
+      <workItem from="1710161483321" duration="2562000" />
+      <workItem from="1710164221163" duration="3061000" />
+      <workItem from="1710169259838" duration="9228000" />
+      <workItem from="1710213449485" duration="15498000" />
+      <workItem from="1710240139587" duration="171000" />
+      <workItem from="1710240331755" duration="103000" />
+      <workItem from="1710240452101" duration="303000" />
+      <workItem from="1710240780094" duration="253000" />
+      <workItem from="1710241052739" duration="74000" />
+      <workItem from="1710241145484" duration="991000" />
+      <workItem from="1710242172019" duration="1844000" />
+      <workItem from="1710256959157" duration="2515000" />
+      <workItem from="1710307553361" duration="1144000" />
+      <workItem from="1710318594070" duration="725000" />
+      <workItem from="1710322906365" duration="247000" />
+      <workItem from="1710323165897" duration="165000" />
+      <workItem from="1710323347386" duration="166000" />
+      <workItem from="1710323527503" duration="85000" />
+      <workItem from="1710323623694" duration="49000" />
+      <workItem from="1710323681830" duration="474000" />
+      <workItem from="1710329783846" duration="25000" />
+      <workItem from="1710590834388" duration="1066000" />
+      <workItem from="1710591920098" duration="38000" />
+      <workItem from="1710591970958" duration="2757000" />
+      <workItem from="1710647368563" duration="206000" />
+      <workItem from="1710647592210" duration="660000" />
+      <workItem from="1710648605006" duration="6162000" />
+      <workItem from="1710772717366" duration="280000" />
+      <workItem from="1710919417484" duration="448000" />
+      <workItem from="1710925104624" duration="201000" />
+      <workItem from="1710925323375" duration="61000" />
+      <workItem from="1710928698059" duration="113000" />
+      <workItem from="1710928831018" duration="486000" />
+      <workItem from="1710929355650" duration="412000" />
+      <workItem from="1710929783430" duration="487000" />
+      <workItem from="1710930498708" duration="17981000" />
+      <workItem from="1711006195567" duration="6203000" />
+      <workItem from="1711155430582" duration="608000" />
+      <workItem from="1711242269419" duration="2987000" />
+      <workItem from="1711277432766" duration="9000" />
+      <workItem from="1711381270338" duration="3071000" />
+      <workItem from="1711418158468" duration="9078000" />
+      <workItem from="1711525376046" duration="842000" />
+      <workItem from="1711801534222" duration="2383000" />
+      <workItem from="1711877244784" duration="1610000" />
+      <workItem from="1711881233277" duration="5933000" />
+      <workItem from="1711901900027" duration="2187000" />
+      <workItem from="1711905329648" duration="5263000" />
+      <workItem from="1712152527331" duration="9000" />
+      <workItem from="1712241702425" duration="4677000" />
+      <workItem from="1712727343746" duration="44000" />
+      <workItem from="1716358763787" duration="432000" />
+      <workItem from="1716359219578" duration="1141000" />
+      <workItem from="1716363361408" duration="819000" />
+      <workItem from="1716365983663" duration="2439000" />
+      <workItem from="1716379506579" duration="1910000" />
+      <workItem from="1716556047108" duration="169000" />
+      <workItem from="1716556251442" duration="100000" />
+      <workItem from="1716556384073" duration="885000" />
+      <workItem from="1716627045394" duration="13000" />
+      <workItem from="1716694843613" duration="6344000" />
+      <workItem from="1716702304490" duration="831000" />
+    </task>
+    <task id="LOCAL-00006" summary="Initial commit">
+      <created>1709026014980</created>
+      <option name="number" value="00006" />
+      <option name="presentableId" value="LOCAL-00006" />
+      <option name="project" value="LOCAL" />
+      <updated>1709026014980</updated>
+    </task>
+    <task id="LOCAL-00007" summary="Initial commit">
+      <created>1709034517192</created>
+      <option name="number" value="00007" />
+      <option name="presentableId" value="LOCAL-00007" />
+      <option name="project" value="LOCAL" />
+      <updated>1709034517192</updated>
+    </task>
+    <task id="LOCAL-00008" summary="Initial commit">
+      <created>1709041493426</created>
+      <option name="number" value="00008" />
+      <option name="presentableId" value="LOCAL-00008" />
+      <option name="project" value="LOCAL" />
+      <updated>1709041493426</updated>
+    </task>
+    <task id="LOCAL-00009" summary="Initial commit">
+      <created>1709098672407</created>
+      <option name="number" value="00009" />
+      <option name="presentableId" value="LOCAL-00009" />
+      <option name="project" value="LOCAL" />
+      <updated>1709098672407</updated>
+    </task>
+    <task id="LOCAL-00010" summary="Initial commit">
+      <created>1709105709101</created>
+      <option name="number" value="00010" />
+      <option name="presentableId" value="LOCAL-00010" />
+      <option name="project" value="LOCAL" />
+      <updated>1709105709101</updated>
+    </task>
+    <task id="LOCAL-00011" summary="Initial commit">
+      <created>1709125394209</created>
+      <option name="number" value="00011" />
+      <option name="presentableId" value="LOCAL-00011" />
+      <option name="project" value="LOCAL" />
+      <updated>1709125394209</updated>
+    </task>
+    <task id="LOCAL-00012" summary="Initial commit">
+      <created>1709128734751</created>
+      <option name="number" value="00012" />
+      <option name="presentableId" value="LOCAL-00012" />
+      <option name="project" value="LOCAL" />
+      <updated>1709128734751</updated>
+    </task>
+    <task id="LOCAL-00013" summary="Initial commit">
+      <created>1709184009818</created>
+      <option name="number" value="00013" />
+      <option name="presentableId" value="LOCAL-00013" />
+      <option name="project" value="LOCAL" />
+      <updated>1709184009819</updated>
+    </task>
+    <task id="LOCAL-00014" summary="Initial commit">
+      <created>1709184030202</created>
+      <option name="number" value="00014" />
+      <option name="presentableId" value="LOCAL-00014" />
+      <option name="project" value="LOCAL" />
+      <updated>1709184030202</updated>
+    </task>
+    <task id="LOCAL-00015" summary="Initial commit">
+      <created>1709283297150</created>
+      <option name="number" value="00015" />
+      <option name="presentableId" value="LOCAL-00015" />
+      <option name="project" value="LOCAL" />
+      <updated>1709283297151</updated>
+    </task>
+    <task id="LOCAL-00016" summary="Initial commit">
+      <created>1709309890978</created>
+      <option name="number" value="00016" />
+      <option name="presentableId" value="LOCAL-00016" />
+      <option name="project" value="LOCAL" />
+      <updated>1709309890978</updated>
+    </task>
+    <task id="LOCAL-00017" summary="Initial commit">
+      <created>1709349687215</created>
+      <option name="number" value="00017" />
+      <option name="presentableId" value="LOCAL-00017" />
+      <option name="project" value="LOCAL" />
+      <updated>1709349687215</updated>
+    </task>
+    <task id="LOCAL-00018" summary="Initial commit">
+      <created>1709365667493</created>
+      <option name="number" value="00018" />
+      <option name="presentableId" value="LOCAL-00018" />
+      <option name="project" value="LOCAL" />
+      <updated>1709365667493</updated>
+    </task>
+    <task id="LOCAL-00019" summary="Initial commit">
+      <created>1709367420878</created>
+      <option name="number" value="00019" />
+      <option name="presentableId" value="LOCAL-00019" />
+      <option name="project" value="LOCAL" />
+      <updated>1709367420878</updated>
+    </task>
+    <task id="LOCAL-00020" summary="Initial commit">
+      <created>1709368335168</created>
+      <option name="number" value="00020" />
+      <option name="presentableId" value="LOCAL-00020" />
+      <option name="project" value="LOCAL" />
+      <updated>1709368335168</updated>
+    </task>
+    <task id="LOCAL-00021" summary="Initial commit">
+      <created>1709369642161</created>
+      <option name="number" value="00021" />
+      <option name="presentableId" value="LOCAL-00021" />
+      <option name="project" value="LOCAL" />
+      <updated>1709369642162</updated>
+    </task>
+    <task id="LOCAL-00022" summary="Initial commit">
+      <created>1709372598287</created>
+      <option name="number" value="00022" />
+      <option name="presentableId" value="LOCAL-00022" />
+      <option name="project" value="LOCAL" />
+      <updated>1709372598287</updated>
+    </task>
+    <task id="LOCAL-00023" summary="Initial commit">
+      <created>1709372703016</created>
+      <option name="number" value="00023" />
+      <option name="presentableId" value="LOCAL-00023" />
+      <option name="project" value="LOCAL" />
+      <updated>1709372703016</updated>
+    </task>
+    <task id="LOCAL-00024" summary="Initial commit">
+      <created>1709377395541</created>
+      <option name="number" value="00024" />
+      <option name="presentableId" value="LOCAL-00024" />
+      <option name="project" value="LOCAL" />
+      <updated>1709377395541</updated>
+    </task>
+    <task id="LOCAL-00025" summary="Initial commit">
+      <created>1709383092911</created>
+      <option name="number" value="00025" />
+      <option name="presentableId" value="LOCAL-00025" />
+      <option name="project" value="LOCAL" />
+      <updated>1709383092911</updated>
+    </task>
+    <task id="LOCAL-00026" summary="Initial commit">
+      <created>1709383235197</created>
+      <option name="number" value="00026" />
+      <option name="presentableId" value="LOCAL-00026" />
+      <option name="project" value="LOCAL" />
+      <updated>1709383235197</updated>
+    </task>
+    <task id="LOCAL-00027" summary="Initial commit">
+      <created>1709388126175</created>
+      <option name="number" value="00027" />
+      <option name="presentableId" value="LOCAL-00027" />
+      <option name="project" value="LOCAL" />
+      <updated>1709388126176</updated>
+    </task>
+    <task id="LOCAL-00028" summary="Initial commit">
+      <created>1709388557727</created>
+      <option name="number" value="00028" />
+      <option name="presentableId" value="LOCAL-00028" />
+      <option name="project" value="LOCAL" />
+      <updated>1709388557727</updated>
+    </task>
+    <task id="LOCAL-00029" summary="Initial commit">
+      <created>1709431936982</created>
+      <option name="number" value="00029" />
+      <option name="presentableId" value="LOCAL-00029" />
+      <option name="project" value="LOCAL" />
+      <updated>1709431936982</updated>
+    </task>
+    <task id="LOCAL-00030" summary="Initial commit">
+      <created>1709808728971</created>
+      <option name="number" value="00030" />
+      <option name="presentableId" value="LOCAL-00030" />
+      <option name="project" value="LOCAL" />
+      <updated>1709808728971</updated>
+    </task>
+    <task id="LOCAL-00031" summary="Initial commit">
+      <created>1709809085218</created>
+      <option name="number" value="00031" />
+      <option name="presentableId" value="LOCAL-00031" />
+      <option name="project" value="LOCAL" />
+      <updated>1709809085218</updated>
+    </task>
+    <task id="LOCAL-00032" summary="Initial commit">
+      <created>1709826322187</created>
+      <option name="number" value="00032" />
+      <option name="presentableId" value="LOCAL-00032" />
+      <option name="project" value="LOCAL" />
+      <updated>1709826322187</updated>
+    </task>
+    <task id="LOCAL-00033" summary="Initial commit">
+      <created>1709994310105</created>
+      <option name="number" value="00033" />
+      <option name="presentableId" value="LOCAL-00033" />
+      <option name="project" value="LOCAL" />
+      <updated>1709994310106</updated>
+    </task>
+    <task id="LOCAL-00034" summary="Initial commit">
+      <created>1710055228624</created>
+      <option name="number" value="00034" />
+      <option name="presentableId" value="LOCAL-00034" />
+      <option name="project" value="LOCAL" />
+      <updated>1710055228624</updated>
+    </task>
+    <task id="LOCAL-00035" summary="Initial commit">
+      <created>1710164698034</created>
+      <option name="number" value="00035" />
+      <option name="presentableId" value="LOCAL-00035" />
+      <option name="project" value="LOCAL" />
+      <updated>1710164698034</updated>
+    </task>
+    <task id="LOCAL-00036" summary="Initial commit">
+      <created>1710167268673</created>
+      <option name="number" value="00036" />
+      <option name="presentableId" value="LOCAL-00036" />
+      <option name="project" value="LOCAL" />
+      <updated>1710167268673</updated>
+    </task>
+    <task id="LOCAL-00037" summary="Initial commit">
+      <created>1710170507905</created>
+      <option name="number" value="00037" />
+      <option name="presentableId" value="LOCAL-00037" />
+      <option name="project" value="LOCAL" />
+      <updated>1710170507905</updated>
+    </task>
+    <task id="LOCAL-00038" summary="Initial commit">
+      <created>1710172779716</created>
+      <option name="number" value="00038" />
+      <option name="presentableId" value="LOCAL-00038" />
+      <option name="project" value="LOCAL" />
+      <updated>1710172779716</updated>
+    </task>
+    <task id="LOCAL-00039" summary="Initial commit">
+      <created>1710172936114</created>
+      <option name="number" value="00039" />
+      <option name="presentableId" value="LOCAL-00039" />
+      <option name="project" value="LOCAL" />
+      <updated>1710172936114</updated>
+    </task>
+    <task id="LOCAL-00040" summary="Initial commit">
+      <created>1710173037133</created>
+      <option name="number" value="00040" />
+      <option name="presentableId" value="LOCAL-00040" />
+      <option name="project" value="LOCAL" />
+      <updated>1710173037133</updated>
+    </task>
+    <task id="LOCAL-00041" summary="New Commit">
+      <created>1710173206875</created>
+      <option name="number" value="00041" />
+      <option name="presentableId" value="LOCAL-00041" />
+      <option name="project" value="LOCAL" />
+      <updated>1710173206875</updated>
+    </task>
+    <task id="LOCAL-00042" summary="New Commit">
+      <created>1710173376619</created>
+      <option name="number" value="00042" />
+      <option name="presentableId" value="LOCAL-00042" />
+      <option name="project" value="LOCAL" />
+      <updated>1710173376619</updated>
+    </task>
+    <task id="LOCAL-00043" summary="New Commit">
+      <created>1710173683399</created>
+      <option name="number" value="00043" />
+      <option name="presentableId" value="LOCAL-00043" />
+      <option name="project" value="LOCAL" />
+      <updated>1710173683399</updated>
+    </task>
+    <task id="LOCAL-00044" summary="New Commit">
+      <created>1710208972793</created>
+      <option name="number" value="00044" />
+      <option name="presentableId" value="LOCAL-00044" />
+      <option name="project" value="LOCAL" />
+      <updated>1710208972793</updated>
+    </task>
+    <task id="LOCAL-00045" summary="New Commit">
+      <created>1710209929880</created>
+      <option name="number" value="00045" />
+      <option name="presentableId" value="LOCAL-00045" />
+      <option name="project" value="LOCAL" />
+      <updated>1710209929880</updated>
+    </task>
+    <task id="LOCAL-00046" summary="New Commit">
+      <created>1710213235347</created>
+      <option name="number" value="00046" />
+      <option name="presentableId" value="LOCAL-00046" />
+      <option name="project" value="LOCAL" />
+      <updated>1710213235347</updated>
+    </task>
+    <task id="LOCAL-00047" summary="New Commit">
+      <created>1710237379074</created>
+      <option name="number" value="00047" />
+      <option name="presentableId" value="LOCAL-00047" />
+      <option name="project" value="LOCAL" />
+      <updated>1710237379074</updated>
+    </task>
+    <task id="LOCAL-00048" summary="New Commit">
+      <created>1710239206315</created>
+      <option name="number" value="00048" />
+      <option name="presentableId" value="LOCAL-00048" />
+      <option name="project" value="LOCAL" />
+      <updated>1710239206315</updated>
+    </task>
+    <task id="LOCAL-00049" summary="New Commit">
+      <created>1710259654326</created>
+      <option name="number" value="00049" />
+      <option name="presentableId" value="LOCAL-00049" />
+      <option name="project" value="LOCAL" />
+      <updated>1710259654326</updated>
+    </task>
+    <task id="LOCAL-00050" summary="New Commit">
+      <created>1710655188033</created>
+      <option name="number" value="00050" />
+      <option name="presentableId" value="LOCAL-00050" />
+      <option name="project" value="LOCAL" />
+      <updated>1710655188033</updated>
+    </task>
+    <task id="LOCAL-00051" summary="New Commit">
+      <created>1710655343370</created>
+      <option name="number" value="00051" />
+      <option name="presentableId" value="LOCAL-00051" />
+      <option name="project" value="LOCAL" />
+      <updated>1710655343372</updated>
+    </task>
+    <task id="LOCAL-00052" summary="New Commit">
+      <created>1710655557100</created>
+      <option name="number" value="00052" />
+      <option name="presentableId" value="LOCAL-00052" />
+      <option name="project" value="LOCAL" />
+      <updated>1710655557100</updated>
+    </task>
+    <task id="LOCAL-00053" summary="New Commit">
+      <created>1710655585211</created>
+      <option name="number" value="00053" />
+      <option name="presentableId" value="LOCAL-00053" />
+      <option name="project" value="LOCAL" />
+      <updated>1710655585211</updated>
+    </task>
+    <task id="LOCAL-00054" summary="New Commit">
+      <created>1711882043347</created>
+      <option name="number" value="00054" />
+      <option name="presentableId" value="LOCAL-00054" />
+      <option name="project" value="LOCAL" />
+      <updated>1711882043348</updated>
+    </task>
+    <option name="localTasksCounter" value="55" />
+    <servers />
+  </component>
+  <component name="TypeScriptGeneratedFilesManager">
+    <option name="version" value="3" />
+  </component>
+  <component name="UnknownFeatures">
+    <option featureType="com.intellij.fileTypeFactory" implementationName="*.md" />
+  </component>
+  <component name="Vcs.Log.Tabs.Properties">
+    <option name="TAB_STATES">
+      <map>
+        <entry key="MAIN">
+          <value>
+            <State>
+              <option name="CUSTOM_BOOLEAN_PROPERTIES">
+                <map>
+                  <entry key="Show.Git.Branches" value="false" />
+                </map>
+              </option>
+              <option name="FILTERS">
+                <map>
+                  <entry key="branch">
+                    <value>
+                      <list>
+                        <option value="HEAD" />
+                      </list>
+                    </value>
+                  </entry>
+                </map>
+              </option>
+            </State>
+          </value>
+        </entry>
+      </map>
+    </option>
+  </component>
+  <component name="VcsManagerConfiguration">
+    <option name="ADD_EXTERNAL_FILES_SILENTLY" value="true" />
+    <ignored-roots>
+      <path value="$PROJECT_DIR$/code - Copy" />
+      <path value="$PROJECT_DIR$/code" />
+    </ignored-roots>
+    <MESSAGE value="Initial commit" />
+    <MESSAGE value="New Commit" />
+    <option name="LAST_COMMIT_MESSAGE" value="New Commit" />
+  </component>
+  <component name="XDebuggerManager">
+    <watches-manager>
+      <configuration name="PythonConfigurationType">
+        <watch expression="self" />
+        <watch expression="self" />
+      </configuration>
+    </watches-manager>
+  </component>
+  <component name="com.intellij.coverage.CoverageDataManagerImpl">
+    <SUITE FILE_PATH="coverage/PINN$PINN_V.coverage" NAME="PINN-V Coverage Results" MODIFIED="1709128362473" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/code" />
+    <SUITE FILE_PATH="coverage/PINN$Doctests_in_functional.coverage" NAME="Doctests in functional Coverage Results" MODIFIED="1706118811712" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/venv/Lib/site-packages/torch/nn" />
+    <SUITE FILE_PATH="coverage/PINN$PINN_III.coverage" NAME="PINN-III Coverage Results" MODIFIED="1706580164845" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$" />
+    <SUITE FILE_PATH="coverage/PINN$Torch_NN.coverage" NAME="Torch_NN Coverage Results" MODIFIED="1704702524901" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$" />
+    <SUITE FILE_PATH="coverage/PINN$main.coverage" NAME="main Coverage Results" MODIFIED="1710653847791" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$" />
+    <SUITE FILE_PATH="coverage/PINN$PINN_ver2_1.coverage" NAME="PINN_ver2.1 Coverage Results" MODIFIED="1710047215849" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/code" />
+    <SUITE FILE_PATH="coverage/PINN$PINN_VI.coverage" NAME="PINN-VI Coverage Results" MODIFIED="1709363332807" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/code" />
+    <SUITE FILE_PATH="coverage/PINN$EulerReq_0610.coverage" NAME="EulerReq_0610 Coverage Results" MODIFIED="1704620452659" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$" />
+    <SUITE FILE_PATH="coverage/PINN$PINN_ver2_0.coverage" NAME="PINN_ver2.0 Coverage Results" MODIFIED="1709804158965" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/code" />
+    <SUITE FILE_PATH="coverage/PINN$PINN_V___Copy.coverage" NAME="PINN-V - Copy Coverage Results" MODIFIED="1709120621188" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/code" />
+    <SUITE FILE_PATH="coverage/PINN$__init__.coverage" NAME="__init__ Coverage Results" MODIFIED="1709360651436" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/venv/Lib/site-packages/torch/autograd" />
+    <SUITE FILE_PATH="coverage/PINN$derivation_test.coverage" NAME="derivation_test Coverage Results" MODIFIED="1712246952420" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$" />
+    <SUITE FILE_PATH="coverage/PINN$PINN_IV.coverage" NAME="PINN-IV Coverage Results" MODIFIED="1709050643357" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/code" />
+    <SUITE FILE_PATH="coverage/PINN$SelectArea.coverage" NAME="SelectArea Coverage Results" MODIFIED="1709032210408" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/code" />
+    <SUITE FILE_PATH="coverage/PINN$PINN.coverage" NAME="PINN Coverage Results" MODIFIED="1706521867002" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$" />
+  </component>
+</project>
