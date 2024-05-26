@@ -7,6 +7,7 @@
     <list default="true" id="adbbd5d0-5b79-4adb-ba77-89cd9ee51a24" name="Changes" comment="New Commit">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/Numerical_Simulation.py" beforeDir="false" afterPath="$PROJECT_DIR$/Numerical_Simulation.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/data/npy/variables.npz" beforeDir="false" afterPath="$PROJECT_DIR$/data/npy/variables.npz" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -314,7 +315,7 @@
       <workItem from="1716556384073" duration="885000" />
       <workItem from="1716627045394" duration="13000" />
       <workItem from="1716694843613" duration="6344000" />
-      <workItem from="1716702304490" duration="14137000" />
+      <workItem from="1716702304490" duration="14163000" />
     </task>
     <task id="LOCAL-00010" summary="Initial commit">
       <created>1709105709101</created>
