@@ -33,6 +33,11 @@ if __name__ == '__main__':
     filename = 'variables.npz'
     # filename = 'dvSave-2023_03_26_02_21_16.npy'
     Timestamp, xEvent, yEvent, polarities = dp.load_data('npz', current_path, filename)
+    if option == 'npz':
+        Timestamp = Timestamp[::100]
+        xEvent = xEvent[::100]
+        yEvent = yEvent[::100]
+        polarities = polarities[::100]
     # Data Cleansing
     fig = plt.figure()
     dp.plot_data(

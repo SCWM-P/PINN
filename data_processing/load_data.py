@@ -44,7 +44,7 @@ def load_data(option: str, current_path, filename: str):
         Timestamp = data['T'].flatten()
         xEvent = data['X'].flatten()
         yEvent = data['displ'].flatten()
-        polrities = np.ones_like(xEvent)
+        polarities = np.ones_like(xEvent)
     else:
         raise ValueError('Invalid option')
     return Timestamp, xEvent, yEvent, polarities
