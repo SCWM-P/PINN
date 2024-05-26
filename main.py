@@ -1,18 +1,20 @@
+import os
 import torch
 import time
-import scipy.io
 import numpy as np
+import matplotlib
 import matplotlib.pyplot as plt
 import data_processing as dp
 from model import PhysicsInformedNN
 
 np.random.seed(1234)
 torch.manual_seed(1234)
+matplotlib.use('TkAgg')
 torch.autograd.set_detect_anomaly(True)
-plt.ion()
 plt.rc('font', family='Times New Roman')
 plt.rc('text', usetex=True)
 plt.rc('grid', color='k', alpha=0.2)
+current_path = os.getcwd()
 
 
 if __name__ == '__main__':
@@ -20,28 +22,17 @@ if __name__ == '__main__':
     epochs = 500
     layers = [2, 50, 50, 50, 50, 1]
     connections = [0, 1, 2, 3, 3, 2]
-
     # Check CUDA availability (for GPU acceleration)
     device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
     print("========  Using device  ========")
     print(f"============  {device}  ============")
 
     # Load Data
-    # There are two dataset provided. The first is a dataset from .mat file.
-    # And the second is a dataset from .npy file. Please uncomment following code to choose one and run.
-    filename = 'test16-1.mat'
-    data = scipy.io.loadmat(f'data/mat/{filename}')
-    Timestamp = data['brushedData'][:, 0]/1e6
-    xEvent = data['brushedData'][:, 1]
-    yEvent = data['brushedData'][:, 2]
-    polarities = np.zeros_like(xEvent)
+    option = 'npz'
+    # filename = 'test16-1.mat'
+    filename = 'variables.npz'
     # filename = 'dvSave-2023_03_26_02_21_16.npy'
-    # data = np.load(f'data/npy/{filename}', allow_pickle=True).item()
-    # xEvent = data['xEvent']
-    # Timestamp = data['Timestamp']
-    # yEvent = data['yEvent']
-    # polarities = data['polarities']
-
+    Timestamp, xEvent, yEvent, polarities = dp.load_data('npz', current_path, filename)
     # Data Cleansing
     fig = plt.figure()
     dp.plot_data(

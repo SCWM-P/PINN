@@ -1,7 +1,9 @@
 from . import data_cleansing
 from . import plot_figure
-# from . import rotate
+from . import rotate
+from . import load_data
 
 HotPixel_cleansing = data_cleansing.HotPixel_cleansing
-# data_rotate = rotate.data_rotate
+data_rotate = rotate.data_rotate
 plot_data = plot_figure.plot_data
+load_data = load_data.load_data

@@ -5,10 +5,12 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="adbbd5d0-5b79-4adb-ba77-89cd9ee51a24" name="Changes" comment="New Commit">
-      <change afterPath="$PROJECT_DIR$/data/npy/variables.npz" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/test.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/data_processing/load_data.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/data_processing/rotate.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/Numerical_Simulation.py" beforeDir="false" afterPath="$PROJECT_DIR$/Numerical_Simulation.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/data_processing/__init__.py" beforeDir="false" afterPath="$PROJECT_DIR$/data_processing/__init__.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/main.py" beforeDir="false" afterPath="$PROJECT_DIR$/main.py" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -67,7 +69,7 @@
     "node.js.selected.package.eslint": "(autodetect)",
     "node.js.selected.package.tslint": "(autodetect)",
     "nodejs_package_manager_path": "npm",
-    "settings.editor.selected.configurable": "preferences.editor",
+    "settings.editor.selected.configurable": "TONGYI Lingma",
     "vue.rearranger.settings.migration": "true"
   },
   "keyToStringList": {
@@ -83,29 +85,7 @@
       </console-settings>
     </option>
   </component>
-  <component name="RunManager" selected="Python.test">
-    <configuration name="EulerReq_0610" type="PythonConfigurationType" factoryName="Python" temporary="true" nameIsGenerated="true">
-      <module name="Pytorch 2.1.2" />
-      <option name="INTERPRETER_OPTIONS" value="" />
-      <option name="PARENT_ENVS" value="true" />
-      <envs>
-        <env name="PYTHONUNBUFFERED" value="1" />
-      </envs>
-      <option name="SDK_HOME" value="" />
-      <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$" />
-      <option name="IS_MODULE_SDK" value="true" />
-      <option name="ADD_CONTENT_ROOTS" value="true" />
-      <option name="ADD_SOURCE_ROOTS" value="true" />
-      <EXTENSION ID="PythonCoverageRunConfigurationExtension" runner="coverage.py" />
-      <option name="SCRIPT_NAME" value="$PROJECT_DIR$/EulerReq_0610.py" />
-      <option name="PARAMETERS" value="" />
-      <option name="SHOW_COMMAND_LINE" value="true" />
-      <option name="EMULATE_TERMINAL" value="false" />
-      <option name="MODULE_MODE" value="false" />
-      <option name="REDIRECT_INPUT" value="false" />
-      <option name="INPUT_FILE" value="" />
-      <method v="2" />
-    </configuration>
+  <component name="RunManager">
     <configuration name="Torch_NN" type="PythonConfigurationType" factoryName="Python" nameIsGenerated="true">
       <module name="Pytorch 2.1.2" />
       <option name="INTERPRETER_OPTIONS" value="" />
@@ -154,9 +134,6 @@
       <module name="Pytorch 2.1.2" />
       <option name="INTERPRETER_OPTIONS" value="" />
       <option name="PARENT_ENVS" value="true" />
-      <envs>
-        <env name="PYTHONUNBUFFERED" value="1" />
-      </envs>
       <option name="SDK_HOME" value="" />
       <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$" />
       <option name="IS_MODULE_SDK" value="true" />
@@ -194,7 +171,6 @@
     <recent_temporary>
       <list>
         <item itemvalue="Python.test" />
-        <item itemvalue="Python.EulerReq_0610" />
       </list>
     </recent_temporary>
   </component>
@@ -342,14 +318,7 @@
       <workItem from="1716556384073" duration="885000" />
       <workItem from="1716627045394" duration="13000" />
       <workItem from="1716694843613" duration="6344000" />
-      <workItem from="1716702304490" duration="9362000" />
-    </task>
-    <task id="LOCAL-00008" summary="Initial commit">
-      <created>1709041493426</created>
-      <option name="number" value="00008" />
-      <option name="presentableId" value="LOCAL-00008" />
-      <option name="project" value="LOCAL" />
-      <updated>1709041493426</updated>
+      <workItem from="1716702304490" duration="12757000" />
     </task>
     <task id="LOCAL-00009" summary="Initial commit">
       <created>1709098672407</created>
@@ -687,7 +656,14 @@
       <option name="project" value="LOCAL" />
       <updated>1716704561334</updated>
     </task>
-    <option name="localTasksCounter" value="57" />
+    <task id="LOCAL-00057" summary="New Commit">
+      <created>1716727767401</created>
+      <option name="number" value="00057" />
+      <option name="presentableId" value="LOCAL-00057" />
+      <option name="project" value="LOCAL" />
+      <updated>1716727767401</updated>
+    </task>
+    <option name="localTasksCounter" value="58" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">

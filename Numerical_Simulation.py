@@ -1,11 +1,14 @@
 import sys
 import os
 import numpy as np
+import matplotlib
 import matplotlib.pyplot as plt
 from mpl_toolkits.mplot3d import Axes3D
 from data_processing.fdm import rk4th, mkc
+matplotlib.use('TkAgg')
+plt.ion()
 
-use_filedata = True
+use_filedata = False
 if not use_filedata:
     # 定义物理参数和初始条件
     L = 2.0  # 总长度
@@ -63,6 +66,7 @@ if not use_filedata:
     Z, dZ, t_comp = rk4th(dz, t, z0, Fext)
     displ = Z[:n, :]
     acc = dZ[n:2 * n, :]
+    T, X = np.meshgrid( np.linspace(0, L, N - 1), t)
 
     variables = {
         name: val for name, val in globals().items()
@@ -94,13 +98,12 @@ alpha = 100
 # Plot results
 plt.figure(1)
 plt.subplot(2, 1, 1)
-plt.plot(t[::alpha], Fext.T[::alpha], 'o')
+plt.plot(t[::alpha], Fext.T[::alpha], '.')
 plt.subplot(2, 1, 2)
 plt.plot(t[::alpha], displ[[10, 20, 30, 50], :].T[::alpha])  # plot displacement at specific points
 # %%
 # Plot all data
-plt.figure(2)
-ax = plt.figure().add_subplot(111, projection='3d')
+ax = plt.figure(2).add_subplot(111, projection='3d')
 X, T = np.meshgrid(np.linspace(0, L, N - 1), t[::alpha])
 surf = ax.plot_surface(T, X, displ.T[::alpha, :], cmap='viridis')
 ax.set_title('3D Surface plot of Displacement over Time and Length')
@@ -108,4 +111,4 @@ ax.set_xlabel('Time $t$[s]')
 ax.set_ylabel('Position along beam $x$[m]')
 ax.set_zlabel('Displacement $u$[m]')
 plt.colorbar(surf, ax=ax, shrink=0.5, aspect=5)
-plt.show()
+plt.show(block=False)
