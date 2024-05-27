@@ -1,3 +1,5 @@
+# -*- coding: utf-8 -*-
+# %%
 import os
 import torch
 import time
@@ -16,86 +18,86 @@ plt.rc('text', usetex=True)
 plt.rc('grid', color='k', alpha=0.2)
 current_path = os.getcwd()
 
+# %%
+# Configuration
+epochs = 300
+layers = [2, 50, 50, 50, 50, 1]
+connections = [0, 1, 0, 1, 0, 1]
+# Check CUDA availability (for GPU acceleration)
+device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
+print("========  Using device  ========")
+print(f"============  {device}  ============")
 
-if __name__ == '__main__':
-    # Configuration
-    epochs = 500
-    layers = [2, 50, 50, 50, 50, 1]
-    connections = [0, 1, 2, 3, 3, 2]
-    # Check CUDA availability (for GPU acceleration)
-    device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
-    print("========  Using device  ========")
-    print(f"============  {device}  ============")
+# Load Data
+option = 'npz'
+# filename = 'test16-1.mat'
+filename = 'variables.npz'
+# filename = 'dvSave-2023_03_26_02_21_16.npy'
+Timestamp, xEvent, yEvent, polarities = dp.load_data('npz', current_path, filename)
+# Data Cleansing
+fig = plt.figure()
+dp.plot_data(
+    fig.add_subplot(131, projection='3d'),
+    xEvent, Timestamp, yEvent,
+    title='Original Data', color=yEvent
+)
+(xEvent, Timestamp, yEvent, polarities) = dp.HotPixel_cleansing(xEvent, Timestamp, yEvent, polarities)
+dp.plot_data(
+    fig.add_subplot(132, projection='3d'),
+    xEvent, Timestamp, yEvent,
+    title='After HotPixel Cleansing', color=yEvent
+)
+(xEvent, Timestamp, yEvent) = dp.data_rotate(xEvent, Timestamp, yEvent, option='TLS')
+dp.plot_data(
+    fig.add_subplot(133, projection='3d'),
+    xEvent, Timestamp, yEvent,
+    title='After Data Rotation', color=yEvent
+)
 
-    # Load Data
-    option = 'npz'
-    # filename = 'test16-1.mat'
-    filename = 'variables.npz'
-    # filename = 'dvSave-2023_03_26_02_21_16.npy'
-    Timestamp, xEvent, yEvent, polarities = dp.load_data('npz', current_path, filename)
-    # Data Cleansing
-    fig = plt.figure()
-    dp.plot_data(
-        fig.add_subplot(131, projection='3d'),
-        xEvent, Timestamp, yEvent,
-        title='Original Data', color=polarities
-    )
-    (xEvent, Timestamp, yEvent, polarities) = dp.HotPixel_cleansing(xEvent, Timestamp, yEvent, polarities)
-    dp.plot_data(
-        fig.add_subplot(132, projection='3d'),
-        xEvent, Timestamp, yEvent,
-        title='After HotPixel Cleansing', color=polarities
-    )
-    (xEvent, Timestamp, yEvent) = dp.data_rotate(xEvent, Timestamp, yEvent, option='TLS')
-    dp.plot_data(
-        fig.add_subplot(133, projection='3d'),
-        xEvent, Timestamp, yEvent,
-        title='After Data Rotation', color=polarities
-    )
-
-    # Convert to torch.Tensor
-    xEvent = torch.tensor(
-        xEvent,
-        dtype=torch.float32,
-        device=device,
-        requires_grad=True
-    ).unsqueeze(1)
-    Timestamp = torch.tensor(
-        Timestamp,
-        dtype=torch.float32,
-        device=device,
-        requires_grad=True
-    ).unsqueeze(1)
-    yEvent = torch.tensor(
-        yEvent,
-        dtype=torch.float32,
-        device=device,
-        requires_grad=True
-    ).unsqueeze(1)
-    print('====== Data Loading Done! ======')
+# Convert to torch.Tensor
+xEvent = torch.tensor(
+    xEvent,
+    dtype=torch.float32,
+    device=device,
+    requires_grad=True
+).unsqueeze(1)
+Timestamp = torch.tensor(
+    Timestamp,
+    dtype=torch.float32,
+    device=device,
+    requires_grad=True
+).unsqueeze(1)
+yEvent = torch.tensor(
+    yEvent,
+    dtype=torch.float32,
+    device=device,
+    requires_grad=True
+).unsqueeze(1)
+print('====== Data Loading Done! ======')
 
 #%%
-    print('===== Model Initialization =====')
-    pinn = PhysicsInformedNN(
-        layers, connections, device,
-        xEvent, Timestamp, yEvent,
-        epochs
-    )
-    print('========= Model Training =======')
+print('===== Model Initialization =====')
+pinn = PhysicsInformedNN(
+    layers, connections, device,
+    xEvent, Timestamp, yEvent,
+    epochs
+)
+print('========= Model Training =======')
 
-    # Training the Model
-    start_time = time.time()
-    pinn.train()
-    end_time = time.time()
-    print('==============================================')
-    print('============= Model Training Done! ===========')
-    print("======== Training time: {:.2f} seconds ======".format(end_time - start_time))
-    print('=== Average time per epoch: {:.4f} seconds ==='.format((end_time - start_time) / epochs))
-    print('==============================================')
+# Training the Model
+start_time = time.time()
+pinn.train()
+end_time = time.time()
+print('==============================================')
+print('============= Model Training Done! ===========')
+print("======== Training time: {:.2f} seconds ======".format(end_time - start_time))
+print('=== Average time per epoch: {:.4f} seconds ==='.format((end_time - start_time) / epochs))
+print('==============================================')
 
-    #%% Draw the final results for visualization
+#%% Draw the final results for visualization
 
-    # Plot parameter change curves
+# Plot parameter change curves
+def draw():
     fig1 = plt.figure(figsize=(18, 10))
     plt.rcParams.update({'font.size': 16})
     layout = (2, 2)
@@ -129,3 +131,5 @@ if __name__ == '__main__':
     # plot the final 3D result
     pinn.plot_results(epochs)
     plt.show()
+
+draw()

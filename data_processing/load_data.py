@@ -4,7 +4,7 @@ import os
 np.random.seed(2024)
 
 
-def load_data(option: str, current_path, filename: str, alpha: float=100):
+def load_data(option: str, current_path, filename: str, alpha: float=1000):
     """
     从指定路径加载数据。
 
@@ -44,7 +44,7 @@ def load_data(option: str, current_path, filename: str, alpha: float=100):
         data = {key: value for key, value in data.items()}
         Timestamp = data['T'].flatten()
         xEvent = data['X'].flatten()
-        yEvent = data['displ'].flatten()
+        yEvent = data["displ"].T.flatten()
         polarities = np.ones_like(xEvent)
         index = np.random.choice(
             range(len(Timestamp)),

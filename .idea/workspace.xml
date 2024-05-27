@@ -5,13 +5,11 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="adbbd5d0-5b79-4adb-ba77-89cd9ee51a24" name="Changes" comment="New Commit">
-      <change beforePath="$PROJECT_DIR$/.gitignore" beforeDir="false" afterPath="$PROJECT_DIR$/.gitignore" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/Numerical_Simulation.py" beforeDir="false" afterPath="$PROJECT_DIR$/Numerical_Simulation.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/data_processing/data_cleansing.py" beforeDir="false" afterPath="$PROJECT_DIR$/data_processing/data_cleansing.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/data_processing/load_data.py" beforeDir="false" afterPath="$PROJECT_DIR$/data_processing/load_data.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/data_processing/plot_figure.py" beforeDir="false" afterPath="$PROJECT_DIR$/data_processing/plot_figure.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/main.py" beforeDir="false" afterPath="$PROJECT_DIR$/main.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/temp.xlsx" beforeDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -86,7 +84,7 @@
       </console-settings>
     </option>
   </component>
-  <component name="RunManager">
+  <component name="RunManager" selected="Python.main">
     <configuration name="Torch_NN" type="PythonConfigurationType" factoryName="Python" nameIsGenerated="true">
       <module name="Pytorch 2.1.2" />
       <option name="INTERPRETER_OPTIONS" value="" />
@@ -327,14 +325,10 @@
       <workItem from="1716694843613" duration="6344000" />
       <workItem from="1716702304490" duration="18543000" />
       <workItem from="1716739382699" duration="5000" />
-      <workItem from="1716739404546" duration="4673000" />
-    </task>
-    <task id="LOCAL-00017" summary="Initial commit">
-      <created>1709349687215</created>
-      <option name="number" value="00017" />
-      <option name="presentableId" value="LOCAL-00017" />
-      <option name="project" value="LOCAL" />
-      <updated>1709349687215</updated>
+      <workItem from="1716739404546" duration="5301000" />
+      <workItem from="1716746087958" duration="1208000" />
+      <workItem from="1716747543597" duration="1552000" />
+      <workItem from="1716774206778" duration="6677000" />
     </task>
     <task id="LOCAL-00018" summary="Initial commit">
       <created>1709365667493</created>
@@ -672,7 +666,14 @@
       <option name="project" value="LOCAL" />
       <updated>1716739467633</updated>
     </task>
-    <option name="localTasksCounter" value="66" />
+    <task id="LOCAL-00066" summary="New Commit">
+      <created>1716744118465</created>
+      <option name="number" value="00066" />
+      <option name="presentableId" value="LOCAL-00066" />
+      <option name="project" value="LOCAL" />
+      <updated>1716744118465</updated>
+    </task>
+    <option name="localTasksCounter" value="67" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -728,7 +729,7 @@
       <breakpoints>
         <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
           <url>file://$PROJECT_DIR$/Numerical_Simulation.py</url>
-          <line>115</line>
+          <line>117</line>
           <option name="timeStamp" value="7" />
         </line-breakpoint>
         <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
@@ -751,7 +752,7 @@
     <SUITE FILE_PATH="coverage/PINN$PINN_III.coverage" NAME="PINN-III Coverage Results" MODIFIED="1706580164845" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$" />
     <SUITE FILE_PATH="coverage/PINN$Torch_NN.coverage" NAME="Torch_NN Coverage Results" MODIFIED="1704702524901" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$" />
     <SUITE FILE_PATH="coverage/PINN$Numerical_Simulation.coverage" NAME="Numerical_Simulation Coverage Results" MODIFIED="1716741457055" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$" />
-    <SUITE FILE_PATH="coverage/PINN$main.coverage" NAME="main Coverage Results" MODIFIED="1716743767742" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$" />
+    <SUITE FILE_PATH="coverage/PINN$main.coverage" NAME="main Coverage Results" MODIFIED="1716787045650" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$" />
     <SUITE FILE_PATH="coverage/PINN$PINN_ver2_1.coverage" NAME="PINN_ver2.1 Coverage Results" MODIFIED="1710047215849" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/code" />
     <SUITE FILE_PATH="coverage/PINN$PINN_VI.coverage" NAME="PINN-VI Coverage Results" MODIFIED="1709363332807" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/code" />
     <SUITE FILE_PATH="coverage/PINN$EulerReq_0610.coverage" NAME="EulerReq_0610 Coverage Results" MODIFIED="1704620452659" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$" />

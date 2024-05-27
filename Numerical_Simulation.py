@@ -92,6 +92,7 @@ else:
     for name, val in variables.items():
         globals()[name] = val
 
+
 def draw():
     # %%
     alpha = 100
@@ -112,5 +113,6 @@ def draw():
     ax.set_zlabel('Displacement $u$[m]')
     plt.colorbar(surf, ax=ax, shrink=0.5, aspect=5)
     plt.show(block=False)
+
 
 draw()

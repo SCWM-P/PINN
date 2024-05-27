@@ -17,7 +17,8 @@ def plot_data(
         ylabel: str = '$Time(s)$',
         zlabel: str = '$Y$',
         color='r',
-        label: str = ''
+        label: str = '',
+        cmap='viridis'
 ):
     """
     Plot the data on a given subplot ax in 3D view.
@@ -25,7 +26,7 @@ def plot_data(
     ax.scatter(
         x, y, z,
         c=color, marker='.', alpha=0.5,
-        label=label
+        label=label, cmap=cmap
     )
     ax.set_xlabel(xlabel, fontsize=14)
     ax.set_ylabel(ylabel, fontsize=14)
