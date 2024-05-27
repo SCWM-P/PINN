@@ -56,16 +56,16 @@ dp.plot_data(
 
 # Convert to torch.Tensor
 xEvent = torch.tensor(
-    xEvent,dtype=torch.float32,
-    device=device,requires_grad=True
+    xEvent, dtype=torch.float32,
+    device=device, requires_grad=True
 ).unsqueeze(1)
 Timestamp = torch.tensor(
-    Timestamp,dtype=torch.float32,
-    device=device,requires_grad=True
+    Timestamp, dtype=torch.float32,
+    device=device, requires_grad=True
 ).unsqueeze(1)
 yEvent = torch.tensor(
-    yEvent,dtype=torch.float32,
-    device=device,requires_grad=True
+    yEvent, dtype=torch.float32,
+    device=device, requires_grad=True
 ).unsqueeze(1)
 print('====== Data Loading Done! ======')
 

@@ -5,10 +5,7 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="adbbd5d0-5b79-4adb-ba77-89cd9ee51a24" name="Changes" comment="New Commit">
-      <change afterPath="$PROJECT_DIR$/main.ipynb" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/data_processing/__init__.py" beforeDir="false" afterPath="$PROJECT_DIR$/data_processing/__init__.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/data_processing/plot_figure.py" beforeDir="false" afterPath="$PROJECT_DIR$/data_processing/plot_figure.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/main.py" beforeDir="false" afterPath="$PROJECT_DIR$/main.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/model.py" beforeDir="false" afterPath="$PROJECT_DIR$/model.py" afterDir="false" />
     </list>
@@ -329,14 +326,7 @@
       <workItem from="1716774206778" duration="7477000" />
       <workItem from="1716795318176" duration="4606000" />
       <workItem from="1716799974150" duration="98000" />
-      <workItem from="1716800087058" duration="3421000" />
-    </task>
-    <task id="LOCAL-00020" summary="Initial commit">
-      <created>1709368335168</created>
-      <option name="number" value="00020" />
-      <option name="presentableId" value="LOCAL-00020" />
-      <option name="project" value="LOCAL" />
-      <updated>1709368335168</updated>
+      <workItem from="1716800087058" duration="4044000" />
     </task>
     <task id="LOCAL-00021" summary="Initial commit">
       <created>1709369642161</created>
@@ -674,7 +664,14 @@
       <option name="project" value="LOCAL" />
       <updated>1716805953197</updated>
     </task>
-    <option name="localTasksCounter" value="69" />
+    <task id="LOCAL-00069" summary="New Commit">
+      <created>1716815934411</created>
+      <option name="number" value="00069" />
+      <option name="presentableId" value="LOCAL-00069" />
+      <option name="project" value="LOCAL" />
+      <updated>1716815934411</updated>
+    </task>
+    <option name="localTasksCounter" value="70" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -730,7 +727,7 @@
       <breakpoints>
         <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
           <url>file://$PROJECT_DIR$/Numerical_Simulation.py</url>
-          <line>117</line>
+          <line>120</line>
           <option name="timeStamp" value="7" />
         </line-breakpoint>
         <line-breakpoint enabled="true" suspend="THREAD" type="python-line">

@@ -49,17 +49,13 @@ class DNN(torch.nn.Module):
 class PhysicsInformedNN:
     def __init__(
             self,
-            layers: list,
-            connections: list,
-            device: torch.device,
-            xEvent: torch.Tensor,
-            Timestamp: torch.Tensor,
-            yEvent: torch.Tensor,
+            layers: list, connections: list, device: torch.device,
+            xEvent: torch.Tensor, Timestamp: torch.Tensor, yEvent: torch.Tensor,
             epochs: int,
             *,
             validation_ratio=0.2,
             EI=None, Tension=None, M=None, c=None, history=None
-        ):
+            ):
         # Configuration
         self.device = device
         self.dnn = DNN(layers, connections).to(device)
@@ -377,10 +373,21 @@ class PhysicsInformedNN:
         print(f"Model parameters saved to {save_path}!")
 
     def load(self, save_dic: dict, option: str = 'state'):
+        """
+        加载模型和优化器的状态以及额外的参数。
+
+        参数:
+        - save_dic: 一个字典，包含模型状态、优化器状态和额外参数。
+        - option: 一个字符串，指定加载的选项，可以是`state`（加载模型状态）或者`model`（加载整个模型）。
+
+        注意:
+        - 如果选项不是`state`或`model`，将抛出ValueError。
+        - 不返回任何值，但会更新实例的状态。
+        """
         if option == 'state':
-            self.dnn.load_state_dict(save_dic['model'])
+            self.dnn.load_state_dict(save_dic['model'])  # 加载模型的状态
         elif option == 'model':
-            self.dnn = save_dic['model']
+            self.dnn = save_dic['model']  # 直接加载整个模型
         else:
             raise ValueError("The option must be 'state' or 'model'!")
         self.optimizer.load_state_dict(save_dic['optimizer'])
