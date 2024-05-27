@@ -7,6 +7,7 @@ import matplotlib
 import matplotlib.pyplot as plt
 import data_processing as dp
 
+
 # Plot Configuration
 try:
     plt.rc('grid', color='k', alpha=0.2)
@@ -61,6 +62,7 @@ class PhysicsInformedNN:
             validation_ratio=0.2,
             EI=None, Tension=None, M=None, c=None, history=None
             ):
+        from sklearn.model_selection import train_test_split
         # Configuration
         self.device = device
         self.dnn = DNN(layers, connections).to(device)
@@ -261,6 +263,7 @@ class PhysicsInformedNN:
             plt.show()
 
     def train(self):
+        from tqdm import tqdm
         epochs = self.epochs
         x_train, t_train, y_train = self.normalize(self.x_train, self.t_train, self.y_train)
         for epoch in tqdm(range(epochs)):

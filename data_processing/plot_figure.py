@@ -3,7 +3,6 @@ import numpy as np
 import matplotlib
 import matplotlib.pyplot as plt
 try:
-    matplotlib.use('TkAgg')
     plt.rc('font', family='Times New Roman')
     plt.rc('text', usetex=True)
     plt.ion()

@@ -3,6 +3,7 @@
 import os
 import torch
 import time
+import warnings
 import numpy as np
 import matplotlib
 import matplotlib.pyplot as plt
@@ -15,10 +16,9 @@ torch.autograd.set_detect_anomaly(True)
 plt.rc('grid', color='k', alpha=0.2)
 current_path = os.getcwd()
 try:
-    matplotlib.use('TkAgg')
+    plt.ion()
     plt.rc('font', family='Times New Roman')
     plt.rc('text', usetex=True)
-    plt.ion()
 except Exception as e:
     warnings.warn(e.msg, UserWarning)
 
@@ -27,7 +27,7 @@ except Exception as e:
 epochs = 30000
 layers = [2, 50, 50, 50, 50, 1]
 connections = [0, 1, 0, 1, 0, 1]
-USE_pth = False
+USE_pth = True
 # Check CUDA availability (for GPU acceleration)
 device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
 print("========  Using device  ========")
@@ -81,11 +81,12 @@ pinn = PhysicsInformedNN(
     xEvent, Timestamp, yEvent,
     epochs
 )
+print(pinn.dnn)
 os.makedirs(os.path.join(current_path, 'data', 'pth'), exist_ok=True)
 if USE_pth:
     try:
         loss_list = [
-            i.split('_')
+            i[:-4].split('_')
             for i in os.listdir(
                 os.path.join(
                     current_path,
@@ -111,25 +112,25 @@ if USE_pth:
             os.path.join(
                 current_path,
                 'data', 'pth',
-                ''.join(max(loss_list, key=compare))
+                '_'.join(max(loss_list, key=compare)) + '.pth'
             )
         )
         pinn.load(state_dic)
         print('Model weights loaded!')
     except Exception as e:
         print('Failed to load model weights!\nError Info:', e)
-print(pinn.dnn)
-print('========= Model Training =======')
-
-# Training the Model
-start_time = time.time()
-pinn.train()
-pinn.save(os.path.join(current_path, 'data', 'pth'), 'state')
-end_time = time.time()
-print('==============================================')
-print('============= Model Training Done! ===========')
-print("======== Training time: {:.2f} seconds ======".format(end_time - start_time))
-print('=== Average time per epoch: {:.4f} seconds ==='.format((end_time - start_time) / epochs))
-print('==============================================')
+else:
+    print('========= Model Training =======')
+    # Training the Model
+    start_time = time.time()
+    pinn.train()
+    pinn.save(os.path.join(current_path, 'data', 'pth'), 'state')
+    end_time = time.time()
+    print('==============================================')
+    print('============= Model Training Done! ===========')
+    print("======== Training time: {:.2f} seconds ======".format(end_time - start_time))
+    print('=== Average time per epoch: {:.4f} seconds ==='.format((end_time - start_time) / epochs))
+    print('==============================================')
 
 dp.draw_results(pinn)
+plt.show(block=True)
