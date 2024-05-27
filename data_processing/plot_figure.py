@@ -4,12 +4,12 @@ import matplotlib
 import matplotlib.pyplot as plt
 try:
     matplotlib.use('TkAgg')
+    plt.rc('font', family='Times New Roman')
+    plt.rc('text', usetex=True)
+    plt.ion()
+    plt.rc('grid', color='k', alpha=0.2)
 except Exception as e:
     warnings.warn(str(e), ImportWarning)
-plt.ion()
-plt.rc('font', family='Times New Roman')
-plt.rc('text', usetex=True)
-plt.rc('grid', color='k', alpha=0.2)
 
 
 def plot_data(
@@ -19,9 +19,9 @@ def plot_data(
         z: np.ndarray,
         *,
         title: str = '',
-        xlabel: str = '$X$',
-        ylabel: str = '$Time(s)$',
-        zlabel: str = '$Y$',
+        xlabel: str = 'X',
+        ylabel: str = 'Time(s)',
+        zlabel: str = 'Y',
         color='r',
         label: str = '',
         cmap='viridis'
@@ -76,5 +76,5 @@ def draw_results(pinn):
     ax2_2.legend(loc='upper right')
 
     # plot the final 3D result
-    pinn.plot_results(epochs)
+    pinn.plot_results(pinn.epochs)
     plt.show()

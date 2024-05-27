@@ -2,6 +2,7 @@ import torch
 import time
 import numpy as np
 import os
+from tqdm import tqdm
 import data_processing as dp
 import matplotlib.pyplot as plt
 from sklearn.model_selection import train_test_split
@@ -232,9 +233,9 @@ class PhysicsInformedNN:
                 c='r', marker='.', alpha=0.2,
                 label='Prediction of Natural Network'
             )
-            ax_train.set_xlabel('$X$', fontsize=16)
-            ax_train.set_ylabel('$T (s)$', fontsize=16)
-            ax_train.set_zlabel('$Y$', fontsize=16)
+            ax_train.set_xlabel('X', fontsize=16)
+            ax_train.set_ylabel('T (s)', fontsize=16)
+            ax_train.set_zlabel('Y', fontsize=16)
             ax_train.legend()
             ax_train.set_title(f'Comparison at Epoch {epoch} in Train Set', fontsize=18)
             ax_val.scatter(
@@ -249,9 +250,9 @@ class PhysicsInformedNN:
                 c='r', marker='.', alpha=0.5,
                 label='Prediction of Natural Network'
             )
-            ax_val.set_xlabel('$X$', fontsize=16)
-            ax_val.set_ylabel('$T (s)$', fontsize=16)
-            ax_val.set_zlabel('$Y$', fontsize=16)
+            ax_val.set_xlabel('X', fontsize=16)
+            ax_val.set_ylabel('T (s)', fontsize=16)
+            ax_val.set_zlabel('Y', fontsize=16)
             ax_val.legend()
             ax_val.set_title(f'Comparison at Epoch {epoch} in Validation Set', fontsize=18)
             plt.show()
@@ -259,7 +260,7 @@ class PhysicsInformedNN:
     def train(self):
         epochs = self.epochs
         x_train, t_train, y_train = self.normalize(self.x_train, self.t_train, self.y_train)
-        for epoch in range(epochs):
+        for epoch in tqdm(range(epochs)):
             self.dnn.train()  # Train the  model in training set
             self.optimizer.zero_grad()
             # Loss of Natural Network
@@ -353,7 +354,7 @@ class PhysicsInformedNN:
                 ),
                 self.y_val
             )
-        now = time.strftime(f"{loss:.4e}_%Y%m%d_%H%M%s", time.localtime())
+        now = time.strftime(f"{loss:.4e}_%Y.%m.%d_%H.%M", time.localtime())
         save_path = os.path.join(file_path, f'{now}.pth')
         save_dic = {
             'optimizer': self.optimizer.state_dict(),

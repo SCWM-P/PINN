@@ -19,7 +19,7 @@ current_path = os.getcwd()
 
 # %%
 # Configuration
-epochs = 300
+epochs = 30000
 layers = [2, 50, 50, 50, 50, 1]
 connections = [0, 1, 0, 1, 0, 1]
 USE_pth = False
@@ -76,6 +76,7 @@ pinn = PhysicsInformedNN(
     xEvent, Timestamp, yEvent,
     epochs
 )
+os.makedirs(os.path.join(current_path, 'data', 'pth'), exist_ok=True)
 if USE_pth:
     try:
         loss_list = [
@@ -112,4 +113,4 @@ print("======== Training time: {:.2f} seconds ======".format(end_time - start_ti
 print('=== Average time per epoch: {:.4f} seconds ==='.format((end_time - start_time) / epochs))
 print('==============================================')
 
-dp.draw(pinn.epochs)
+dp.draw_results(pinn)

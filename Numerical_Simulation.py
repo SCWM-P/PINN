@@ -8,11 +8,11 @@ from mpl_toolkits.mplot3d import Axes3D
 from data_processing.fdm import rk4th, mkc
 try:
     matplotlib.use('TkAgg')
+    plt.ion()
 except Exception as e:
     warnings.warn(str(e), ImportWarning)
-plt.ion()
 
-use_filedata = False
+use_filedata = True
 if not use_filedata:
     # 定义物理参数和初始条件
     L = 2.0  # 总长度
