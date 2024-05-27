@@ -10,7 +10,7 @@ try:
     matplotlib.use('TkAgg')
     plt.ion()
 except Exception as e:
-    warnings.warn(str(e), ImportWarning)
+    warnings.warn(e.msg, UserWarning)
 
 use_filedata = True
 if not use_filedata:

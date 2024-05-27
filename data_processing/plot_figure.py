@@ -9,7 +9,7 @@ try:
     plt.ion()
     plt.rc('grid', color='k', alpha=0.2)
 except Exception as e:
-    warnings.warn(str(e), ImportWarning)
+    warnings.warn(e.msg, UserWarning)
 
 
 def plot_data(

@@ -12,10 +12,15 @@ from model import PhysicsInformedNN
 np.random.seed(1234)
 torch.manual_seed(1234)
 torch.autograd.set_detect_anomaly(True)
-plt.rc('font', family='Times New Roman')
-plt.rc('text', usetex=True)
 plt.rc('grid', color='k', alpha=0.2)
 current_path = os.getcwd()
+try:
+    matplotlib.use('TkAgg')
+    plt.rc('font', family='Times New Roman')
+    plt.rc('text', usetex=True)
+    plt.ion()
+except Exception as e:
+    warnings.warn(e.msg, UserWarning)
 
 # %%
 # Configuration
@@ -81,7 +86,7 @@ if USE_pth:
     try:
         loss_list = [
             i.split('_')
-            for i in os.path.listdir(
+            for i in os.listdir(
                 os.path.join(
                     current_path,
                     'data', 'pth'

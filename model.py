@@ -1,16 +1,19 @@
+import os
 import torch
 import time
+import warnings
 import numpy as np
-import os
-from tqdm import tqdm
-import data_processing as dp
+import matplotlib
 import matplotlib.pyplot as plt
-from sklearn.model_selection import train_test_split
+import data_processing as dp
 
 # Plot Configuration
-plt.rc('font', family='Times New Roman')
-plt.rc('text', usetex=True)
-plt.rc('grid', color='k', alpha=0.2)
+try:
+    plt.rc('grid', color='k', alpha=0.2)
+    plt.rc('font', family='Times New Roman')
+    plt.rc('text', usetex=True)
+except Exception as e:
+    warnings.warn(e.msg, UserWarning)
 
 
 class DNN(torch.nn.Module):
