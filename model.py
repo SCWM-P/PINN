@@ -354,7 +354,7 @@ class PhysicsInformedNN:
                 ),
                 self.y_val
             )
-        now = time.strftime(f"{loss:.4e}_%Y.%m.%d_%H.%M", time.localtime())
+        now = time.strftime(f"{loss:.4e}_%Y.%m.%d_%H.%M.%S", time.localtime())
         save_path = os.path.join(file_path, f'{now}.pth')
         save_dic = {
             'optimizer': self.optimizer.state_dict(),

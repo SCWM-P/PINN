@@ -88,11 +88,25 @@ if USE_pth:
                 )
             )
         ]
+
+
+        def compare(x):
+            Ymd = x[1].split('.')
+            HMS = x[2].split('.')
+            t = time.mktime(
+                time.strptime(
+                    ''.join([*Ymd, *HMS]),
+                    '%Y%m%d%H%M%S'
+                )
+            )
+            return t
+
+
         state_dic = torch.load(
             os.path.join(
                 current_path,
                 'data', 'pth',
-                ''.join(min(loss_list, key=lambda x: float(x[0])))
+                ''.join(max(loss_list, key=compare))
             )
         )
         pinn.load(state_dic)
