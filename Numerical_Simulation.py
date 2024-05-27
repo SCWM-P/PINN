@@ -5,7 +5,10 @@ import matplotlib
 import matplotlib.pyplot as plt
 from mpl_toolkits.mplot3d import Axes3D
 from data_processing.fdm import rk4th, mkc
-matplotlib.use('TkAgg')
+try:
+    matplotlib.use('TkAgg')
+except Exception as e:
+    warnings.warn(e, ImportWarning)
 plt.ion()
 
 use_filedata = True

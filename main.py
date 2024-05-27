@@ -11,7 +11,6 @@ from model import PhysicsInformedNN
 
 np.random.seed(1234)
 torch.manual_seed(1234)
-matplotlib.use('TkAgg')
 torch.autograd.set_detect_anomaly(True)
 plt.rc('font', family='Times New Roman')
 plt.rc('text', usetex=True)
@@ -57,32 +56,49 @@ dp.plot_data(
 
 # Convert to torch.Tensor
 xEvent = torch.tensor(
-    xEvent,
-    dtype=torch.float32,
-    device=device,
-    requires_grad=True
+    xEvent,dtype=torch.float32,
+    device=device,requires_grad=True
 ).unsqueeze(1)
 Timestamp = torch.tensor(
-    Timestamp,
-    dtype=torch.float32,
-    device=device,
-    requires_grad=True
+    Timestamp,dtype=torch.float32,
+    device=device,requires_grad=True
 ).unsqueeze(1)
 yEvent = torch.tensor(
-    yEvent,
-    dtype=torch.float32,
-    device=device,
-    requires_grad=True
+    yEvent,dtype=torch.float32,
+    device=device,requires_grad=True
 ).unsqueeze(1)
 print('====== Data Loading Done! ======')
 
-#%%
+# %%
 print('===== Model Initialization =====')
 pinn = PhysicsInformedNN(
     layers, connections, device,
     xEvent, Timestamp, yEvent,
     epochs
 )
+if USE_pth:
+    try:
+        loss_list = [
+            i.split('_')
+            for i in os.path.listdir(
+                os.path.join(
+                    current_path,
+                    'data', 'pth'
+                )
+            )
+        ]
+        state_dic = torch.load(
+            os.path.join(
+                current_path,
+                'data', 'pth',
+                ''.join(min(loss_list, key=lambda x: float(x[0])))
+            )
+        )
+        pinn.load(state_dic)
+        print('Model weights loaded!')
+    except Exception as e:
+        print('Failed to load model weights!\nError Info:', e)
+print(pinn.dnn)
 print('========= Model Training =======')
 
 # Training the Model
@@ -96,42 +112,4 @@ print("======== Training time: {:.2f} seconds ======".format(end_time - start_ti
 print('=== Average time per epoch: {:.4f} seconds ==='.format((end_time - start_time) / epochs))
 print('==============================================')
 
-#%% Draw the final results for visualization
-
-# Plot parameter change curves
-def draw():
-    fig1 = plt.figure(figsize=(18, 10))
-    plt.rcParams.update({'font.size': 16})
-    layout = (2, 2)
-    subplots = [plt.subplot2grid(layout, (0, 0)), plt.subplot2grid(layout, (0, 1)),
-                plt.subplot2grid(layout, (1, 0)), plt.subplot2grid(layout, (1, 1))]
-    line_styles = ['-', '--', '-.', ':', '-']
-    plots = [subplots[0].plot(pinn.history['EI'], c='r', ls=line_styles[0], label='EI'),
-             subplots[1].plot(pinn.history['Tension'], c='g', ls=line_styles[1], label='T'),
-             subplots[2].plot(pinn.history['M'], c='b', ls=line_styles[2], label='M'),
-             subplots[3].plot(pinn.history['c'], c='c', ls=line_styles[3], label='c')]
-    for i, ax in enumerate(subplots):
-        ax.set_title(f"Parameter {['EI', 'Tension', 'M', 'c', 'γ'][i]}", fontsize=16)
-        ax.set_xlabel('Epoch', fontsize=16)
-        ax.set_ylabel('Parameter Value', fontsize=16)
-        ax.legend()
-    plt.subplots_adjust(hspace=0.5, wspace=0.3)
-    fig1.suptitle('Parameter Evolution', fontsize=18)
-
-    # Plotting Loss Function and Accuracy Change
-    fig2, ax2_1 = plt.subplots()
-    ax2_2 = ax2_1.twinx()
-    ax2_1.plot(pinn.history['train_loss'], 'r-', label='Loss', linewidth=2)
-    ax2_2.plot(pinn.history['train_accuracy'], 'b.-', label='Accuracy', linewidth=2)
-    ax2_1.set_xlabel('Epoch', fontsize=32)
-    ax2_1.set_ylabel('Loss', fontsize=32)
-    ax2_2.set_ylabel(r'Accuracy (\%)', fontsize=32)
-    plt.title('Loss and Accuracy Change', fontsize=36)
-    ax2_1.legend(loc='upper left')
-    ax2_2.legend(loc='upper right')
-
-    # plot the final 3D result
-    pinn.plot_results(epochs)
-    plt.show()
-
-draw()
+dp.draw(pinn)

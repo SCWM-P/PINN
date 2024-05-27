@@ -59,16 +59,16 @@ class PhysicsInformedNN:
             *,
             validation_ratio=0.2,
             EI=None, Tension=None, M=None, c=None, history=None
-    ):
+        ):
         # Configuration
         self.device = device
         self.dnn = DNN(layers, connections).to(device)
         # Learning Parameters
-        def_para = lambda x: torch.nn.Parameter(torch.tensor([x], device=device))
-        self.EI = def_para(1.0) if EI is None else def_para(EI)
-        self.Tension = def_para(1.0) if Tension is None else def_para(Tension)
-        self.M = def_para(1.0) if M is None else def_para(M)
-        self.c = def_para(1.0) if c is None else def_para(c)
+        self.def_para = lambda x: torch.nn.Parameter(torch.tensor([x], device=device))
+        self.EI = self.def_para(1.0) if EI is None else self.def_para(EI)
+        self.Tension = self.def_para(1.0) if Tension is None else self.def_para(Tension)
+        self.M = self.def_para(1.0) if M is None else self.def_para(M)
+        self.c = self.def_para(1.0) if c is None else self.def_para(c)
         # Data
         self.xEvent = xEvent
         self.Timestamp = Timestamp
@@ -356,7 +356,7 @@ class PhysicsInformedNN:
                 ),
                 self.y_val
             )
-        now = time.strftime(f"%Y%m%d_%H%M%s_{loss_nn:.4e}", time.localtime())
+        now = time.strftime(f"{loss:.4e}_%Y%m%d_%H%M%s", time.localtime())
         save_path = os.path.join(file_path, f'{now}.pth')
         save_dic = {
             'optimizer': self.optimizer.state_dict(),
@@ -376,5 +376,16 @@ class PhysicsInformedNN:
         torch.save(save_dic, save_path)
         print(f"Model parameters saved to {save_path}!")
 
-    def load(self):
-        pass
+    def load(self, save_dic: dict, option: str = 'state'):
+        if option == 'state':
+            self.dnn.load_state_dict(save_dic['model'])
+        elif option == 'model':
+            self.dnn = save_dic['model']
+        else:
+            raise ValueError("The option must be 'state' or 'model'!")
+        self.optimizer.load_state_dict(save_dic['optimizer'])
+        self.EI = self.def_para(save_dic['EI'])
+        self.Tension = self.def_para(save_dic['Tension'])
+        self.M = self.def_para(save_dic['M'])
+        self.c = self.def_para(save_dic['c'])
+        self.history = save_dic['history']
