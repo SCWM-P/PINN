@@ -112,4 +112,4 @@ print("======== Training time: {:.2f} seconds ======".format(end_time - start_ti
 print('=== Average time per epoch: {:.4f} seconds ==='.format((end_time - start_time) / epochs))
 print('==============================================')
 
-dp.draw(pinn)
+dp.draw(pinn.epochs)

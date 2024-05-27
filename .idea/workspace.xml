@@ -5,7 +5,12 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="adbbd5d0-5b79-4adb-ba77-89cd9ee51a24" name="Changes" comment="New Commit">
+      <change afterPath="$PROJECT_DIR$/.idea/webServers.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/deployment.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/deployment.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/misc.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/misc.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Numerical_Simulation.py" beforeDir="false" afterPath="$PROJECT_DIR$/Numerical_Simulation.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/data_processing/plot_figure.py" beforeDir="false" afterPath="$PROJECT_DIR$/data_processing/plot_figure.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/main.py" beforeDir="false" afterPath="$PROJECT_DIR$/main.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/model.py" beforeDir="false" afterPath="$PROJECT_DIR$/model.py" afterDir="false" />
     </list>
@@ -43,6 +48,10 @@
   <component name="MarkdownSettingsMigration">
     <option name="stateVersion" value="1" />
   </component>
+  <component name="ProblemsViewState">
+    <option name="groupByToolId" value="true" />
+    <option name="sortByName" value="true" />
+  </component>
   <component name="ProjectId" id="2aXY720xUOHdJqnvWLg7tVeUHmI" />
   <component name="ProjectLevelVcsManager" settingsEditedManually="true">
     <ConfirmationsSetting value="2" id="Add" />
@@ -60,13 +69,13 @@
     "WebServerToolWindowFactoryState": "false",
     "git-widget-placeholder": "master",
     "ignore.virus.scanning.warn.message": "true",
-    "last_opened_file_path": "D:/Projects/PINN",
+    "last_opened_file_path": "D:/Projects/PINN/Others_Solutions",
     "node.js.detected.package.eslint": "true",
     "node.js.detected.package.tslint": "true",
     "node.js.selected.package.eslint": "(autodetect)",
     "node.js.selected.package.tslint": "(autodetect)",
     "nodejs_package_manager_path": "npm",
-    "settings.editor.selected.configurable": "TONGYI Lingma",
+    "settings.editor.selected.configurable": "preferences.pluginManager",
     "vue.rearranger.settings.migration": "true"
   },
   "keyToStringList": {
@@ -82,7 +91,7 @@
       </console-settings>
     </option>
   </component>
-  <component name="RunManager" selected="Python.main">
+  <component name="RunManager">
     <configuration name="Torch_NN" type="PythonConfigurationType" factoryName="Python" nameIsGenerated="true">
       <module name="Pytorch 2.1.2" />
       <option name="INTERPRETER_OPTIONS" value="" />
@@ -326,14 +335,7 @@
       <workItem from="1716774206778" duration="7477000" />
       <workItem from="1716795318176" duration="4606000" />
       <workItem from="1716799974150" duration="98000" />
-      <workItem from="1716800087058" duration="4044000" />
-    </task>
-    <task id="LOCAL-00021" summary="Initial commit">
-      <created>1709369642161</created>
-      <option name="number" value="00021" />
-      <option name="presentableId" value="LOCAL-00021" />
-      <option name="project" value="LOCAL" />
-      <updated>1709369642162</updated>
+      <workItem from="1716800087058" duration="7210000" />
     </task>
     <task id="LOCAL-00022" summary="Initial commit">
       <created>1709372598287</created>
@@ -671,7 +673,14 @@
       <option name="project" value="LOCAL" />
       <updated>1716815934411</updated>
     </task>
-    <option name="localTasksCounter" value="70" />
+    <task id="LOCAL-00070" summary="New Commit">
+      <created>1716816329107</created>
+      <option name="number" value="00070" />
+      <option name="presentableId" value="LOCAL-00070" />
+      <option name="project" value="LOCAL" />
+      <updated>1716816329107</updated>
+    </task>
+    <option name="localTasksCounter" value="71" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">

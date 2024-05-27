@@ -1,5 +1,6 @@
 import sys
 import os
+import warnings
 import numpy as np
 import matplotlib
 import matplotlib.pyplot as plt
@@ -8,10 +9,10 @@ from data_processing.fdm import rk4th, mkc
 try:
     matplotlib.use('TkAgg')
 except Exception as e:
-    warnings.warn(e, ImportWarning)
+    warnings.warn(str(e), ImportWarning)
 plt.ion()
 
-use_filedata = True
+use_filedata = False
 if not use_filedata:
     # 定义物理参数和初始条件
     L = 2.0  # 总长度

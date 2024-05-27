@@ -5,7 +5,7 @@ import matplotlib.pyplot as plt
 try:
     matplotlib.use('TkAgg')
 except Exception as e:
-    warnings.warn(e, ImportWarning)
+    warnings.warn(str(e), ImportWarning)
 plt.ion()
 plt.rc('font', family='Times New Roman')
 plt.rc('text', usetex=True)
