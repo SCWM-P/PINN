@@ -23,6 +23,7 @@ current_path = os.getcwd()
 epochs = 300
 layers = [2, 50, 50, 50, 50, 1]
 connections = [0, 1, 0, 1, 0, 1]
+USE_pth = False
 # Check CUDA availability (for GPU acceleration)
 device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
 print("========  Using device  ========")
@@ -30,8 +31,8 @@ print(f"============  {device}  ============")
 
 # Load Data
 option = 'npz'
-# filename = 'test16-1.mat'
 filename = 'variables.npz'
+# filename = 'test16-1.mat'
 # filename = 'dvSave-2023_03_26_02_21_16.npy'
 Timestamp, xEvent, yEvent, polarities = dp.load_data('npz', current_path, filename)
 # Data Cleansing
@@ -87,6 +88,7 @@ print('========= Model Training =======')
 # Training the Model
 start_time = time.time()
 pinn.train()
+pinn.save(os.path.join(current_path, 'data', 'pth'), 'state')
 end_time = time.time()
 print('==============================================')
 print('============= Model Training Done! ===========')

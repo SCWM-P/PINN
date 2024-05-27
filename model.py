@@ -5,7 +5,7 @@ import data_processing as dp
 import matplotlib.pyplot as plt
 from sklearn.model_selection import train_test_split
 
-# Configuration
+# Plot Configuration
 plt.rc('font', family='Times New Roman')
 plt.rc('text', usetex=True)
 plt.rc('grid', color='k', alpha=0.2)
@@ -18,6 +18,7 @@ class DNN(torch.nn.Module):
     :param layers: list of layer sizes
     :param connections: list of connection scheme
     """
+
     def __init__(self, layers: list, connections: list):
         super(DNN, self).__init__()
         self.layers = layers
@@ -55,16 +56,19 @@ class PhysicsInformedNN:
             Timestamp: torch.Tensor,
             yEvent: torch.Tensor,
             epochs: int,
-            validation_ratio=0.2
+            *,
+            validation_ratio=0.2,
+            EI=None, Tension=None, M=None, c=None, history=None
     ):
         # Configuration
         self.device = device
         self.dnn = DNN(layers, connections).to(device)
         # Learning Parameters
-        self.EI = torch.nn.Parameter(torch.tensor([1.0], device=device))
-        self.Tension = torch.nn.Parameter(torch.tensor([1.0], device=device))
-        self.M = torch.nn.Parameter(torch.tensor([1.0], device=device))
-        self.c = torch.nn.Parameter(torch.tensor([1.0], device=device))
+        def_para = lambda x: torch.nn.Parameter(torch.tensor([x], device=device))
+        self.EI = def_para(1.0) if EI is None else def_para(EI)
+        self.Tension = def_para(1.0) if Tension is None else def_para(Tension)
+        self.M = def_para(1.0) if M is None else def_para(M)
+        self.c = def_para(1.0) if c is None else def_para(c)
         # Data
         self.xEvent = xEvent
         self.Timestamp = Timestamp
@@ -77,14 +81,17 @@ class PhysicsInformedNN:
             random_state=42
         )
         # Define the Training Parameters History
-        self.history = {
-            'train_loss': torch.zeros((epochs,)),
-            'train_accuracy': torch.zeros((epochs,)),
-            'EI': torch.zeros((epochs,)),
-            'Tension': torch.zeros((epochs,)),
-            'M': torch.zeros((epochs,)),
-            'c': torch.zeros((epochs,))
-        }
+        if history is None:
+            self.history = {
+                'train_loss': [],
+                'train_accuracy': [],
+                'EI': [],
+                'Tension': [],
+                'M': [],
+                'c': []
+            }
+        else:
+            self.history = history
         # Define Optimizer
         self.optimizer = torch.optim.Adam(
             list(self.dnn.parameters()) + [self.EI, self.Tension, self.M, self.c],
@@ -265,7 +272,7 @@ class PhysicsInformedNN:
             loss_physical = self.physicalLoss(self.x_train, self.t_train, self.y_train)
 
             Loss = loss_nn \
-                + loss_physical
+                   + loss_physical
             Loss.backward(retain_graph=True)
             self.optimizer.step()
             self.exponent_schedule.step()
@@ -273,12 +280,12 @@ class PhysicsInformedNN:
             # Record loss
             self.dnn.eval()  # Evaluate the  model in validation set
             truth_train = torch.sum(torch.abs(y_nn_pred - y_train) <= 0.1 * torch.abs(y_train))
-            self.history['train_loss'][epoch] = loss_nn.item()
-            self.history['train_accuracy'][epoch] = truth_train.item() / y_train.numel() * 100
-            self.history['EI'][epoch] = self.EI.item()
-            self.history['Tension'][epoch] = self.Tension.item()
-            self.history['M'][epoch] = self.M.item()
-            self.history['c'][epoch] = self.c.item()
+            self.history['train_loss'].append(loss_nn.item())
+            self.history['train_accuracy'].append(truth_train.item() / y_train.numel() * 100)
+            self.history['EI'].append(self.EI.item())
+            self.history['Tension'].append(self.Tension.item())
+            self.history['M'].append(self.M.item())
+            self.history['c'].append(self.c.item())
 
             # Print epoch Results
             if epoch % 50 == 0:
@@ -298,7 +305,7 @@ class PhysicsInformedNN:
                 print('= == === ==== Validation Set ==== === == =')
                 print(f'Natural Network Loss:{loss_nn_val.item():.3e}')
                 print(f'Physical Equation Loss:{loss_physical_val.item():.3e}')
-                print(f'Accuracy:{(truth_val.item() / y_val.numel())*100:.2f}%')
+                print(f'Accuracy:{(truth_val.item() / y_val.numel()) * 100:.2f}%')
                 print('------------------------------------------')
                 print(
                     f'刚度EI: {self.EI.item():<14.4e},'
@@ -329,3 +336,45 @@ class PhysicsInformedNN:
                 elif epoch % (epochs // 20) == 0:
                     if epoch <= 3000:
                         self.plot_results(epoch)
+
+    def save(self, file_path: str, option: str = 'state'):
+        """
+        保存模型的状态或模型本身到指定路径。
+
+        参数:
+        - file_path: str, 保存文件的路径。
+        - option: str, 保存选项，'state'表示保存模型的状态（默认），'model'表示保存模型本身。
+
+        返回值:
+        - 无。
+        """
+        with torch.no_grad():
+            self.dnn.eval()
+            loss = torch.nn.functional.mse_loss(
+                self.predict(
+                    self.x_val, self.t_val
+                ),
+                self.y_val
+            )
+        now = time.strftime(f"%Y%m%d_%H%M%s_{loss_nn:.4e}", time.localtime())
+        save_path = os.path.join(file_path, f'{now}.pth')
+        save_dic = {
+            'optimizer': self.optimizer.state_dict(),
+            'EI': self.EI.item(),
+            'Tension': self.Tension.item(),
+            'M': self.M.item(),
+            'c': self.c.item(),
+            'history': self.history,
+        }
+
+        if option == 'state':
+            save_dic['model'] = self.dnn.state_dict()
+        elif option == 'model':
+            save_dic['model'] = self.dnn
+        else:
+            raise ValueError("The option must be 'state' or 'model'!")
+        torch.save(save_dic, save_path)
+        print(f"Model parameters saved to {save_path}!")
+
+    def load(self):
+        pass
