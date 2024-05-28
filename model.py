@@ -77,6 +77,7 @@ class PhysicsInformedNN:
         self.Timestamp = Timestamp
         self.yEvent = yEvent
         self.epochs = epochs
+        self.lr = 0.1
         # Split train and validation sets
         self.x_train, self.x_val, self.t_train, self.t_val, self.y_train, self.y_val = train_test_split(
             self.xEvent, self.Timestamp, self.yEvent,
@@ -98,7 +99,7 @@ class PhysicsInformedNN:
         # Define Optimizer
         self.optimizer = torch.optim.Adam(
             list(self.dnn.parameters()) + [self.EI, self.Tension, self.M, self.c],
-            lr=0.1,
+            lr=self.lr,
             betas=(0.9, 0.999),
             eps=1e-15,
             weight_decay=0.0001
@@ -195,25 +196,33 @@ class PhysicsInformedNN:
         loss_Physical = torch.nn.functional.mse_loss(y_PI_pred, torch.zeros_like(y_PI_pred))
         return loss_Physical
 
-    def plot_results(self, epoch: int):
+    def plot_results(self, epoch: int, option: str = 'show'):
         """
-        Plots the results of the model in particular epoch.
-        :param epoch: Current number of model training rounds
-        :return: None. Just plot!
+        Plots the results of the model in a particular epoch.
+
+        This method evaluates the model at the given epoch and plots the predictions against the actual values
+        both for the training and validation datasets. It can either show the plot directly or save it as an image
+        based on the provided option.
+
+        :param epoch: Current number of model training rounds. Used to label the plot for reference.
+        :param option: A string specifying the action to be taken. 'show' to display the plot or 'save' to save it.
+                       Defaults to 'show'.
+        :return: None.
         """
+        # Set the model to evaluation mode
         self.dnn.eval()
         with torch.no_grad():
-            # Plot the results in train set
+            # Prepare and plot the results for the training set
             x_train, t_train, y_train = self.normalize(self.x_train, self.t_train, self.y_train)
             y_nn_pred_train = self.predict(x_train, t_train)
             x_train, t_train, y_nn_pred_train = self.denormalize(x_train, t_train, y_nn_pred_train)
 
-            # plot the results in validation set
+            # Prepare and plot the results for the validation set
             x_val, t_val, y_val = self.normalize(self.x_val, self.t_val, self.y_val)
             y_nn_pred_val = self.predict(x_val, t_val)
             x_val, t_val, y_nn_pred_val = self.denormalize(x_val, t_val, y_nn_pred_val)
 
-            # Convert torch.Tensor to numpy.ndarray
+            # Convert tensors to numpy arrays for plotting
             x_train = x_train.cpu().detach().numpy()
             t_train = t_train.cpu().detach().numpy()
             y_nn_pred_train = y_nn_pred_train.cpu().detach().numpy()
@@ -222,10 +231,12 @@ class PhysicsInformedNN:
             t_val = t_val.cpu().detach().numpy()
             y_nn_pred_val = y_nn_pred_val.cpu().detach().numpy()
 
-            # Plot the results
-            fig = plt.figure()
+            # Create a figure with two subplots for comparing the model's performance on train and validation sets
+            fig = plt.figure(figsize=(18, 10))
             ax_train = fig.add_subplot(121, projection='3d')
             ax_val = fig.add_subplot(122, projection='3d')
+
+            # Plot the actual and predicted values for the training set
             ax_train.scatter(
                 self.x_train.cpu().detach().numpy(),
                 self.t_train.cpu().detach().numpy(),
@@ -238,11 +249,15 @@ class PhysicsInformedNN:
                 c='r', marker='.', alpha=0.2,
                 label='Prediction of Natural Network'
             )
+
+            # Set axes labels, add legend, and set title for the training set subplot
             ax_train.set_xlabel('X', fontsize=16)
             ax_train.set_ylabel('T (s)', fontsize=16)
             ax_train.set_zlabel('Y', fontsize=16)
             ax_train.legend()
             ax_train.set_title(f'Comparison at Epoch {epoch} in Train Set', fontsize=18)
+
+            # Plot the actual and predicted values for the validation set
             ax_val.scatter(
                 self.x_val.cpu().detach().numpy(),
                 self.t_val.cpu().detach().numpy(),
@@ -255,12 +270,42 @@ class PhysicsInformedNN:
                 c='r', marker='.', alpha=0.5,
                 label='Prediction of Natural Network'
             )
+
+            # Set axes labels, add legend, and set title for the validation set subplot
             ax_val.set_xlabel('X', fontsize=16)
             ax_val.set_ylabel('T (s)', fontsize=16)
             ax_val.set_zlabel('Y', fontsize=16)
             ax_val.legend()
             ax_val.set_title(f'Comparison at Epoch {epoch} in Validation Set', fontsize=18)
-            plt.show()
+
+            # Depending on the option, either show the plot or save it as an image
+            if option == 'save':
+                # Construct the path to save the plot and save it
+                current_path = os.getcwd()
+                os.makedirs(
+                    os.path.join(
+                        current_path,
+                        'Photo', 'Output'
+                    ), exist_ok=True
+                )
+                save_path = os.path.join(
+                    current_path,
+                    'Photo', 'Output'
+                )
+                now = time.strftime("%Y-%m-%d-%H-%M-%S", time.localtime())
+                plt.savefig(
+                    os.path.join(
+                        save_path,
+                        f"{self.lr:.3e}_"
+                        f"{self.optimizer.param_groups[0]['lr']:.3e}_"
+                        f"{epoch}_{now}.png"
+                    ),
+                    dpi=300, bbox_inches='tight', transparent=True
+                )
+                print(f"Plot saved at {save_path}")
+            else:
+                # Display the plot directly
+                plt.show()
 
     def train(self):
         from tqdm import tqdm
@@ -332,14 +377,14 @@ class PhysicsInformedNN:
             # Process Visualization
             if epochs <= 1000:
                 if epoch % 100 == 0:
-                    self.plot_results(epoch)
+                    self.plot_results(epoch, option='save')
             else:
                 if epoch <= 1000:
                     if epoch % 100 == 0:
-                        self.plot_results(epoch)
+                        self.plot_results(epoch, option='save')
                 elif epoch % (epochs // 20) == 0:
                     if epoch <= 3000:
-                        self.plot_results(epoch)
+                        self.plot_results(epoch, option='save')
 
     def save(self, file_path: str, option: str = 'state'):
         """
@@ -360,7 +405,7 @@ class PhysicsInformedNN:
                 ),
                 self.y_val
             )
-        now = time.strftime(f"{loss:.4e}_%Y.%m.%d_%H.%M.%S", time.localtime())
+        now = time.strftime(f"{loss:.4e}_%Y-%m-%d_%H-%M-%S", time.localtime())
         save_path = os.path.join(file_path, f'{now}.pth')
         save_dic = {
             'optimizer': self.optimizer.state_dict(),

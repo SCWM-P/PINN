@@ -40,7 +40,7 @@ filename = 'variables.npz'
 # filename = 'dvSave-2023_03_26_02_21_16.npy'
 Timestamp, xEvent, yEvent, polarities = dp.load_data('npz', current_path, filename)
 # Data Cleansing
-fig = plt.figure()
+fig = plt.figure(figsize=(18, 10))
 dp.plot_data(
     fig.add_subplot(131, projection='3d'),
     xEvent, Timestamp, yEvent,
@@ -72,6 +72,13 @@ yEvent = torch.tensor(
     yEvent, dtype=torch.float32,
     device=device, requires_grad=True
 ).unsqueeze(1)
+fig.savefig(
+    os.path.join(
+        current_path,
+        'Photo', 'data_load.png'
+    ), bbox_inches='tight', dpi=300, transparent=True
+)
+print(f"Load data figure has been saved at {os.path.join(current_path, 'Photo', 'data_load.png')}!")
 print('====== Data Loading Done! ======')
 
 # %%
@@ -85,6 +92,16 @@ print(pinn.dnn)
 os.makedirs(os.path.join(current_path, 'data', 'pth'), exist_ok=True)
 if USE_pth:
     try:
+        def compare(x):
+            Ymd = x[1].split('-')
+            HMS = x[2].split('-')
+            t = time.mktime(
+                time.strptime(
+                    ''.join([*Ymd, *HMS]),
+                    '%Y%m%d%H%M%S'
+                )
+            )
+            return t
         loss_list = [
             i[:-4].split('_')
             for i in os.listdir(
@@ -94,20 +111,6 @@ if USE_pth:
                 )
             )
         ]
-
-
-        def compare(x):
-            Ymd = x[1].split('.')
-            HMS = x[2].split('.')
-            t = time.mktime(
-                time.strptime(
-                    ''.join([*Ymd, *HMS]),
-                    '%Y%m%d%H%M%S'
-                )
-            )
-            return t
-
-
         state_dic = torch.load(
             os.path.join(
                 current_path,
@@ -118,7 +121,7 @@ if USE_pth:
         pinn.load(state_dic)
         print('Model weights loaded!')
     except Exception as e:
-        print('Failed to load model weights!\nError Info:', e)
+        warnings.warn('Failed to load model weights!\nError Info: ' + str(e), UserWarning)
 else:
     print('========= Model Training =======')
     # Training the Model

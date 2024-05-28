@@ -63,7 +63,7 @@ def draw_results(pinn):
     fig1.suptitle('Parameter Evolution', fontsize=18)
 
     # Plotting Loss Function and Accuracy Change
-    fig2, ax2_1 = plt.subplots()
+    fig2, ax2_1 = plt.subplots(figsize=(18, 10))
     ax2_2 = ax2_1.twinx()
     ax2_1.plot(pinn.history['train_loss'], 'r-', label='Loss', linewidth=2)
     ax2_2.plot(pinn.history['train_accuracy'], 'b.-', label='Accuracy', linewidth=2)
@@ -75,5 +75,15 @@ def draw_results(pinn):
     ax2_2.legend(loc='upper right')
 
     # plot the final 3D result
-    pinn.plot_results(pinn.epochs)
+    pinn.plot_results(pinn.epochs, option='save')
     plt.show()
+
+
+def save_fig(fig, filename: str, save_path: str, format: str= None):
+    fig.savefig(
+        os.path.join(
+            save_path,
+            filename + 'png'
+        ), dpi=300, format=format
+    )
+    print(f'{filename} saved to {savepath}')
