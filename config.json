@@ -1,0 +1,15 @@
+{
+  "epochs": 30000,
+  "layers": [2,80,80,80,80,1],
+  "connections": [0, 0, 2, 0, 0, 2],
+  "USE_pth": true,
+  "USE_rotate": true,
+  "USE_HotPixelCleansing": true,
+  "optimizer_config": {
+    "type": "Adam",
+    "lr": 0.1,
+    "betas": [0.9, 0.999],
+    "eps": 1e-15,
+    "weight_decay": 0.0001
+  }
+}

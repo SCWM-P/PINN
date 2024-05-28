@@ -310,6 +310,7 @@ class PhysicsInformedNN:
     def train(self):
         from tqdm import tqdm
         epochs = self.epochs
+        Logs = []
         x_train, t_train, y_train = self.normalize(self.x_train, self.t_train, self.y_train)
         for epoch in tqdm(range(epochs)):
             self.dnn.train()  # Train the  model in training set
@@ -320,8 +321,7 @@ class PhysicsInformedNN:
             # Loss of Physical Informed Equation
             loss_physical = self.physicalLoss(self.x_train, self.t_train, self.y_train)
 
-            Loss = loss_nn \
-                   + loss_physical
+            Loss = loss_nn + loss_physical
             Loss.backward(retain_graph=True)
             self.optimizer.step()
             self.exponent_schedule.step()
@@ -337,7 +337,7 @@ class PhysicsInformedNN:
             self.history['c'].append(self.c.item())
 
             # Print epoch Results
-            if epoch % 50 == 0:
+            if epoch % 100 == 0:
                 epoch_endTime = time.time()
                 epoch_time = (epoch_endTime - epoch_startTime) if locals().get('epoch_startTime') else 0
                 x_val, t_val, y_val = self.normalize(self.x_val, self.t_val, self.y_val)
@@ -345,33 +345,25 @@ class PhysicsInformedNN:
                 truth_val = torch.sum(torch.abs(y_nn_val_pred - y_val) <= 0.1 * torch.abs(y_val))
                 loss_nn_val = torch.nn.functional.mse_loss(y_nn_val_pred, y_val)
                 loss_physical_val = self.physicalLoss(self.x_val, self.t_val, self.y_val)
-                print(f'\n========  Epoch {epoch} / Total {epochs}  =======')
-                print(f'======== Cost {epoch_time:.1f}s per 50 epochs ========')
-                print('= = == === ====  Train  Set  ==== === == =')
-                print(f'Natural Network Loss:{loss_nn.item():.3e}')
-                print(f'Physical Equation Loss:{loss_physical.item():.3e}')
-                print(f'Accuracy:{self.history["train_accuracy"][epoch]:.2f}%')
-                print('= == === ==== Validation Set ==== === == =')
-                print(f'Natural Network Loss:{loss_nn_val.item():.3e}')
-                print(f'Physical Equation Loss:{loss_physical_val.item():.3e}')
-                print(f'Accuracy:{(truth_val.item() / y_val.numel()) * 100:.2f}%')
-                print('------------------------------------------')
-                print(
-                    f'刚度EI: {self.EI.item():<14.4e},'
-                    f'EI_grad: {self.EI.grad.item():.4e}'
-                )
-                print(
-                    f'张力Tension: {self.Tension.item():<9.4e},'
-                    f'Tension_grad: {self.Tension.grad.item():.4e}'
-                )
-                print(
-                    f'质量M: {self.M.item():<15.4e},'
-                    f'M_grad: {self.M.grad.item():.4e}'
-                )
-                print(
-                    f'阻尼c: {self.c.item():<15.4e},'
-                    f'c_grad: {self.c.grad.item():.4e}'
-                )
+                log = f"""
+                    \n========  Epoch {epoch} / Total {epochs}  =======\n
+                    ======== Cost {epoch_time:.1f}s per 50 epochs ========\n
+                    ========  Train  Set  ========\n
+                    Natural Network Loss:{loss_nn.item():.3e}\n
+                    Physical Equation Loss:{loss_physical.item():.3e}\n
+                    Accuracy:{self.history["train_accuracy"][epoch]:.2f}%\n
+                    ======== Validation Set =======\n
+                    Natural Network Loss:{loss_nn_val.item():.3e}\n
+                    Physical Equation Loss:{loss_physical_val.item():.3e}\n
+                    Accuracy:{(truth_val.item() / y_val.numel()) * 100:.2f}%\n
+                    ------------------------------------------\n
+                    刚度EI: {self.EI.item():<14.4e}, EI_grad: {self.EI.grad.item():.4e}\n
+                    张力Tension: {self.Tension.item():<9.4e}, Tension_grad: {self.Tension.grad.item():.4e}\n
+                    质量M: {self.M.item():<15.4e}, M_grad: {self.M.grad.item():.4e}\n
+                    阻尼c: {self.c.item():<15.4e}, c_grad: {self.c.grad.item():.4e}\n
+                """
+                print(log)
+                Logs.append(log)
                 epoch_startTime = time.time()
 
             # Process Visualization
@@ -385,6 +377,7 @@ class PhysicsInformedNN:
                 elif epoch % (epochs // 20) == 0:
                     if epoch <= 3000:
                         self.plot_results(epoch, option='save')
+        return Logs
 
     def save(self, file_path: str, option: str = 'state'):
         """
@@ -399,13 +392,9 @@ class PhysicsInformedNN:
         """
         with torch.no_grad():
             self.dnn.eval()
-            loss = torch.nn.functional.mse_loss(
-                self.predict(
-                    self.x_val, self.t_val
-                ),
-                self.y_val
-            )
-        now = time.strftime(f"{loss:.4e}_%Y-%m-%d_%H-%M-%S", time.localtime())
+            loss = self.history['train_loss']
+            accuracy = self.history['train_accuracy']
+        now = time.strftime(f"{loss:.3e}_{accuracy:.1e}_%Y-%m-%d_%H-%M-%S", time.localtime())
         save_path = os.path.join(file_path, f'{now}.pth')
         save_dic = {
             'optimizer': self.optimizer.state_dict(),

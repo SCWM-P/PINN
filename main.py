@@ -3,6 +3,7 @@
 import os
 import torch
 import time
+import json
 import warnings
 import numpy as np
 import matplotlib
@@ -24,10 +25,14 @@ except Exception as e:
 
 # %%
 # Configuration
-epochs = 30000
-layers = [2, 50, 50, 50, 50, 1]
-connections = [0, 1, 0, 1, 0, 1]
-USE_pth = True
+with open('config.json', 'r') as f:
+    config = json.load(f)
+    epochs = config['epochs']
+    layers = config['layers']
+    connections = config['connections']
+    USE_pth = config['USE_pth']
+    optimizer_config = config['optimizer_config']
+
 # Check CUDA availability (for GPU acceleration)
 device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
 print("========  Using device  ========")
@@ -46,32 +51,29 @@ dp.plot_data(
     xEvent, Timestamp, yEvent,
     title='Original Data', color=yEvent
 )
-(xEvent, Timestamp, yEvent, polarities) = dp.HotPixel_cleansing(xEvent, Timestamp, yEvent, polarities)
-dp.plot_data(
-    fig.add_subplot(132, projection='3d'),
-    xEvent, Timestamp, yEvent,
-    title='After HotPixel Cleansing', color=yEvent
-)
-(xEvent, Timestamp, yEvent) = dp.data_rotate(xEvent, Timestamp, yEvent, option='TLS')
-dp.plot_data(
-    fig.add_subplot(133, projection='3d'),
-    xEvent, Timestamp, yEvent,
-    title='After Data Rotation', color=yEvent
-)
+if config['USE_HotPixelCleansing']:
+    (xEvent, Timestamp, yEvent, polarities) = dp.HotPixel_cleansing(xEvent, Timestamp, yEvent, polarities)
+    dp.plot_data(
+        fig.add_subplot(132, projection='3d'),
+        xEvent, Timestamp, yEvent,
+        title='After HotPixel Cleansing', color=yEvent
+    )
+if config['USE_rotate']:
+    (xEvent, Timestamp, yEvent) = dp.data_rotate(xEvent, Timestamp, yEvent, option='TLS')
+    dp.plot_data(
+        fig.add_subplot(133, projection='3d'),
+        xEvent, Timestamp, yEvent,
+        title='After Data Rotation', color=yEvent
+    )
 
 # Convert to torch.Tensor
-xEvent = torch.tensor(
-    xEvent, dtype=torch.float32,
+to_Tensor = lambda x: torch.tensor(
+    x, dtype=torch.float32,
     device=device, requires_grad=True
 ).unsqueeze(1)
-Timestamp = torch.tensor(
-    Timestamp, dtype=torch.float32,
-    device=device, requires_grad=True
-).unsqueeze(1)
-yEvent = torch.tensor(
-    yEvent, dtype=torch.float32,
-    device=device, requires_grad=True
-).unsqueeze(1)
+xEvent = to_Tensor(xEvent)
+Timestamp = to_Tensor(Timestamp)
+yEvent = to_Tensor(yEvent)
 fig.savefig(
     os.path.join(
         current_path,
@@ -92,16 +94,6 @@ print(pinn.dnn)
 os.makedirs(os.path.join(current_path, 'data', 'pth'), exist_ok=True)
 if USE_pth:
     try:
-        def compare(x):
-            Ymd = x[1].split('-')
-            HMS = x[2].split('-')
-            t = time.mktime(
-                time.strptime(
-                    ''.join([*Ymd, *HMS]),
-                    '%Y%m%d%H%M%S'
-                )
-            )
-            return t
         loss_list = [
             i[:-4].split('_')
             for i in os.listdir(
@@ -115,7 +107,11 @@ if USE_pth:
             os.path.join(
                 current_path,
                 'data', 'pth',
-                '_'.join(max(loss_list, key=compare)) + '.pth'
+                '_'.join(max(
+                    loss_list, key=lambda x: time.mktime(
+                        time.strptime(x[2], '%Y-%m-%d-%H-%M-%S')
+                    )
+                    )) + '.pth'
             )
         )
         pinn.load(state_dic)
@@ -126,8 +122,10 @@ else:
     print('========= Model Training =======')
     # Training the Model
     start_time = time.time()
-    pinn.train()
+    Logs = pinn.train()
     pinn.save(os.path.join(current_path, 'data', 'pth'), 'state')
+    with open(os.path.join(current_path, "log.txt"), 'a') as f:
+        f.write(Logs)
     end_time = time.time()
     print('==============================================')
     print('============= Model Training Done! ===========')
