@@ -7,12 +7,11 @@ import matplotlib
 import matplotlib.pyplot as plt
 import data_processing as dp
 
-
 # Plot Configuration
 try:
     plt.rc('grid', color='k', alpha=0.2)
-    plt.rc('font', family='Times New Roman')
-    plt.rc('text', usetex=True)
+    # plt.rc('font', family='Times New Roman')
+    # plt.rc('text', usetex=True)
 except Exception as e:
     warnings.warn(e.msg, UserWarning)
 
@@ -61,7 +60,7 @@ class PhysicsInformedNN:
             *,
             validation_ratio=0.2,
             EI=None, Tension=None, M=None, c=None, history=None
-            ):
+    ):
         from sklearn.model_selection import train_test_split
         # Configuration
         self.device = device
@@ -345,23 +344,24 @@ class PhysicsInformedNN:
                 truth_val = torch.sum(torch.abs(y_nn_val_pred - y_val) <= 0.1 * torch.abs(y_val))
                 loss_nn_val = torch.nn.functional.mse_loss(y_nn_val_pred, y_val)
                 loss_physical_val = self.physicalLoss(self.x_val, self.t_val, self.y_val)
-                log = f"""
-                    \n========  Epoch {epoch} / Total {epochs}  =======\n
-                    ======== Cost {epoch_time:.1f}s per 50 epochs ========\n
-                    ========  Train  Set  ========\n
-                    Natural Network Loss:{loss_nn.item():.3e}\n
-                    Physical Equation Loss:{loss_physical.item():.3e}\n
-                    Accuracy:{self.history["train_accuracy"][epoch]:.2f}%\n
-                    ======== Validation Set =======\n
-                    Natural Network Loss:{loss_nn_val.item():.3e}\n
-                    Physical Equation Loss:{loss_physical_val.item():.3e}\n
-                    Accuracy:{(truth_val.item() / y_val.numel()) * 100:.2f}%\n
-                    ------------------------------------------\n
-                    刚度EI: {self.EI.item():<14.4e}, EI_grad: {self.EI.grad.item():.4e}\n
-                    张力Tension: {self.Tension.item():<9.4e}, Tension_grad: {self.Tension.grad.item():.4e}\n
-                    质量M: {self.M.item():<15.4e}, M_grad: {self.M.grad.item():.4e}\n
-                    阻尼c: {self.c.item():<15.4e}, c_grad: {self.c.grad.item():.4e}\n
-                """
+                log = \
+                    f"""
+    \n========  Epoch {epoch} / Total {epochs}  =======
+    ======== Cost {epoch_time:.1f}s per 50 epochs ========
+    ========  Train  Set  ========
+    Natural Network Loss:{loss_nn.item():.3e}
+    Physical Equation Loss:{loss_physical.item():.3e}
+    Accuracy:{self.history["train_accuracy"][epoch]:.2f}%
+    ======== Validation Set =======
+    Natural Network Loss:{loss_nn_val.item():.3e}
+    Physical Equation Loss:{loss_physical_val.item():.3e}
+    Accuracy:{(truth_val.item() / y_val.numel()) * 100:.2f}%
+    ------------------------------------------
+    刚度EI: {self.EI.item():<14.4e}, EI_grad: {self.EI.grad.item():.4e}
+    张力Tension: {self.Tension.item():<9.4e}, Tension_grad: {self.Tension.grad.item():.4e}
+    质量M: {self.M.item():<15.4e}, M_grad: {self.M.grad.item():.4e}
+    阻尼c: {self.c.item():<15.4e}, c_grad: {self.c.grad.item():.4e}
+                    """
                 print(log)
                 Logs.append(log)
                 epoch_startTime = time.time()
@@ -392,8 +392,8 @@ class PhysicsInformedNN:
         """
         with torch.no_grad():
             self.dnn.eval()
-            loss = self.history['train_loss']
-            accuracy = self.history['train_accuracy']
+            loss = self.history['train_loss'][-1]
+            accuracy = self.history['train_accuracy'][-1]
         now = time.strftime(f"{loss:.3e}_{accuracy:.1e}_%Y-%m-%d_%H-%M-%S", time.localtime())
         save_path = os.path.join(file_path, f'{now}.pth')
         save_dic = {

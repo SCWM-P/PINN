@@ -3,8 +3,8 @@ import numpy as np
 import matplotlib
 import matplotlib.pyplot as plt
 try:
-    plt.rc('font', family='Times New Roman')
-    plt.rc('text', usetex=True)
+    # plt.rc('font', family='Times New Roman')
+    # plt.rc('text', usetex=True)
     plt.ion()
     plt.rc('grid', color='k', alpha=0.2)
 except Exception as e:

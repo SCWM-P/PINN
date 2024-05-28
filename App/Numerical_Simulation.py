@@ -112,9 +112,9 @@ def draw():
     X, T = np.meshgrid(np.linspace(0, L, N - 1), t[::alpha])
     surf = ax.plot_surface(T, X, displ.T[::alpha, :], cmap='viridis')
     ax.set_title('3D Surface plot of Displacement over Time and Length')
-    ax.set_xlabel('Time $t$[s]')
-    ax.set_ylabel('Position along beam $x$[m]')
-    ax.set_zlabel('Displacement $u$[m]')
+    ax.set_xlabel('Time t[s]')
+    ax.set_ylabel('Position along beam x[m]')
+    ax.set_zlabel('Displacement u[m]')
     plt.colorbar(surf, ax=ax, shrink=0.5, aspect=5)
     plt.show(block=False)
 

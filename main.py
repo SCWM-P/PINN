@@ -16,14 +16,6 @@ torch.manual_seed(1234)
 torch.autograd.set_detect_anomaly(True)
 plt.rc('grid', color='k', alpha=0.2)
 current_path = os.getcwd()
-try:
-    plt.ion()
-    plt.rc('font', family='Times New Roman')
-    plt.rc('text', usetex=True)
-except Exception as e:
-    warnings.warn(e.msg, UserWarning)
-
-# %%
 # Configuration
 with open('config.json', 'r') as f:
     config = json.load(f)
@@ -32,6 +24,14 @@ with open('config.json', 'r') as f:
     connections = config['connections']
     USE_pth = config['USE_pth']
     optimizer_config = config['optimizer_config']
+try:
+    if not config['HEADLESS']:
+        plt.ion()
+        plt.rc('font', family='Times New Roman')
+        matplotlib.use('TkAgg')
+        plt.rc('text', usetex=True)
+except Exception as e:
+    warnings.warn(e.msg, UserWarning)
 
 # Check CUDA availability (for GPU acceleration)
 device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
@@ -74,12 +74,13 @@ to_Tensor = lambda x: torch.tensor(
 xEvent = to_Tensor(xEvent)
 Timestamp = to_Tensor(Timestamp)
 yEvent = to_Tensor(yEvent)
-fig.savefig(
-    os.path.join(
-        current_path,
-        'Photo', 'data_load.png'
-    ), bbox_inches='tight', dpi=300, transparent=True
-)
+if not config['HEADLESS']:
+    fig.savefig(
+        os.path.join(
+            current_path,
+            'Photo', 'data_load.png'
+        ), bbox_inches='tight', dpi=300, transparent=True
+    )
 print(f"Load data figure has been saved at {os.path.join(current_path, 'Photo', 'data_load.png')}!")
 print('====== Data Loading Done! ======')
 
@@ -125,7 +126,10 @@ else:
     Logs = pinn.train()
     pinn.save(os.path.join(current_path, 'data', 'pth'), 'state')
     with open(os.path.join(current_path, "log.txt"), 'a') as f:
-        f.write(Logs)
+        current_time = time.strftime("%Y-%m-%d %H:%M:%S", time.localtime())
+        f.write(f"\n{current_time}\n")
+        f.write(f'{str(pinn.dnn)}\n')
+        f.write("".join(Logs))
     end_time = time.time()
     print('==============================================')
     print('============= Model Training Done! ===========')

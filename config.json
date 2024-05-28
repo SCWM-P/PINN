@@ -1,8 +1,9 @@
 {
   "epochs": 30000,
   "layers": [2,80,80,80,80,1],
-  "connections": [0, 0, 2, 0, 0, 2],
-  "USE_pth": true,
+  "connections": [0, 0, 2, 0, 2, 0],
+  "HEADLESS": true,
+  "USE_pth": false,
   "USE_rotate": true,
   "USE_HotPixelCleansing": true,
   "optimizer_config": {
