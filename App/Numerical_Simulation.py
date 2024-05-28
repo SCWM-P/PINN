@@ -86,7 +86,7 @@ if not use_filedata:
         os.path.join(
             os.path.dirname(current_path),
             'data', 'npy','variables.npz'
-        ),**variables
+        ), **variables
     )
 else:
     variables = np.load(os.path.join(

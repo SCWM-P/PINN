@@ -28,9 +28,9 @@ def plot_data(
     """
     Plot the data on a given subplot ax in 3D view.
     """
-    ax.scatter(
+    mappable = ax.scatter(
         x, y, z,
-        c=color, marker='.', alpha=0.5,
+        c=color, marker='.', alpha=0.8,
         label=label, cmap=cmap
     )
     ax.set_xlabel(xlabel, fontsize=14)
@@ -40,6 +40,7 @@ def plot_data(
         ax.set_title(f'{title}', fontsize=16)
     if label:
         ax.legend()
+    return mappable
 
 
 # Draw the final results for visualization
@@ -50,10 +51,12 @@ def draw_results(pinn):
     subplots = [plt.subplot2grid(layout, (0, 0)), plt.subplot2grid(layout, (0, 1)),
                 plt.subplot2grid(layout, (1, 0)), plt.subplot2grid(layout, (1, 1))]
     line_styles = ['-', '--', '-.', ':', '-']
-    plots = [subplots[0].plot(pinn.history['EI'], c='r', ls=line_styles[0], label='EI'),
-             subplots[1].plot(pinn.history['Tension'], c='g', ls=line_styles[1], label='T'),
-             subplots[2].plot(pinn.history['M'], c='b', ls=line_styles[2], label='M'),
-             subplots[3].plot(pinn.history['c'], c='c', ls=line_styles[3], label='c')]
+    plots = [
+        subplots[0].plot(pinn.history['EI'], c='r', ls=line_styles[0], label='EI'),
+        subplots[1].plot(pinn.history['Tension'], c='g', ls=line_styles[1], label='T'),
+        subplots[2].plot(pinn.history['M'], c='b', ls=line_styles[2], label='M'),
+        subplots[3].plot(pinn.history['c'], c='c', ls=line_styles[3], label='c')
+    ]
     for i, ax in enumerate(subplots):
         ax.set_title(f"Parameter {['EI', 'Tension', 'M', 'c', 'γ'][i]}", fontsize=16)
         ax.set_xlabel('Epoch', fontsize=16)
@@ -87,3 +90,34 @@ def save_fig(fig, filename: str, save_path: str, format: str= None):
         ), dpi=300, format=format
     )
     print(f'{filename} saved to {savepath}')
+
+
+def set_subplots(num_subplots: int, projection: str = None):
+    """
+    Create a figure with the optimal subplot layout for a given number of subplots.
+    Returns the figure and axes.
+
+    :Parameters:
+    num_subplots (int): The number of subplots
+
+    :Returns:
+    tuple: A tuple (fig, axes) where fig is the figure object and axes is an array of axes objects
+    """
+    if num_subplots <= 0:
+        raise ValueError("Number of subplots must be a positive integer")
+    rows = int(np.floor(np.sqrt(num_subplots)))
+    cols = int(np.ceil(num_subplots / rows))
+    if rows * cols < num_subplots:
+        rows += 1
+    fig, axes = plt.subplots(
+        rows, cols,
+        figsize=(cols * 6, rows * 6),
+        subplot_kw={'projection': projection}
+    )
+    # Flatten axes array for easy iteration
+    axes = axes.flatten() if rows * cols > 1 else [axes]
+    # Hide any unused axes
+    for i in range(num_subplots, len(axes)):
+        fig.delaxes(axes[i])
+    plt.tight_layout()
+    return fig, axes

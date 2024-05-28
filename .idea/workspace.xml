@@ -5,7 +5,24 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="adbbd5d0-5b79-4adb-ba77-89cd9ee51a24" name="Changes" comment="New Commit">
+      <change afterPath="$PROJECT_DIR$/.idea/encodings.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/.idea/jupyter-settings.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Photo/Output/1.000e-01_9.704e-02_30_2024-05-29-03-03-44.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/data/pth/1.8817e+00_45.0_2024-05-28-00-01-17.pth" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/data/pth/4.3747e-01_10.0_2024-05-27-23-30-17.pth" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/data/pth/5.865e-01_6.0_2024-05-28-16-32-33.pth" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/log.txt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/misc.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/misc.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/App/Numerical_Simulation.py" beforeDir="false" afterPath="$PROJECT_DIR$/App/Numerical_Simulation.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/config.json" beforeDir="false" afterPath="$PROJECT_DIR$/config.json" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/data/pth/1.8817e+00_2024-05-28-00-01-17.pth" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/data/pth/4.3747e-01_2024-05-27-23-30-17.pth" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/data_processing/__init__.py" beforeDir="false" afterPath="$PROJECT_DIR$/data_processing/__init__.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/data_processing/load_data.py" beforeDir="false" afterPath="$PROJECT_DIR$/data_processing/load_data.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/data_processing/plot_figure.py" beforeDir="false" afterPath="$PROJECT_DIR$/data_processing/plot_figure.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/main.py" beforeDir="false" afterPath="$PROJECT_DIR$/main.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/model.py" beforeDir="false" afterPath="$PROJECT_DIR$/model.py" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -53,29 +70,31 @@
     <option name="hideEmptyMiddlePackages" value="true" />
     <option name="showLibraryContents" value="true" />
   </component>
-  <component name="PropertiesComponent">{
-  &quot;keyToString&quot;: {
-    &quot;ASKED_ADD_EXTERNAL_FILES&quot;: &quot;true&quot;,
-    &quot;ASKED_SHARE_PROJECT_CONFIGURATION_FILES&quot;: &quot;true&quot;,
-    &quot;RunOnceActivity.ShowReadmeOnStart&quot;: &quot;true&quot;,
-    &quot;WebServerToolWindowFactoryState&quot;: &quot;false&quot;,
-    &quot;git-widget-placeholder&quot;: &quot;master&quot;,
-    &quot;ignore.virus.scanning.warn.message&quot;: &quot;true&quot;,
-    &quot;last_opened_file_path&quot;: &quot;D:/Projects/PINN/data/pth&quot;,
-    &quot;node.js.detected.package.eslint&quot;: &quot;true&quot;,
-    &quot;node.js.detected.package.tslint&quot;: &quot;true&quot;,
-    &quot;node.js.selected.package.eslint&quot;: &quot;(autodetect)&quot;,
-    &quot;node.js.selected.package.tslint&quot;: &quot;(autodetect)&quot;,
-    &quot;nodejs_package_manager_path&quot;: &quot;npm&quot;,
-    &quot;settings.editor.selected.configurable&quot;: &quot;org.jetbrains.plugins.notebooks.jupyter.connections.configuration.JupyterServerConfigurable&quot;,
-    &quot;two.files.diff.last.used.folder&quot;: &quot;D:/Projects/PINN/data/pth&quot;,
-    &quot;vue.rearranger.settings.migration&quot;: &quot;true&quot;
+  <component name="PropertiesComponent"><![CDATA[{
+  "keyToString": {
+    "ASKED_ADD_EXTERNAL_FILES": "true",
+    "ASKED_SHARE_PROJECT_CONFIGURATION_FILES": "true",
+    "RunOnceActivity.OpenProjectViewOnStart": "true",
+    "RunOnceActivity.ShowReadmeOnStart": "true",
+    "SHARE_PROJECT_CONFIGURATION_FILES": "true",
+    "WebServerToolWindowFactoryState": "false",
+    "git-widget-placeholder": "master",
+    "ignore.virus.scanning.warn.message": "true",
+    "last_opened_file_path": "D:/Projects/PINN/data/pth",
+    "node.js.detected.package.eslint": "true",
+    "node.js.detected.package.tslint": "true",
+    "node.js.selected.package.eslint": "(autodetect)",
+    "node.js.selected.package.tslint": "(autodetect)",
+    "nodejs_package_manager_path": "npm",
+    "settings.editor.selected.configurable": "org.jetbrains.plugins.notebooks.jupyter.connections.configuration.JupyterServerConfigurable",
+    "two.files.diff.last.used.folder": "D:/Projects/PINN/data/pth",
+    "vue.rearranger.settings.migration": "true"
   },
-  &quot;keyToStringList&quot;: {
-    &quot;ChangesTree.GroupingKeys&quot;: [
+  "keyToStringList": {
+    "ChangesTree.GroupingKeys": [
     ]
   }
-}</component>
+}]]></component>
   <component name="PyConsoleOptionsProvider">
     <option name="myPythonConsoleState">
       <console-settings module-name="Pytorch 2.1.2" is-module-sdk="true">
@@ -334,14 +353,9 @@
       <workItem from="1716795318176" duration="4606000" />
       <workItem from="1716799974150" duration="98000" />
       <workItem from="1716800087058" duration="15901000" />
-      <workItem from="1716862638241" duration="14476000" />
-    </task>
-    <task id="LOCAL-00030" summary="Initial commit">
-      <created>1709808728971</created>
-      <option name="number" value="00030" />
-      <option name="presentableId" value="LOCAL-00030" />
-      <option name="project" value="LOCAL" />
-      <updated>1709808728971</updated>
+      <workItem from="1716862638241" duration="15515000" />
+      <workItem from="1716903331010" duration="4464000" />
+      <workItem from="1716913132067" duration="10387000" />
     </task>
     <task id="LOCAL-00031" summary="Initial commit">
       <created>1709809085218</created>
@@ -679,7 +693,14 @@
       <option name="project" value="LOCAL" />
       <updated>1716883474550</updated>
     </task>
-    <option name="localTasksCounter" value="79" />
+    <task id="LOCAL-00079" summary="New Commit">
+      <created>1716884724500</created>
+      <option name="number" value="00079" />
+      <option name="presentableId" value="LOCAL-00079" />
+      <option name="project" value="LOCAL" />
+      <updated>1716884724500</updated>
+    </task>
+    <option name="localTasksCounter" value="80" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -731,10 +752,20 @@
     <option name="LAST_COMMIT_MESSAGE" value="New Commit" />
   </component>
   <component name="XDebuggerManager">
+    <breakpoint-manager>
+      <breakpoints>
+        <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
+          <url>file://$PROJECT_DIR$/data_processing/load_data.py</url>
+          <line>44</line>
+          <option name="timeStamp" value="1" />
+        </line-breakpoint>
+      </breakpoints>
+    </breakpoint-manager>
     <watches-manager>
       <configuration name="PythonConfigurationType">
         <watch expression="self" />
         <watch expression="self" />
+        <watch expression="loss_list[2]" />
       </configuration>
     </watches-manager>
   </component>
@@ -744,7 +775,7 @@
     <SUITE FILE_PATH="coverage/PINN$PINN_III.coverage" NAME="PINN-III Coverage Results" MODIFIED="1706580164845" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$" />
     <SUITE FILE_PATH="coverage/PINN$Torch_NN.coverage" NAME="Torch_NN Coverage Results" MODIFIED="1704702524901" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$" />
     <SUITE FILE_PATH="coverage/PINN$Numerical_Simulation.coverage" NAME="Numerical_Simulation Coverage Results" MODIFIED="1716878318165" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/App" />
-    <SUITE FILE_PATH="coverage/PINN$main.coverage" NAME="main Coverage Results" MODIFIED="1716879267162" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$" />
+    <SUITE FILE_PATH="coverage/PINN$main.coverage" NAME="main Coverage Results" MODIFIED="1716914427268" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$" />
     <SUITE FILE_PATH="coverage/PINN$PINN_ver2_1.coverage" NAME="PINN_ver2.1 Coverage Results" MODIFIED="1710047215849" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/code" />
     <SUITE FILE_PATH="coverage/PINN$PINN_VI.coverage" NAME="PINN-VI Coverage Results" MODIFIED="1709363332807" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/code" />
     <SUITE FILE_PATH="coverage/PINN$EulerReq_0610.coverage" NAME="EulerReq_0610 Coverage Results" MODIFIED="1704620452659" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$" />

@@ -240,12 +240,14 @@ class PhysicsInformedNN:
                 self.x_train.cpu().detach().numpy(),
                 self.t_train.cpu().detach().numpy(),
                 self.y_train.cpu().detach().numpy(),
-                c='b', marker='.', alpha=0.2,
-                label='Actual Dataset'
+                c=self.y_train.cpu().detach().numpy(),
+                marker='.', alpha=0.5,
+                label='Actual Dataset', cmap='viridis'
             )
             ax_train.scatter(
                 x_train, t_train, y_nn_pred_train,
-                c='r', marker='.', alpha=0.2,
+                c=y_nn_pred_train,
+                marker='.', alpha=0.5, cmap='RdBu',
                 label='Prediction of Natural Network'
             )
 
@@ -261,12 +263,14 @@ class PhysicsInformedNN:
                 self.x_val.cpu().detach().numpy(),
                 self.t_val.cpu().detach().numpy(),
                 self.y_val.cpu().detach().numpy(),
-                c='b', marker='.', alpha=0.2,
-                label='Actual Dataset'
+                c=self.y_val.cpu().detach().numpy(),
+                marker='.', alpha=0.5,
+                label='Actual Dataset', cmap='viridis'
             )
             ax_val.scatter(
                 x_val, t_val, y_nn_pred_val,
-                c='r', marker='.', alpha=0.5,
+                c=y_nn_pred_val, cmap='RdBu',
+                marker='.', alpha=0.5,
                 label='Prediction of Natural Network'
             )
 
@@ -363,20 +367,22 @@ class PhysicsInformedNN:
     阻尼c: {self.c.item():<15.4e}, c_grad: {self.c.grad.item():.4e}
                     """
                 print(log)
-                Logs.append(log)
                 epoch_startTime = time.time()
 
             # Process Visualization
             if epochs <= 1000:
                 if epoch % 100 == 0:
                     self.plot_results(epoch, option='save')
+                    Logs.append(log)
             else:
                 if epoch <= 1000:
                     if epoch % 100 == 0:
                         self.plot_results(epoch, option='save')
+                        Logs.append(log)
                 elif epoch % (epochs // 20) == 0:
                     if epoch <= 3000:
                         self.plot_results(epoch, option='save')
+                        Logs.append(log)
         return Logs
 
     def save(self, file_path: str, option: str = 'state'):
@@ -394,7 +400,7 @@ class PhysicsInformedNN:
             self.dnn.eval()
             loss = self.history['train_loss'][-1]
             accuracy = self.history['train_accuracy'][-1]
-        now = time.strftime(f"{loss:.3e}_{accuracy:.1e}_%Y-%m-%d_%H-%M-%S", time.localtime())
+        now = time.strftime(f"{loss:.3e}_{accuracy:.1f}_%Y-%m-%d-%H-%M-%S", time.localtime())
         save_path = os.path.join(file_path, f'{now}.pth')
         save_dic = {
             'optimizer': self.optimizer.state_dict(),

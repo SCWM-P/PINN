@@ -1,7 +1,7 @@
 {
-  "epochs": 30000,
+  "epochs": 200,
   "layers": [2,80,80,80,80,1],
-  "connections": [0, 0, 2, 0, 2, 0],
+  "connections": [0, 1, 0, 1, 0, 1],
   "HEADLESS": true,
   "USE_pth": false,
   "USE_rotate": true,

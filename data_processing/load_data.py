@@ -42,8 +42,8 @@ def load_data(option: str, current_path, filename: str, alpha: float=1000):
             allow_pickle=True
         )
         data = {key: value for key, value in data.items()}
-        Timestamp = data['T'].flatten()
-        xEvent = data['X'].flatten()
+        Timestamp = data['X'].flatten()[::-1]
+        xEvent = data['T'].flatten()
         yEvent = data["displ"].T.flatten()
         polarities = np.ones_like(xEvent)
         index = np.random.choice(
