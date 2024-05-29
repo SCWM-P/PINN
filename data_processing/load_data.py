@@ -1,6 +1,7 @@
 import numpy as np
 import scipy.io
 import os
+import torch
 np.random.seed(2024)
 
 
@@ -59,3 +60,36 @@ def load_data(option: str, current_path, filename: str, alpha: float=1000):
     else:
         raise ValueError('Invalid option')
     return Timestamp, xEvent, yEvent, polarities
+
+
+def get_state_dic(path: str = None, current_path: str = os.path.dirname(os.path.abspath(__file__))):
+    if path:
+        state_dic = torch.load(path)
+        return state_dic
+    loss_list = [
+        i[:-4].split('_')
+        for i in os.listdir(
+            os.path.join(
+                current_path,
+                'data', 'pth'
+            )
+        )
+    ]
+    state_dic = torch.load(
+        os.path.join(
+            current_path,
+            'data', 'pth',
+            '_'.join(max(
+                loss_list, key=lambda x: time.mktime(
+                    time.strptime(x[2], '%Y-%m-%d-%H-%M-%S')
+                ))) + '.pth'
+        )
+    )
+    return state_dic
+
+
+def to_Tensor(x, device):
+    return torch.tensor(
+        x, dtype=torch.float32,
+        device=device, requires_grad=True
+    ).unsqueeze(1)

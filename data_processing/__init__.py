@@ -8,4 +8,7 @@ data_rotate = rotate.data_rotate
 plot_data = plot_figure.plot_data
 draw_results = plot_figure.draw_results
 set_subplots = plot_figure.set_subplots
+get_state_dic = load_data.get_state_dic
+to_Tensor = load_data.to_Tensor
 load_data = load_data.load_data
+

@@ -24,6 +24,7 @@ with open('config.json', 'r') as f:
     connections = config['connections']
     USE_pth = config['USE_pth']
     optimizer_config = config['optimizer_config']
+    lr = optimizer_config['lr']
 try:
     if not config['HEADLESS']:
         plt.ion()
@@ -72,16 +73,9 @@ except Exception as e:
 
 
 # Convert to torch.Tensor
-def to_Tensor(x):
-    return torch.tensor(
-        x, dtype=torch.float32,
-        device=device, requires_grad=True
-    ).unsqueeze(1)
-
-
-xEvent = to_Tensor(xEvent)
-Timestamp = to_Tensor(Timestamp)
-yEvent = to_Tensor(yEvent)
+xEvent = dp.to_Tensor(xEvent, device=device)
+Timestamp = dp.to_Tensor(Timestamp, device=device)
+yEvent = dp.to_Tensor(yEvent, device=device)
 if not config['HEADLESS']:
     fig.savefig(
         os.path.join(
@@ -94,60 +88,45 @@ print('====== Data Loading Done! ======')
 
 # %%
 print('===== Model Initialization =====')
-for lr in [0.1, 0.01, 0.005, 0.001, 0.0005, 0.0001, 0.00005, 0.00001]:
-    for connections in [[0, 1, 0, 1, 0, 1], [0, 0, 2, 0, 2, 0]]:
-        pinn = PhysicsInformedNN(
-            layers, connections, device,
-            xEvent, Timestamp, yEvent,
-            epochs
+pinn = PhysicsInformedNN(
+    layers, connections, device,
+    xEvent, Timestamp, yEvent,
+    epochs
+)
+pinn.optimizer.param_groups[0]['lr'] = lr
+print(pinn.dnn)
+print(f'lr: {lr}\tconnections: {connections}')
+os.makedirs(os.path.join(current_path, 'data', 'pth'), exist_ok=True)
+if USE_pth:
+    try:
+        state_dic = dp.get_state_dic(
+            os.path.join(
+                current_path,
+                'data', 'pth', '2.245e-01_26.8_2024-05-29-04-45-03.pth'
+            )
         )
-        pinn.optimizer.param_groups[0]['lr'] = lr
-        print(pinn.dnn)
-        print(f'lr: {lr}\tconnections: {connections}')
-        os.makedirs(os.path.join(current_path, 'data', 'pth'), exist_ok=True)
-        if USE_pth:
-            try:
-                loss_list = [
-                    i[:-4].split('_')
-                    for i in os.listdir(
-                        os.path.join(
-                            current_path,
-                            'data', 'pth'
-                        )
-                    )
-                ]
-                state_dic = torch.load(
-                    os.path.join(
-                        current_path,
-                        'data', 'pth',
-                        '_'.join(max(
-                            loss_list, key=lambda x: time.mktime(
-                                time.strptime(x[2], '%Y-%m-%d-%H-%M-%S')
-                            ))) + '.pth'
-                    )
-                )
-                pinn.load(state_dic)
-                print('Model weights loaded!')
-            except Exception as e:
-                warnings.warn('Failed to load model weights!\nError Info: ' + str(e), UserWarning)
-        else:
-            print('========= Model Training =======')
-            # Training the Model
-            start_time = time.time()
-            Logs = pinn.train()
-            pinn.save(os.path.join(current_path, 'data', 'pth'), 'state')
-            with open(os.path.join(current_path, "log.txt"), 'a') as f:
-                current_time = time.strftime("%Y-%m-%d %H:%M:%S", time.localtime())
-                f.write(f"\n{current_time}\n")
-                f.write(f"{str(pinn.dnn)}\nlr: {lr:.5f}\t connections: {connections}\n")
-                f.write("".join(Logs))
-            end_time = time.time()
-            print('==============================================')
-            print('============= Model Training Done! ===========')
-            print("======== Training time: {:.2f} seconds ======".format(end_time - start_time))
-            print('=== Average time per epoch: {:.4f} seconds ==='.format((end_time - start_time) / epochs))
-            print('==============================================')
+        pinn.load(state_dic)
+        print('Model weights loaded!')
+    except Exception as e:
+        warnings.warn('Failed to load model weights!\nError Info: ' + str(e), UserWarning)
+else:
+    print('========= Model Training =======')
+    # Training the Model
+    start_time = time.time()
+    Logs = pinn.train()
+    pinn.save(os.path.join(current_path, 'data', 'pth'), 'state')
+    with open(os.path.join(current_path, "log.txt"), 'a') as f:
+        current_time = time.strftime("%Y-%m-%d %H:%M:%S", time.localtime())
+        f.write(f"\n{current_time}\n")
+        f.write(f"{str(pinn.dnn)}\nlr: {lr:.5f}\t connections: {connections}\n")
+        f.write("".join(Logs))
+    end_time = time.time()
+    print('==============================================')
+    print('============= Model Training Done! ===========')
+    print("======== Training time: {:.2f} seconds ======".format(end_time - start_time))
+    print('=== Average time per epoch: {:.4f} seconds ==='.format((end_time - start_time) / epochs))
+    print('==============================================')
 
-        dp.draw_results(pinn)
-        # plt.show(block=True)
-        plt.close('all')
+dp.draw_results(pinn)
+plt.show(block=True)
+# plt.close('all')

@@ -41,11 +41,18 @@ class DNN(torch.nn.Module):
         residual = [x]
         for i, (linear, conn) in enumerate(zip(self.linears, self.connections)):
             x = linear(x)
-            if i < self.num_layers - 2:
+            if i < self.num_layers - 1:
                 x = self.tanh(x)
-            for rsd in residual[-conn:]:
+            for j, rsd in enumerate([residual[k] for k in conn]):
                 if x.shape == rsd.shape:
                     x = x + rsd
+                else:
+                    warings.warn(
+                        f"Residual shape mismatch at layer {i + j + 1},"
+                        f"which is intended to be added to layer {i + 1}!"
+                        f"This might be not work as you expect!",
+                        RuntimeWarning
+                    )
             residual.append(x)
         return x
 
