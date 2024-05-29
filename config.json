@@ -1,5 +1,5 @@
 {
-  "epochs": 200,
+  "epochs": 30000,
   "layers": [2,80,80,80,80,1],
   "connections": [0, 1, 0, 1, 0, 1],
   "HEADLESS": true,
