@@ -1,24 +1,16 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
-  <component name="PublishConfigData" autoUpload="Always" remoteFilesAllowedToDisappearOnAutoupload="false" confirmBeforeUploading="false">
+  <component name="PublishConfigData" autoUpload="Always" serverName="root@connect.cqa1.seetacloud.com:52363 key" remoteFilesAllowedToDisappearOnAutoupload="false" confirmBeforeUploading="false">
     <option name="confirmBeforeUploading" value="false" />
     <serverData>
-      <paths name="featurize@workspace.featurize.cn:44219 password">
-        <serverdata>
-          <mappings>
-            <mapping local="$PROJECT_DIR$" web="/" />
-          </mappings>
-        </serverdata>
-      </paths>
       <paths name="root@connect.cqa1.seetacloud.com:52363 key">
         <serverdata>
           <mappings>
-            <mapping deploy="/root/autodl-tmp/PINN" local="$PROJECT_DIR$" />
+            <mapping deploy="/" local="$PROJECT_DIR$" />
           </mappings>
           <excludedPaths>
             <excludedPath local="true" path="$PROJECT_DIR$/data/npy/variables.npz" />
             <excludedPath local="true" path="$PROJECT_DIR$/data/aedat4" />
-            <excludedPath local="true" path="$PROJECT_DIR$/Others_Solutions" />
           </excludedPaths>
         </serverdata>
       </paths>
@@ -28,23 +20,9 @@
             <mapping local="$PROJECT_DIR$" web="/" />
           </mappings>
           <excludedPaths>
-            <excludedPath local="true" path="&quot;D:/Projects/PINN/Others_Solutions&quot;" />
+            <excludedPath local="true" path="$PROJECT_DIR$/Others_Solutions" />
             <excludedPath local="true" path="$PROJECT_DIR$/data/npy/variables.npz" />
           </excludedPaths>
-        </serverdata>
-      </paths>
-      <paths name="user@192.168.31.228:22 password">
-        <serverdata>
-          <mappings>
-            <mapping local="$PROJECT_DIR$" web="/" />
-          </mappings>
-        </serverdata>
-      </paths>
-      <paths name="user@2001:da8:8002:6000::b7b6:22 password">
-        <serverdata>
-          <mappings>
-            <mapping local="$PROJECT_DIR$" web="/" />
-          </mappings>
         </serverdata>
       </paths>
     </serverData>

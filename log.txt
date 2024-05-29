@@ -4299,3 +4299,484 @@ lr: 0.00001	 connections: [0, 0, 2, 0, 2, 0]
     质量M: 1.0055e+00     , M_grad: -1.6499e-04
     阻尼c: 9.9025e-01     , c_grad: 3.0740e-05
                     
+2024-05-30 02:48:07
+DNN(
+  (linears): ModuleList(
+    (0): Linear(in_features=2, out_features=80, bias=True)
+    (1-3): 3 x Linear(in_features=80, out_features=80, bias=True)
+    (4): Linear(in_features=80, out_features=1, bias=True)
+  )
+  (tanh): Tanh()
+)
+lr: 0.10000	 connections: [[], [], [-2], [], [-2], []]
+
+    
+========  Epoch 0 / Total 20000  =======
+    ======== Cost 0.0s per 50 epochs ========
+    ========  Train  Set  ========
+    Natural Network Loss:1.071e+00
+    Physical Equation Loss:1.757e-03
+    Accuracy:1.20%
+    ======== Validation Set =======
+    Natural Network Loss:1.457e+00
+    Physical Equation Loss:1.101e+04
+    Accuracy:4.60%
+    ------------------------------------------
+    刚度EI: 9.0000e-01    , EI_grad: 3.6025e-03
+    张力Tension: 9.0000e-01, Tension_grad: 1.4553e-04
+    质量M: 1.1000e+00     , M_grad: -2.5240e-04
+    阻尼c: 9.0000e-01     , c_grad: 1.7613e-05
+                    
+    
+========  Epoch 100 / Total 20000  =======
+    ======== Cost 7.0s per 50 epochs ========
+    ========  Train  Set  ========
+    Natural Network Loss:1.935e+00
+    Physical Equation Loss:5.783e+21
+    Accuracy:4.60%
+    ======== Validation Set =======
+    Natural Network Loss:1.643e+00
+    Physical Equation Loss:1.118e+11
+    Accuracy:5.40%
+    ------------------------------------------
+    刚度EI: 6.0232e-01    , EI_grad: 1.9201e+22
+    张力Tension: -7.2148e-01, Tension_grad: -1.8455e+14
+    质量M: 2.3674e+00     , M_grad: 3.8701e+14
+    阻尼c: 2.4163e+00     , c_grad: -1.7390e+10
+                    
+    
+========  Epoch 200 / Total 20000  =======
+    ======== Cost 6.9s per 50 epochs ========
+    ========  Train  Set  ========
+    Natural Network Loss:1.894e+00
+    Physical Equation Loss:6.133e+15
+    Accuracy:3.55%
+    ======== Validation Set =======
+    Natural Network Loss:1.181e+00
+    Physical Equation Loss:2.176e+11
+    Accuracy:2.20%
+    ------------------------------------------
+    刚度EI: 6.0232e-01    , EI_grad: 2.0365e+16
+    张力Tension: -8.5378e-03, Tension_grad: 2.9652e+09
+    质量M: 1.9547e+00     , M_grad: -1.7704e+09
+    阻尼c: 2.1599e+00     , c_grad: 3.2330e+05
+                    
+    
+========  Epoch 300 / Total 20000  =======
+    ======== Cost 7.0s per 50 epochs ========
+    ========  Train  Set  ========
+    Natural Network Loss:1.137e+00
+    Physical Equation Loss:3.260e+14
+    Accuracy:5.10%
+    ======== Validation Set =======
+    Natural Network Loss:8.423e-01
+    Physical Equation Loss:3.992e+18
+    Accuracy:4.80%
+    ------------------------------------------
+    刚度EI: 6.0232e-01    , EI_grad: 1.0825e+15
+    张力Tension: -8.9242e-03, Tension_grad: 1.8282e+08
+    质量M: 1.9553e+00     , M_grad: -2.0620e+10
+    阻尼c: 2.1645e+00     , c_grad: 3.3309e+06
+                    
+    
+========  Epoch 400 / Total 20000  =======
+    ======== Cost 6.9s per 50 epochs ========
+    ========  Train  Set  ========
+    Natural Network Loss:5.681e-01
+    Physical Equation Loss:6.062e+11
+    Accuracy:6.00%
+    ======== Validation Set =======
+    Natural Network Loss:5.310e-01
+    Physical Equation Loss:5.702e+12
+    Accuracy:6.20%
+    ------------------------------------------
+    刚度EI: 6.0232e-01    , EI_grad: 2.0126e+12
+    张力Tension: -8.9292e-03, Tension_grad: 3.0969e+06
+    质量M: 1.9553e+00     , M_grad: 1.1290e+08
+    阻尼c: 2.1645e+00     , c_grad: -3.8015e+04
+                    
+    
+========  Epoch 500 / Total 20000  =======
+    ======== Cost 6.7s per 50 epochs ========
+    ========  Train  Set  ========
+    Natural Network Loss:5.443e-01
+    Physical Equation Loss:7.942e+09
+    Accuracy:6.20%
+    ======== Validation Set =======
+    Natural Network Loss:4.910e-01
+    Physical Equation Loss:1.322e+09
+    Accuracy:7.60%
+    ------------------------------------------
+    刚度EI: 6.0232e-01    , EI_grad: 2.6456e+10
+    张力Tension: -8.9294e-03, Tension_grad: 1.7793e+05
+    质量M: 1.9553e+00     , M_grad: -2.6444e+07
+    阻尼c: 2.1645e+00     , c_grad: 2.0762e+04
+                    
+    
+========  Epoch 600 / Total 20000  =======
+    ======== Cost 7.0s per 50 epochs ========
+    ========  Train  Set  ========
+    Natural Network Loss:4.791e-01
+    Physical Equation Loss:1.011e+09
+    Accuracy:8.45%
+    ======== Validation Set =======
+    Natural Network Loss:4.790e-01
+    Physical Equation Loss:1.295e+10
+    Accuracy:7.20%
+    ------------------------------------------
+    刚度EI: 6.0232e-01    , EI_grad: 3.3708e+09
+    张力Tension: -8.9294e-03, Tension_grad: 6.4980e+04
+    质量M: 1.9553e+00     , M_grad: -4.0391e+06
+    阻尼c: 2.1645e+00     , c_grad: 2.4920e+03
+                    
+    
+========  Epoch 700 / Total 20000  =======
+    ======== Cost 6.9s per 50 epochs ========
+    ========  Train  Set  ========
+    Natural Network Loss:4.792e-01
+    Physical Equation Loss:7.835e+08
+    Accuracy:7.30%
+    ======== Validation Set =======
+    Natural Network Loss:5.015e-01
+    Physical Equation Loss:3.572e+08
+    Accuracy:7.20%
+    ------------------------------------------
+    刚度EI: 6.0232e-01    , EI_grad: 2.6013e+09
+    张力Tension: -8.9294e-03, Tension_grad: 7.2393e+04
+    质量M: 1.9553e+00     , M_grad: 1.2094e+05
+    阻尼c: 2.1645e+00     , c_grad: 9.0460e+01
+                    
+    
+========  Epoch 800 / Total 20000  =======
+    ======== Cost 6.8s per 50 epochs ========
+    ========  Train  Set  ========
+    Natural Network Loss:4.302e-01
+    Physical Equation Loss:2.093e+09
+    Accuracy:9.25%
+    ======== Validation Set =======
+    Natural Network Loss:4.572e-01
+    Physical Equation Loss:1.155e+09
+    Accuracy:8.60%
+    ------------------------------------------
+    刚度EI: 6.0232e-01    , EI_grad: 6.9546e+09
+    张力Tension: -8.9294e-03, Tension_grad: 1.5666e+05
+    质量M: 1.9553e+00     , M_grad: -1.5455e+06
+    阻尼c: 2.1645e+00     , c_grad: 1.3084e+03
+                    
+    
+========  Epoch 900 / Total 20000  =======
+    ======== Cost 6.9s per 50 epochs ========
+    ========  Train  Set  ========
+    Natural Network Loss:3.505e-01
+    Physical Equation Loss:1.669e+10
+    Accuracy:11.50%
+    ======== Validation Set =======
+    Natural Network Loss:3.649e-01
+    Physical Equation Loss:1.182e+10
+    Accuracy:9.40%
+    ------------------------------------------
+    刚度EI: 6.0232e-01    , EI_grad: 5.5435e+10
+    张力Tension: -8.9294e-03, Tension_grad: 5.4867e+05
+    质量M: 1.9553e+00     , M_grad: -1.5758e+06
+    阻尼c: 2.1645e+00     , c_grad: 1.4034e+03
+                    
+    
+========  Epoch 1000 / Total 20000  =======
+    ======== Cost 6.4s per 50 epochs ========
+    ========  Train  Set  ========
+    Natural Network Loss:3.351e-01
+    Physical Equation Loss:7.280e+09
+    Accuracy:12.00%
+    ======== Validation Set =======
+    Natural Network Loss:3.204e-01
+    Physical Equation Loss:4.635e+09
+    Accuracy:11.40%
+    ------------------------------------------
+    刚度EI: 6.0232e-01    , EI_grad: 2.4178e+10
+    张力Tension: -8.9294e-03, Tension_grad: 3.3927e+05
+    质量M: 1.9553e+00     , M_grad: -1.4603e+06
+    阻尼c: 2.1645e+00     , c_grad: 2.6085e+01
+                    
+    
+========  Epoch 2000 / Total 20000  =======
+    ======== Cost 5.5s per 50 epochs ========
+    ========  Train  Set  ========
+    Natural Network Loss:1.381e-01
+    Physical Equation Loss:9.249e+05
+    Accuracy:20.45%
+    ======== Validation Set =======
+    Natural Network Loss:1.067e-01
+    Physical Equation Loss:3.922e+05
+    Accuracy:23.60%
+    ------------------------------------------
+    刚度EI: 6.0232e-01    , EI_grad: 2.9944e+06
+    张力Tension: -8.9295e-03, Tension_grad: 2.8834e+02
+    质量M: 1.9553e+00     , M_grad: 2.3603e+04
+    阻尼c: 2.1645e+00     , c_grad: -5.3989e+00
+                    
+    
+========  Epoch 3000 / Total 20000  =======
+    ======== Cost 5.4s per 50 epochs ========
+    ========  Train  Set  ========
+    Natural Network Loss:1.294e-01
+    Physical Equation Loss:1.913e+04
+    Accuracy:26.60%
+    ======== Validation Set =======
+    Natural Network Loss:9.723e-02
+    Physical Equation Loss:1.194e+04
+    Accuracy:27.40%
+    ------------------------------------------
+    刚度EI: 6.0232e-01    , EI_grad: 4.6851e+04
+    张力Tension: -8.9295e-03, Tension_grad: 1.0527e+01
+    质量M: 1.9553e+00     , M_grad: 5.1388e+03
+    阻尼c: 2.1645e+00     , c_grad: -3.4560e+00
+                    
+2024-05-30 03:14:09
+DNN(
+  (linears): ModuleList(
+    (0): Linear(in_features=2, out_features=80, bias=True)
+    (1-3): 3 x Linear(in_features=80, out_features=80, bias=True)
+    (4): Linear(in_features=80, out_features=1, bias=True)
+  )
+  (tanh): Tanh()
+)
+lr: 0.10000	 connections: [[], [], [-2], [], [-2], []]
+
+    
+========  Epoch 0 / Total 15000  =======
+    ======== Cost 0.0s per 50 epochs ========
+    ========  Train  Set  ========
+    Natural Network Loss:1.071e+00
+    Physical Equation Loss:1.856e-03
+    Accuracy:1.20%
+    ======== Validation Set =======
+    Natural Network Loss:1.457e+00
+    Physical Equation Loss:1.106e+04
+    Accuracy:4.60%
+    ------------------------------------------
+    刚度EI: 9.0000e-01    , EI_grad: 3.7134e-03
+    张力Tension: 9.0000e-01, Tension_grad: 1.5289e-04
+    质量M: 5.6250e-01     , M_grad: -2.7489e-04
+    阻尼c: -1.0000e-01    , c_grad: 1.4603e-05
+                    
+    
+========  Epoch 100 / Total 15000  =======
+    ======== Cost 6.9s per 50 epochs ========
+    ========  Train  Set  ========
+    Natural Network Loss:1.935e+00
+    Physical Equation Loss:5.783e+21
+    Accuracy:4.60%
+    ======== Validation Set =======
+    Natural Network Loss:1.643e+00
+    Physical Equation Loss:1.118e+11
+    Accuracy:5.40%
+    ------------------------------------------
+    刚度EI: 6.0232e-01    , EI_grad: 1.9201e+22
+    张力Tension: -7.2149e-01, Tension_grad: -1.8455e+14
+    质量M: 5.6250e-01     , M_grad: -1.2471e+18
+    阻尼c: 1.4163e+00     , c_grad: -1.7390e+10
+                    
+    
+========  Epoch 200 / Total 15000  =======
+    ======== Cost 6.8s per 50 epochs ========
+    ========  Train  Set  ========
+    Natural Network Loss:1.894e+00
+    Physical Equation Loss:6.133e+15
+    Accuracy:3.55%
+    ======== Validation Set =======
+    Natural Network Loss:1.181e+00
+    Physical Equation Loss:2.176e+11
+    Accuracy:2.20%
+    ------------------------------------------
+    刚度EI: 6.0232e-01    , EI_grad: 2.0365e+16
+    张力Tension: -8.5532e-03, Tension_grad: 2.9652e+09
+    质量M: 5.6250e-01     , M_grad: -4.9498e+17
+    阻尼c: 1.1599e+00     , c_grad: 3.2330e+05
+                    
+    
+========  Epoch 300 / Total 15000  =======
+    ======== Cost 6.8s per 50 epochs ========
+    ========  Train  Set  ========
+    Natural Network Loss:1.137e+00
+    Physical Equation Loss:3.260e+14
+    Accuracy:5.10%
+    ======== Validation Set =======
+    Natural Network Loss:8.423e-01
+    Physical Equation Loss:3.992e+18
+    Accuracy:4.80%
+    ------------------------------------------
+    刚度EI: 6.0232e-01    , EI_grad: 1.0825e+15
+    张力Tension: -8.9396e-03, Tension_grad: 1.8286e+08
+    质量M: 5.6250e-01     , M_grad: -4.9587e+17
+    阻尼c: 1.1645e+00     , c_grad: 3.3317e+06
+                    
+    
+========  Epoch 400 / Total 15000  =======
+    ======== Cost 6.6s per 50 epochs ========
+    ========  Train  Set  ========
+    Natural Network Loss:5.681e-01
+    Physical Equation Loss:6.061e+11
+    Accuracy:6.00%
+    ======== Validation Set =======
+    Natural Network Loss:5.310e-01
+    Physical Equation Loss:5.702e+12
+    Accuracy:6.20%
+    ------------------------------------------
+    刚度EI: 6.0232e-01    , EI_grad: 2.0123e+12
+    张力Tension: -8.9446e-03, Tension_grad: 3.0969e+06
+    质量M: 5.6250e-01     , M_grad: -4.9588e+17
+    阻尼c: 1.1645e+00     , c_grad: -3.8016e+04
+                    
+    
+========  Epoch 500 / Total 15000  =======
+    ======== Cost 6.7s per 50 epochs ========
+    ========  Train  Set  ========
+    Natural Network Loss:5.443e-01
+    Physical Equation Loss:7.978e+09
+    Accuracy:6.20%
+    ======== Validation Set =======
+    Natural Network Loss:4.910e-01
+    Physical Equation Loss:1.321e+09
+    Accuracy:7.60%
+    ------------------------------------------
+    刚度EI: 6.0232e-01    , EI_grad: 2.6517e+10
+    张力Tension: -8.9448e-03, Tension_grad: 1.7844e+05
+    质量M: 5.6250e-01     , M_grad: -4.9588e+17
+    阻尼c: 1.1645e+00     , c_grad: 2.0805e+04
+                    
+    
+========  Epoch 600 / Total 15000  =======
+    ======== Cost 6.7s per 50 epochs ========
+    ========  Train  Set  ========
+    Natural Network Loss:4.791e-01
+    Physical Equation Loss:1.017e+09
+    Accuracy:8.45%
+    ======== Validation Set =======
+    Natural Network Loss:4.790e-01
+    Physical Equation Loss:1.304e+10
+    Accuracy:7.20%
+    ------------------------------------------
+    刚度EI: 6.0232e-01    , EI_grad: 3.3803e+09
+    张力Tension: -8.9448e-03, Tension_grad: 6.5168e+04
+    质量M: 5.6250e-01     , M_grad: -4.9588e+17
+    阻尼c: 1.1645e+00     , c_grad: 2.5042e+03
+                    
+    
+========  Epoch 700 / Total 15000  =======
+    ======== Cost 6.9s per 50 epochs ========
+    ========  Train  Set  ========
+    Natural Network Loss:4.792e-01
+    Physical Equation Loss:7.834e+08
+    Accuracy:7.30%
+    ======== Validation Set =======
+    Natural Network Loss:5.015e-01
+    Physical Equation Loss:3.578e+08
+    Accuracy:7.20%
+    ------------------------------------------
+    刚度EI: 6.0232e-01    , EI_grad: 2.6012e+09
+    张力Tension: -8.9448e-03, Tension_grad: 7.2471e+04
+    质量M: 5.6250e-01     , M_grad: -4.9588e+17
+    阻尼c: 1.1645e+00     , c_grad: 8.6600e+01
+                    
+    
+========  Epoch 800 / Total 15000  =======
+    ======== Cost 6.5s per 50 epochs ========
+    ========  Train  Set  ========
+    Natural Network Loss:4.302e-01
+    Physical Equation Loss:2.096e+09
+    Accuracy:9.25%
+    ======== Validation Set =======
+    Natural Network Loss:4.572e-01
+    Physical Equation Loss:1.155e+09
+    Accuracy:8.60%
+    ------------------------------------------
+    刚度EI: 6.0232e-01    , EI_grad: 6.9638e+09
+    张力Tension: -8.9448e-03, Tension_grad: 1.5726e+05
+    质量M: 5.6250e-01     , M_grad: -4.9588e+17
+    阻尼c: 1.1645e+00     , c_grad: 1.3702e+03
+                    
+    
+========  Epoch 900 / Total 15000  =======
+    ======== Cost 7.0s per 50 epochs ========
+    ========  Train  Set  ========
+    Natural Network Loss:3.505e-01
+    Physical Equation Loss:1.670e+10
+    Accuracy:11.50%
+    ======== Validation Set =======
+    Natural Network Loss:3.649e-01
+    Physical Equation Loss:1.188e+10
+    Accuracy:9.40%
+    ------------------------------------------
+    刚度EI: 6.0232e-01    , EI_grad: 5.5439e+10
+    张力Tension: -8.9448e-03, Tension_grad: 5.4876e+05
+    质量M: 5.6250e-01     , M_grad: -4.9588e+17
+    阻尼c: 1.1645e+00     , c_grad: 1.3890e+03
+                    
+    
+========  Epoch 1000 / Total 15000  =======
+    ======== Cost 6.9s per 50 epochs ========
+    ========  Train  Set  ========
+    Natural Network Loss:3.351e-01
+    Physical Equation Loss:7.282e+09
+    Accuracy:12.00%
+    ======== Validation Set =======
+    Natural Network Loss:3.204e-01
+    Physical Equation Loss:4.648e+09
+    Accuracy:11.40%
+    ------------------------------------------
+    刚度EI: 6.0232e-01    , EI_grad: 2.4181e+10
+    张力Tension: -8.9448e-03, Tension_grad: 3.3947e+05
+    质量M: 5.6250e-01     , M_grad: -4.9588e+17
+    阻尼c: 1.1645e+00     , c_grad: 2.1079e+00
+                    
+    
+========  Epoch 1500 / Total 15000  =======
+    ======== Cost 5.4s per 50 epochs ========
+    ========  Train  Set  ========
+    Natural Network Loss:1.563e-01
+    Physical Equation Loss:6.192e+07
+    Accuracy:15.95%
+    ======== Validation Set =======
+    Natural Network Loss:1.307e-01
+    Physical Equation Loss:7.913e+07
+    Accuracy:19.00%
+    ------------------------------------------
+    刚度EI: 6.0232e-01    , EI_grad: 2.0476e+08
+    张力Tension: -8.9449e-03, Tension_grad: 8.2904e+03
+    质量M: 5.6250e-01     , M_grad: -4.9588e+17
+    阻尼c: 1.1645e+00     , c_grad: 6.2199e+02
+                    
+    
+========  Epoch 2200 / Total 15000  =======
+    ======== Cost 5.3s per 50 epochs ========
+    ========  Train  Set  ========
+    Natural Network Loss:1.366e-01
+    Physical Equation Loss:2.533e+05
+    Accuracy:21.90%
+    ======== Validation Set =======
+    Natural Network Loss:1.028e-01
+    Physical Equation Loss:3.433e+05
+    Accuracy:22.60%
+    ------------------------------------------
+    刚度EI: 6.0232e-01    , EI_grad: 8.4489e+05
+    张力Tension: -8.9449e-03, Tension_grad: 1.3130e+02
+    质量M: 5.6250e-01     , M_grad: -4.9588e+17
+    阻尼c: 1.1645e+00     , c_grad: -1.1362e+01
+                    
+    
+========  Epoch 3000 / Total 15000  =======
+    ======== Cost 5.4s per 50 epochs ========
+    ========  Train  Set  ========
+    Natural Network Loss:1.294e-01
+    Physical Equation Loss:1.504e+04
+    Accuracy:26.60%
+    ======== Validation Set =======
+    Natural Network Loss:9.723e-02
+    Physical Equation Loss:6.219e+03
+    Accuracy:27.40%
+    ------------------------------------------
+    刚度EI: 6.0232e-01    , EI_grad: 4.9260e+04
+    张力Tension: -8.9449e-03, Tension_grad: 1.3410e+01
+    质量M: 5.6250e-01     , M_grad: -4.9588e+17
+    阻尼c: 1.1645e+00     , c_grad: -4.5754e+00
+                    

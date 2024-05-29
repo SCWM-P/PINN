@@ -13,7 +13,7 @@ try:
     # plt.rc('font', family='Times New Roman')
     # plt.rc('text', usetex=True)
 except Exception as e:
-    warnings.warn(e.msg, UserWarning)
+    warnings.warn(str(e), UserWarning)
 
 
 class DNN(torch.nn.Module):
@@ -47,7 +47,7 @@ class DNN(torch.nn.Module):
                 if x.shape == rsd.shape:
                     x = x + rsd
                 else:
-                    warings.warn(
+                    warnings.warn(
                         f"Residual shape mismatch at layer {i + j + 1},"
                         f"which is intended to be added to layer {i + 1}!"
                         f"This might be not work as you expect!",
@@ -65,7 +65,7 @@ class PhysicsInformedNN:
             xEvent: torch.Tensor, Timestamp: torch.Tensor, yEvent: torch.Tensor,
             epochs: int,
             *,
-            validation_ratio=0.2,
+            validation_ratio=0.2, optimizer='Adam',
             EI=None, Tension=None, M=None, c=None, history=None
     ):
         from sklearn.model_selection import train_test_split
@@ -73,7 +73,7 @@ class PhysicsInformedNN:
         self.device = device
         self.dnn = DNN(layers, connections).to(device)
         # Learning Parameters
-        self.def_para = lambda x: torch.nn.Parameter(torch.tensor([x], device=device))
+        self.def_para = lambda x: torch.nn.Parameter(torch.tensor([float(x)], device=device))
         self.EI = self.def_para(1.0) if EI is None else self.def_para(EI)
         self.Tension = self.def_para(1.0) if Tension is None else self.def_para(Tension)
         self.M = self.def_para(1.0) if M is None else self.def_para(M)
@@ -103,13 +103,29 @@ class PhysicsInformedNN:
         else:
             self.history = history
         # Define Optimizer
-        self.optimizer = torch.optim.Adam(
-            list(self.dnn.parameters()) + [self.EI, self.Tension, self.M, self.c],
-            lr=self.lr,
-            betas=(0.9, 0.999),
-            eps=1e-15,
-            weight_decay=0.0001
-        )
+        other_params = []
+        if not EI: other_params.append(self.EI)
+        if not Tension: other_params.append(self.Tension)
+        if not M: other_params.append(self.M)
+        if not c: other_params.append(self.c)
+        if optimizer == 'Adam':
+            self.optimizer = torch.optim.Adam(
+                list(self.dnn.parameters()) + other_params,
+                lr=self.lr,
+                betas=(0.9, 0.999),
+                eps=1e-15,
+                weight_decay=0.0001
+            )
+        elif optimizer == 'LBFGS':  # beta feature, which is not supported now.
+            self.optimizer = torch.optim.LBFGS(
+                list(self.dnn.parameters()) + other_params,
+                lr=self.lr,
+                max_iter=20,
+                max_eval=20,
+                tolerance_grad=1e-5,
+                tolerance_change=1e-9,
+                history_size=100
+            )
         self.exponent_schedule = torch.optim.lr_scheduler.ExponentialLR(self.optimizer, 0.999)
 
     def predict(self, xEvent: torch.Tensor, Timestamp: torch.Tensor):
@@ -331,7 +347,8 @@ class PhysicsInformedNN:
             # Loss of Physical Informed Equation
             loss_physical = self.physicalLoss(self.x_train, self.t_train, self.y_train)
 
-            Loss = loss_nn + loss_physical
+            Loss = loss_nn \
+                    # + loss_physical
             Loss.backward(retain_graph=True)
             self.optimizer.step()
             self.exponent_schedule.step()
@@ -368,10 +385,10 @@ class PhysicsInformedNN:
     Physical Equation Loss:{loss_physical_val.item():.3e}
     Accuracy:{(truth_val.item() / y_val.numel()) * 100:.2f}%
     ------------------------------------------
-    刚度EI: {self.EI.item():<14.4e}, EI_grad: {self.EI.grad.item():.4e}
-    张力Tension: {self.Tension.item():<9.4e}, Tension_grad: {self.Tension.grad.item():.4e}
-    质量M: {self.M.item():<15.4e}, M_grad: {self.M.grad.item():.4e}
-    阻尼c: {self.c.item():<15.4e}, c_grad: {self.c.grad.item():.4e}
+    刚度EI: {self.EI.item():<14.4e}, EI_grad: {self.EI.grad.item() if self.EI.grad else 0:.4e}
+    张力Tension: {self.Tension.item():<9.4e}, Tension_grad: {self.Tension.grad.item() if self.Tension.grad else 0:.4e}
+    质量M: {self.M.item():<15.4e}, M_grad: {self.M.grad.item() if self.M.grad else 0:.4e}
+    阻尼c: {self.c.item():<15.4e}, c_grad: {self.c.grad.item() if self.c.grad else 0:.4e}
                     """
                 print(log)
                 epoch_startTime = time.time()

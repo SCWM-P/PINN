@@ -45,6 +45,11 @@ filename = 'variables.npz'
 # filename = 'test16-1.mat'
 # filename = 'dvSave-2023_03_26_02_21_16.npy'
 Timestamp, xEvent, yEvent, polarities = dp.load_data('npz', current_path, filename)
+slice = int(0.75*len(Timestamp))
+Timestamp = Timestamp[:slice]
+xEvent = xEvent[:slice]
+yEvent = yEvent[:slice]
+polarities = polarities[slice:]
 # Data Cleansing
 n_subplot = sum((config['USE_HotPixelCleansing'], config['USE_rotate'])) + 1
 fig, axes = dp.set_subplots(n_subplot, projection='3d')
@@ -88,10 +93,11 @@ print('====== Data Loading Done! ======')
 
 # %%
 print('===== Model Initialization =====')
+# for lr in [1.0, 8e-1, 5e-1, 1e-1, 5e-2, 1e-2, 1e-3]:
 pinn = PhysicsInformedNN(
     layers, connections, device,
     xEvent, Timestamp, yEvent,
-    epochs
+    epochs, c=0, M=0.5625
 )
 pinn.optimizer.param_groups[0]['lr'] = lr
 print(pinn.dnn)
@@ -102,7 +108,7 @@ if USE_pth:
         state_dic = dp.get_state_dic(
             os.path.join(
                 current_path,
-                'data', 'pth', '2.245e-01_26.8_2024-05-29-04-45-03.pth'
+                'data', 'pth', '1.261e-01_31.9_2024-05-30-03-14-09.pth'
             )
         )
         pinn.load(state_dic)
@@ -127,6 +133,6 @@ else:
     print('=== Average time per epoch: {:.4f} seconds ==='.format((end_time - start_time) / epochs))
     print('==============================================')
 
-dp.draw_results(pinn)
-plt.show(block=True)
+# dp.draw_results(pinn)
+# plt.show(block=True)
 # plt.close('all')

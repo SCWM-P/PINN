@@ -4,23 +4,26 @@ import warnings
 import numpy as np
 import matplotlib
 import matplotlib.pyplot as plt
-from mpl_toolkits.mplot3d import Axes3D
+# from mpl_toolkits.mplot3d import Axes3D
 from data_processing.fdm import rk4th, mkc
+
 try:
     matplotlib.use('TkAgg')
     plt.ion()
 except Exception as e:
-    warnings.warn(e.msg, UserWarning)
+    warnings.warn(str(e), UserWarning)
 
 use_filedata = False
 current_path = os.getcwd()
 if not use_filedata:
     # 定义物理参数和初始条件
-    L = 2.0  # 总长度
-    H = 2122.5  # 横向力
-    N = 101  # 分段数
-    EI = 3928.0  # 弯曲刚度
-    m = 11.3  # 单位长度质量
+    L = 1.0  # 总长度
+    # H = 2122.5  # 横向力
+    H = 0.0  # 横向力
+    N = 51  # 分段数
+    # EI = 3928.0  # 弯曲刚度
+    EI = 31.25  # 弯曲刚度: 200e9 GPa * 15mm*5mm^3 / 12 = 31.25 N*m^2
+    m = 0.5625  # 单位长度质量: 7.85t/m^-3 * 0.005m * 0.015m = 0.5625kg/m
 
     # 构造一维数组
     EI = np.ones(N + 1) * EI
@@ -52,12 +55,14 @@ if not use_filedata:
     # Time integration
     t = np.arange(0, 2, 0.00001)  # define time
     # f = np.random.randn(len(t)) * 0.001  # random force
-    f = 1e3 * np.sin(2 * np.pi * freq[0] * t)  # periodic force
+    # f = 1e3 * np.sin(2 * np.pi * freq[0] * t)  # periodic force
+    f = 1e3 * np.exp(- 1e2 * t)  # step force
     w = np.zeros(n)  # force distribution on the cable
     w[n // 2] = 1
     Fext = np.outer(w, f)
 
     z0 = np.zeros(2 * n)  # initialization
+    # z0[:n+1] = 0.1
     # z0[100] = 1
 
     G = np.zeros((2 * n, n))
@@ -76,25 +81,29 @@ if not use_filedata:
     variables = {
         name: val for name, val in globals().items()
         if not name.startswith('_') and not
-        callable(val) and not
-            isinstance(
-                val,
-                type(sys)
-            )
+        callable(val) and not isinstance(
+                    val,
+                    type(sys)
+                )
     }
     np.savez(
         os.path.join(
             os.path.dirname(current_path),
-            'data', 'npy','variables.npz'
+            'data', 'npy', 'variables.npz'
         ), **variables
     )
+    print('Files have been saved at ', os.path.join(
+            os.path.dirname(current_path),
+            'data', 'npy', 'variables.npz'
+        ))
 else:
     variables = np.load(os.path.join(
         os.path.dirname(current_path),
-        'data', 'npy','variables.npz'
+        'data', 'npy', 'variables.npz'
     ), allow_pickle=True)
     for name, val in variables.items():
         globals()[name] = val
+    print('Load data from file!')
 
 
 def draw():
@@ -103,9 +112,11 @@ def draw():
     # Plot results
     plt.figure(1)
     plt.subplot(2, 1, 1)
-    plt.plot(t[::alpha], Fext.T[::alpha], '.')
+    plt.plot(t[::alpha], Fext.T[::alpha])
+    plt.title('External Force')
     plt.subplot(2, 1, 2)
-    plt.plot(t[::alpha], displ[[10, 20, 30, 50], :].T[::alpha])  # plot displacement at specific points
+    plt.plot(t[::alpha], displ[[10, 20, 30, 40], :].T[::alpha])  # plot displacement at specific points
+    plt.title('Displacement at specific points')
     # %%
     # Plot all data
     ax = plt.figure(2).add_subplot(111, projection='3d')
