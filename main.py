@@ -8,7 +8,7 @@ import warnings
 import numpy as np
 import matplotlib
 import matplotlib.pyplot as plt
-import data_processing as dp
+import App.data_processing as dp
 from model import PhysicsInformedNN
 
 np.random.seed(1234)
@@ -30,7 +30,7 @@ try:
         plt.ion()
         plt.rc('font', family='Times New Roman')
         matplotlib.use('TkAgg')
-        plt.rc('text', usetex=True)
+        # plt.rc('text', usetex=True)
 except Exception as e:
     warnings.warn(e.msg, UserWarning)
 
@@ -40,11 +40,11 @@ print("========  Using device  ========")
 print(f"============  {device}  ============")
 
 # Load Data
-option = 'npz'
-filename = 'variables.npz'
+option = 'aedat4'
+# filename = 'variables.npz'
 # filename = 'test16-1.mat'
-# filename = 'dvSave-2023_03_26_02_21_16.npy'
-Timestamp, xEvent, yEvent, polarities = dp.load_data('npz', current_path, filename)
+filename = 'dvSave-2023_03_26_02_21_16.npy'
+Timestamp, xEvent, yEvent, polarities = dp.load_data(option, current_path, filename)
 slice = int(0.75*len(Timestamp))
 Timestamp = Timestamp[:slice]
 xEvent = xEvent[:slice]
@@ -81,7 +81,7 @@ except Exception as e:
 xEvent = dp.to_Tensor(xEvent, device=device)
 Timestamp = dp.to_Tensor(Timestamp, device=device)
 yEvent = dp.to_Tensor(yEvent, device=device)
-if not config['HEADLESS']:
+if config['HEADLESS']:
     fig.savefig(
         os.path.join(
             current_path,
@@ -101,7 +101,7 @@ pinn = PhysicsInformedNN(
 )
 pinn.optimizer.param_groups[0]['lr'] = lr
 print(pinn.dnn)
-print(f'lr: {lr}\tconnections: {connections}')
+print(f'lr: {lr}\t connections: {connections}')
 os.makedirs(os.path.join(current_path, 'data', 'pth'), exist_ok=True)
 if USE_pth:
     try:
@@ -134,5 +134,4 @@ else:
     print('==============================================')
 
 # dp.draw_results(pinn)
-# plt.show(block=True)
-# plt.close('all')
+# plt.show()

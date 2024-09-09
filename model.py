@@ -5,7 +5,7 @@ import warnings
 import numpy as np
 import matplotlib
 import matplotlib.pyplot as plt
-import data_processing as dp
+import App.data_processing as dp
 
 # Plot Configuration
 try:
@@ -308,24 +308,11 @@ class PhysicsInformedNN:
             if option == 'save':
                 # Construct the path to save the plot and save it
                 current_path = os.getcwd()
-                os.makedirs(
-                    os.path.join(
-                        current_path,
-                        'Photo', 'Output'
-                    ), exist_ok=True
-                )
-                save_path = os.path.join(
-                    current_path,
-                    'Photo', 'Output'
-                )
+                os.makedirs(os.path.join(current_path,'Photo', 'Output'), exist_ok=True)
+                save_path = os.path.join(current_path,'Photo', 'Output')
                 now = time.strftime("%Y-%m-%d-%H-%M-%S", time.localtime())
                 plt.savefig(
-                    os.path.join(
-                        save_path,
-                        f"{self.lr:.3e}_"
-                        f"{self.optimizer.param_groups[0]['lr']:.3e}_"
-                        f"{epoch}_{now}.png"
-                    ),
+                    os.path.join(save_path, f"{self.lr:.2e}{self.optimizer.param_groups[0]['lr']:.3e}_{epoch}_{now}.png"),
                     dpi=300, bbox_inches='tight', transparent=True
                 )
                 print(f"Plot saved at {save_path}")

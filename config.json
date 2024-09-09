@@ -1,10 +1,10 @@
 {
-  "epochs": 15000,
+  "epochs": 1500,
   "layers": [2,80,80,80,80,1],
   "connections": [
     [], [], [-2], [], [-2], []
   ],
-  "HEADLESS": true,
+  "HEADLESS": false,
   "USE_pth": false,
   "USE_rotate": true,
   "USE_HotPixelCleansing": true,

@@ -6,6 +6,7 @@ import matplotlib
 import matplotlib.pyplot as plt
 # from mpl_toolkits.mplot3d import Axes3D
 from data_processing.fdm import rk4th, mkc
+from data_processing import rootpath
 
 try:
     matplotlib.use('TkAgg')
@@ -14,7 +15,6 @@ except Exception as e:
     warnings.warn(str(e), UserWarning)
 
 use_filedata = False
-current_path = os.getcwd()
 if not use_filedata:
     # 定义物理参数和初始条件
     L = 1.0  # 总长度
@@ -88,17 +88,17 @@ if not use_filedata:
     }
     np.savez(
         os.path.join(
-            os.path.dirname(current_path),
+            rootpath,
             'data', 'npy', 'variables.npz'
         ), **variables
     )
     print('Files have been saved at ', os.path.join(
-            os.path.dirname(current_path),
+            rootpath,
             'data', 'npy', 'variables.npz'
         ))
 else:
     variables = np.load(os.path.join(
-        os.path.dirname(current_path),
+        rootpath,
         'data', 'npy', 'variables.npz'
     ), allow_pickle=True)
     for name, val in variables.items():
@@ -127,7 +127,7 @@ def draw():
     ax.set_ylabel('Position along beam x[m]')
     ax.set_zlabel('Displacement u[m]')
     plt.colorbar(surf, ax=ax, shrink=0.5, aspect=5)
-    plt.show(block=False)
 
 
 draw()
+plt.show()

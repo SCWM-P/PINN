@@ -2,6 +2,7 @@ import matplotlib.pyplot as plt
 import numpy as np
 import pandas as pd
 from dv import AedatFile
+from pathlib import Path
 from data_processing import data_cleansing
 
 HotPixel_cleansing = data_cleansing.HotPixel_cleansing
@@ -29,7 +30,7 @@ with AedatFile(f'../data/aedat4/{filename}') as f:
 
 xEvent, T, yEvent, polarities = HotPixel_cleansing(xEvent, T, yEvent, polarities)
 data = {'xEvent': xEvent, 'Timestamp': T, 'yEvent': yEvent, 'polarities': polarities}
-np.save(f'../data/npy/{filename[:-7]}.npy', data)
+np.save(Path(filename).with_suffix(".npy"), data)
 fig = plt.figure(figsize=(10, 10))
 ax = fig.add_subplot(111, projection='3d')
 ax.scatter(xEvent, T, yEvent, c=polarities, cmap='PiYG', marker='o', alpha=0.9)

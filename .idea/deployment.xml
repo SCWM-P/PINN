@@ -1,31 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
-  <component name="PublishConfigData" autoUpload="Always" serverName="root@connect.cqa1.seetacloud.com:52363 key" remoteFilesAllowedToDisappearOnAutoupload="false" confirmBeforeUploading="false">
+  <component name="PublishConfigData" autoUpload="Always" remoteFilesAllowedToDisappearOnAutoupload="false" confirmBeforeUploading="false">
     <option name="confirmBeforeUploading" value="false" />
-    <serverData>
-      <paths name="root@connect.cqa1.seetacloud.com:52363 key">
-        <serverdata>
-          <mappings>
-            <mapping deploy="/" local="$PROJECT_DIR$" />
-          </mappings>
-          <excludedPaths>
-            <excludedPath local="true" path="$PROJECT_DIR$/data/npy/variables.npz" />
-            <excludedPath local="true" path="$PROJECT_DIR$/data/aedat4" />
-          </excludedPaths>
-        </serverdata>
-      </paths>
-      <paths name="seetacloud">
-        <serverdata>
-          <mappings>
-            <mapping local="$PROJECT_DIR$" web="/" />
-          </mappings>
-          <excludedPaths>
-            <excludedPath local="true" path="$PROJECT_DIR$/Others_Solutions" />
-            <excludedPath local="true" path="$PROJECT_DIR$/data/npy/variables.npz" />
-          </excludedPaths>
-        </serverdata>
-      </paths>
-    </serverData>
     <option name="myAutoUpload" value="ALWAYS" />
   </component>
 </project>

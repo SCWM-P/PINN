@@ -50,13 +50,13 @@ def toggle_animation(event):
 
 
 def custom_func(x):
-    '''
+    r"""
     y = sin x \cdot e^{-\frac{x}{3}}
     \frac{dy}{dx} = (cos x - \frac{sin x}{3}) \cdot e^{-\frac{x}{3}}
     \frac{d^2y}{dx^2} = (-\frac{2}{3} \cdot cos x - \frac{8}{9} \cdot sin x) \cdot e^{-\frac{x}{3}}
     \frac{d^3y}{dx^3} = (\frac{26}{27} \cdot sin x - \frac{2}{3} \cdot cos x) \cdot e^{-\frac{x}{3}}
     \frac{d^4y}{dx^4} = (\frac{28}{81} \cdot sin x + \frac{32}{27} \cdot cos x) \cdot e^{-\frac{x}{3}}
-    '''
+    """
     y = torch.sin(x) * torch.exp(-x / 3)
     dy_dx = (torch.cos(x) - torch.sin(x) / 3) * torch.exp(-x / 3)
     d2y_dx2 = (-2 / 3 * torch.cos(x) - 8 / 9 * torch.sin(x)) * torch.exp(-x / 3)
@@ -92,7 +92,10 @@ scatter_true = axs[0, 0].scatter(
 pred_line, = axs[0, 0].plot([], [], 'g--', label='预测曲线')
 scatter_pred = axs[0, 0].scatter([], [], color='blue', label='预测点')
 axs[0, 0].legend()
-axs[0, 0].set_title(r'$y = sin x \cdot e^{-\frac{x}{3}}$', fontsize=16)
+axs[0, 0].set_title(
+    r'$y = sin x \cdot e^{-\frac{x}{3}}$',
+    fontsize=16
+)
 
 # 在第二张图上绘制
 dy_dx_line, = axs[0, 1].plot(
@@ -108,7 +111,10 @@ scatter_dy_dx = axs[0, 1].scatter(
 dy_dx_pred_line, = axs[0, 1].plot([], [], 'g--', label='预测一阶导数')
 scatter_dy_dx_pred = axs[0, 1].scatter([], [], color='blue', label='预测一阶导数点')
 axs[0, 1].legend()
-axs[0, 1].set_title(r'$\frac{dy}{dx} = (cos x - \frac{sin x}{3}) \cdot e^{-\frac{x}{3}}$', fontsize=16)
+axs[0, 1].set_title(
+    r'$\frac{dy}{dx} = (cos x - \frac{sin x}{3}) \cdot e^{-\frac{x}{3}}$',
+    fontsize=16
+)
 
 # 在第三张图上绘制
 d2y_dx2_line, = axs[0, 2].plot(
@@ -124,7 +130,10 @@ scatter_d2y_dx2 = axs[0, 2].scatter(
 d2y_dx2_pred_line, = axs[0, 2].plot([], [], 'g--', label='预测二阶导数')
 scatter_d2y_dx2_pred = axs[0, 2].scatter([], [], color='blue', label='预测二阶导数点')
 axs[0, 2].legend()
-axs[0, 2].set_title(r'$\frac{d^2y}{dx^2} = (-\frac{2}{3} \cdot cos x - \frac{8}{9} \cdot sin x) \cdot e^{-\frac{x}{3}}$', fontsize=16)
+axs[0, 2].set_title(
+    r'$\frac{d^2y}{dx^2} = (-\frac{2}{3} \cdot cos x - \frac{8}{9} \cdot sin x) \cdot e^{-\frac{x}{3}}$',
+    fontsize=16
+)
 
 # 在第四张图上绘制
 d3y_dx3_line, = axs[1, 0].plot(
@@ -140,7 +149,10 @@ scatter_d3y_dx3 = axs[1, 0].scatter(
 d3y_dx3_pred_line, = axs[1, 0].plot([], [], 'g--', label='预测三阶导数')
 scatter_d3y_dx3_pred = axs[1, 0].scatter([], [], color='blue', label='预测三阶导数点')
 axs[1, 0].legend()
-axs[1, 0].set_title(r'$\frac{d^2y}{dx^2} = (-\frac{2}{3} \cdot cos x - \frac{8}{9} \cdot sin x) \cdot e^{-\frac{x}{3}}$', fontsize=16)
+axs[1, 0].set_title(
+    r'$\frac{d^2y}{dx^2} = (-\frac{2}{3} \cdot cos x - \frac{8}{9} \cdot sin x) \cdot e^{-\frac{x}{3}}$',
+    fontsize=16
+)
 
 # 在第五张图上绘制
 d4y_dx4_line, = axs[1, 1].plot(
@@ -156,7 +168,10 @@ scatter_d4y_dx4 = axs[1, 1].scatter(
 d4y_dx4_pred_line, = axs[1, 1].plot([], [], 'g--', label='预测四阶导数')
 scatter_d4y_dx4_pred = axs[1, 1].scatter([], [], color='blue', label='预测四阶导数点')
 axs[1, 1].legend()
-axs[1, 1].set_title(r'$\frac{d^4y}{dx^4} = (\frac{28}{81} \cdot sin x + \frac{32}{27} \cdot cos x) \cdot e^{-\frac{x}{3}}$', fontsize=16)
+axs[1, 1].set_title(
+    r'$\frac{d^4y}{dx^4} = (\frac{28}{81} \cdot sin x + \frac{32}{27} \cdot cos x) \cdot e^{-\frac{x}{3}}$',
+    fontsize=16
+)
 
 # 在第六张图上绘制
 loss_line, = axs[1, 2].plot(
@@ -179,10 +194,18 @@ def update(frame):
             create_graph=True,
             retain_graph=True
         )[0]
-        dy_dx = (torch.cos(x_train) - torch.sin(x_train) / 3) * torch.exp(-x_train / 3)
-        loss_dy_dx = torch.nn.functional.mse_loss(dy_dx_pred, dy_dx)
+        d2y_dx2_pred = torch.autograd.grad(
+            dy_dx_pred, x_train,
+            grad_outputs=torch.ones_like(dy_dx_pred),
+            create_graph=True,
+            retain_graph=True
+        )[0]
+        # dy_dx = (torch.cos(x_train) - torch.sin(x_train) / 3) * torch.exp(-x_train / 3)
+        d2y_dx2 = (-2 / 3 * torch.cos(x_train) - 8 / 9 * torch.sin(x_train)) * torch.exp(-x_train / 3)
+        # loss_dy_dx = torch.nn.functional.mse_loss(dy_dx_pred, dy_dx)
+        loss_d2y_dx2 = torch.nn.functional.mse_loss(d2y_dx2_pred, d2y_dx2)
         loss_y = torch.nn.functional.mse_loss(y_pred, y_train)
-        loss = loss_y + loss_dy_dx
+        loss = loss_y + loss_d2y_dx2
         loss.backward(retain_graph=True)
         optimizer.step()
         scheduler.step()
